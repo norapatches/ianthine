@@ -122,11 +122,13 @@ class Player(pygame.sprite.Sprite):
         self.direction.y = self.direction.y if self.direction.y < self.fallspeed_max else self.fallspeed_max
         
         if self.jump:
+            # jump
             if self.on_surface['floor']:
                 self.direction.y = -self.jump_height
                 self.timers['wallslide_block'].start()
                 self.hitbox_rect.bottom -= 1
-            elif any((self.on_surface['left'], self.on_surface['right'])) and not self.timers['wallslide_block'].active:
+            # walljump
+            elif any((self.on_surface['left'], self.on_surface['right'])) and not self.timers['wallslide_block'].active and self.abilities['walljump']:
                 self.timers['walljump'].start()
                 self.direction.y = -self.jump_height
                 self.direction.x = 1 if self.on_surface['left'] else -1
