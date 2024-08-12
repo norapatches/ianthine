@@ -16,6 +16,9 @@ Stickman is a 2d platformer game that uses the [pygame-ce](http://pyga.me) libra
     - pressing the *SPACEBAR*
     - holding *SPACEBAR* increases jump length
 
+**dashing**
+    - pressing *X* key
+
 **wall sliding**
     - when colliding with a wall, the gravity is reduced
 
