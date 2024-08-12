@@ -1,0 +1,61 @@
+from settings import *
+
+class CameraGroup(pygame.sprite.Group):
+    def __init__(self, width, height) -> None:
+        super().__init__()
+        self.display = pygame.display.get_surface()
+        self.screen = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
+        self.offset = vector()
+        self.width, self.height = width * TILE_SIZE, height * TILE_SIZE
+        
+        self.minimap = MiniMap(width, height)
+        
+        self.borders = {
+            'left': 0,
+            'right': -self.width + SCREEN_WIDTH,
+            'bottom': -self.height + SCREEN_HEIGHT,
+            'top': 0
+        }
+    
+    def camera_constraint(self) -> None:
+        self.offset.x = self.offset.x if self.offset.x < self.borders['left'] else 0
+        self.offset.x = self.offset.x if self.offset.x > self.borders['right'] else self.borders['right']
+    
+    def toggle_minimap(self):
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_m]:
+            self.display.blit(self.minimap.scaled_surface, (10, WINDOW_HEIGHT - self.minimap.scaled_surface.height - 10))
+    
+    def draw(self, target_position, dt):
+        self.offset.x = -(target_position[0] - SCREEN_WIDTH / 2)
+        self.offset.y = -(target_position[1] - SCREEN_HEIGHT / 2)
+        self.camera_constraint()
+        
+        self.minimap.update(self.sprites())
+        
+        self.screen.fill('black')
+        
+        for sprite in sorted(self, key= lambda sprite: sprite.z):
+            offset_pos = sprite.rect.topleft + self.offset
+            self.screen.blit(sprite.image, offset_pos)
+        
+        scaled = pygame.transform.scale(self.screen, (WINDOW_WIDTH, WINDOW_HEIGHT))
+        self.display.blit(scaled, (0, 0))
+        self.toggle_minimap()
+
+
+class MiniMap:
+    def __init__(self, width, height) -> None:
+        self.surface = pygame.Surface((width, height))
+        self.scaled_surface = pygame.Surface((320, 240))
+    
+    def update(self, sprites) -> None:
+        self.scaled_surface.fill('black')
+        self.surface.fill('black')
+        
+        for sprite in sprites:
+            if hasattr(sprite, 'map_image'):
+                self.surface.blit(sprite.map_image, (sprite.map_rect))
+        
+        scaled = pygame.transform.scale(self.surface, self.scaled_surface.size)
+        self.scaled_surface.blit(scaled, (0, 0))
