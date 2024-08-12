@@ -25,6 +25,10 @@ class Player(pygame.sprite.Sprite):
         self.hitbox_rect = self.rect.inflate(-8, 0)
         self.old_rect = self.hitbox_rect.copy()
         
+        self.floor_rect = pygame.Rect(self.hitbox_rect.bottomleft, (self.hitbox_rect.width, 2))  # rect UNDER player
+        self.right_rect = pygame.Rect((self.hitbox_rect.topright + vector(0, self.hitbox_rect.height / 4)), (2, self.rect.height / 2))    # rect on RIGHT side of player
+        self.left_rect = pygame.Rect((self.hitbox_rect.topleft + vector(-2, self.hitbox_rect.height / 4)), (2, self.rect.height / 2))    # rect on LEFT side of player
+        
         # movement
         self.direction = vector()
         self.speed = 256
@@ -144,26 +148,22 @@ class Player(pygame.sprite.Sprite):
             self.hitbox_rect.topleft += self.platform.direction * self.platform.speed * dt
     
     def check_contact(self) -> None:
-        floor_rect = pygame.Rect(self.hitbox_rect.bottomleft, (self.hitbox_rect.width, 2))  # rect UNDER player
-        right_rect = pygame.Rect((self.hitbox_rect.topright + vector(0, self.hitbox_rect.height / 4)), (2, self.rect.height / 2))    # rect on RIGHT side of player
-        left_rect = pygame.Rect((self.hitbox_rect.topleft + vector(-2, self.hitbox_rect.height / 4)), (2, self.rect.height / 2))    # rect on LEFT side of player
-        
-        '''pygame.draw.rect(self.debug_surface, 'yellow', floor_rect)
-        pygame.draw.rect(self.debug_surface, 'yellow', right_rect)
-        pygame.draw.rect(self.debug_surface, 'yellow', left_rect)'''
+        self.floor_rect = pygame.Rect(self.hitbox_rect.bottomleft, (self.hitbox_rect.width, 1))  # rect UNDER player
+        self.right_rect = pygame.Rect((self.hitbox_rect.topright + vector(0, self.hitbox_rect.height / 4)), (1, self.rect.height / 2))    # rect on RIGHT side of player
+        self.left_rect = pygame.Rect((self.hitbox_rect.topleft + vector(-2, self.hitbox_rect.height / 4)), (1, self.rect.height / 2))    # rect on LEFT side of player
         
         collide_rects = [sprite.rect for sprite in self.collision_sprites]
         semi_collide_rects = [sprite.rect for sprite in self.semi_collision_sprites]
         
         # collisions
-        self.on_surface['floor'] = True if floor_rect.collidelist(collide_rects) >= 0 or floor_rect.collidelist(semi_collide_rects) >= 0 and self.direction.y >= 0 else False
-        self.on_surface['right'] = True if right_rect.collidelist(collide_rects) >= 0 else False
-        self.on_surface['left'] = True if left_rect.collidelist(collide_rects) >= 0 else False
+        self.on_surface['floor'] = True if self.floor_rect.collidelist(collide_rects) >= 0 or self.floor_rect.collidelist(semi_collide_rects) >= 0 and self.direction.y >= 0 else False
+        self.on_surface['right'] = True if self.right_rect.collidelist(collide_rects) >= 0 else False
+        self.on_surface['left'] = True if self.left_rect.collidelist(collide_rects) >= 0 else False
         
         self.platform = None
         sprites = self.collision_sprites.sprites() + self.semi_collision_sprites.sprites()
         for sprite in [sprite for sprite in sprites if hasattr(sprite, 'moving')]:
-            if sprite.rect.colliderect(floor_rect):
+            if sprite.rect.colliderect(self.floor_rect):
                 self.platform = sprite
     
     def collision(self, axis) -> None:
@@ -221,6 +221,18 @@ class Player(pygame.sprite.Sprite):
         surf.fill('yellow')
         self.image.blit(surf, (4, 0))
     
+    def show_collision_detect(self) -> None:
+        floor_surf = pygame.Surface((self.hitbox_rect.width, 1))
+        left_surf = pygame.Surface((1, self.hitbox_rect.height / 2))
+        right_surf = pygame.Surface((1, self.hitbox_rect.height / 2))
+        
+        floor_surf.fill('green')
+        left_surf.fill('green')
+        right_surf.fill('green')
+        
+        self.image.blit(left_surf, (3, 4))
+        self.image.blit(right_surf, (12, 4))
+    
     def update(self, dt) -> None:
         # update rect and timer
         self.old_rect = self.hitbox_rect.copy()
@@ -236,6 +248,9 @@ class Player(pygame.sprite.Sprite):
         # animation
         self.get_state()
         self.animate(dt)
+        
+        # hitbox and side rects
         #self.show_hitbox()
+        #self.show_collision_detect()
         
 
