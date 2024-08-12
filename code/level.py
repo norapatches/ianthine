@@ -1,8 +1,8 @@
 from settings import *
 from sprites import Sprite, Floor, Door
 from camera import CameraGroup
-from enemies import Snail
-from npc import Ghost
+
+from npc import Ghost, Snail
 from player import Player
 
 class Level:
