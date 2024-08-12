@@ -17,7 +17,7 @@ class Player(pygame.sprite.Sprite):
         
         # minimap
         self.map_image = pygame.Surface((1, 1))
-        self.map_image.fill('red')
+        self.map_image.fill('gray')
         self.map_rect = self.map_image.get_frect(topleft = (position[0] / TILE_SIZE, position[1] / TILE_SIZE))
         
         # rects
@@ -38,7 +38,6 @@ class Player(pygame.sprite.Sprite):
         self.jump = False
         self.jump_height = 384
         self.dash = False
-        self.dash_width = 128
               
         # collision
         self.collision_sprites = collision_sprites
@@ -95,7 +94,7 @@ class Player(pygame.sprite.Sprite):
         # jumping
         if pressed[pygame.K_SPACE]:
             self.jump = True
-        if released[pygame.K_SPACE] and self.direction.y < 0:
+        if released[pygame.K_SPACE] and self.direction.y <= 0:
             self.direction.y = 1
     
     def move(self, dt) -> None:
@@ -108,7 +107,7 @@ class Player(pygame.sprite.Sprite):
         if self.timers['dash'].active:
             self.direction.y = 0
             self.direction.x = 1 if self.facing_right else -1
-            self.hitbox_rect.x += self.direction.x * (2 * self.speed) * dt
+            self.hitbox_rect.x += self.direction.x * self.speed * dt
             self.dash = False
         else:
             self.hitbox_rect.x += self.direction.x * self.speed * dt
