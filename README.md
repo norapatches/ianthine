@@ -32,10 +32,6 @@ Stickman is a 2d platformer game that uses the [pygame-ce](http://pyga.me) libra
 **platform skip**
     - pressing the *DOWN* arrow key on semi-collidable platforms allows the player to fall downwards
 
-## NPCS
-
-new line (test)
-
 ### Snail
 - they keep moving in a direction as long as not colliding with a wall or if there is no more surface to walk on
 - they can move on spikes as if it was standard terrain
