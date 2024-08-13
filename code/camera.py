@@ -2,6 +2,7 @@ from settings import *
 
 class CameraGroup(pygame.sprite.Group):
     def __init__(self, width, height) -> None:
+        '''The CameraGroup serves as a moving zoomed-in display surface that displays all sprites on level'''
         super().__init__()
         self.display = pygame.display.get_surface()
         self.screen = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
@@ -18,15 +19,18 @@ class CameraGroup(pygame.sprite.Group):
         }
     
     def camera_constraint(self) -> None:
+        '''Don't allow camera movement on sides'''
         self.offset.x = self.offset.x if self.offset.x < self.borders['left'] else 0
         self.offset.x = self.offset.x if self.offset.x > self.borders['right'] else self.borders['right']
     
-    def toggle_minimap(self):
+    def toggle_minimap(self) -> None:
+        '''Show minimap while holding a key'''
         keys = pygame.key.get_pressed()
         if keys[pygame.K_m]:
             self.display.blit(self.minimap.scaled_surface, (10, WINDOW_HEIGHT - self.minimap.scaled_surface.height - 10))
     
     def draw(self, target_position, dt):
+        '''The custom draw method for the CameraGroup that draws in Z layer order'''
         self.offset.x = -(target_position[0] - SCREEN_WIDTH / 2)
         self.offset.y = -(target_position[1] - SCREEN_HEIGHT / 2)
         self.camera_constraint()
@@ -46,10 +50,12 @@ class CameraGroup(pygame.sprite.Group):
 
 class MiniMap:
     def __init__(self, width, height) -> None:
+        '''A MiniMap surface that displays terrain and player position'''
         self.surface = pygame.Surface((width, height))
         self.scaled_surface = pygame.Surface((320, 240))
     
     def update(self, sprites) -> None:
+        '''Update sprite positions'''
         self.scaled_surface.fill('black')
         self.surface.fill('black')
         

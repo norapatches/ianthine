@@ -8,6 +8,7 @@ class Ghost(pygame.sprite.Sprite):
         self.image = self.frames[self.frame_index]
         self.rect = self.image.get_frect(topleft= position)
         
+        # minimap
         self.map_image = pygame.Surface((1, 1))
         self.map_image.fill('white')
         self.map_rect = self.map_image.get_frect(topleft = (position[0] / TILE_SIZE, position[1] / TILE_SIZE))
@@ -37,6 +38,7 @@ class Snail(pygame.sprite.Sprite):
         self.image = self.frames[self.frame_index]
         self.rect = self.image.get_frect(topleft= position)
         
+        # minimap
         self.map_image = pygame.Surface((1, 1))
         self.map_image.fill('yellow')
         self.map_rect = self.map_image.get_frect(topleft = (position[0] / TILE_SIZE, position[1] / TILE_SIZE))
@@ -85,3 +87,4 @@ class Snail(pygame.sprite.Sprite):
         self.reverse()
         
         self.animate(dt)
+        #self.show_hitbox()
