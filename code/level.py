@@ -27,7 +27,7 @@ class Level:
     def setup(self, tmx_map, level_frames):
         
         # tiles
-        for layer in ['bg', 'bg_details', 'terrain', 'platform']:
+        for layer in ['bg', 'terrain', 'platform']:
             for x, y, surface in tmx_map.get_layer_by_name(layer).tiles():
                 groups = [self.all_sprites]
                 if layer == 'terrain':
@@ -44,18 +44,11 @@ class Level:
         for obj in tmx_map.get_layer_by_name('npc'):
             if obj.name == 'ghost':
                 Ghost((obj.x, obj.y), level_frames['ghost'], self.all_sprites)
-        
-        for obj in tmx_map.get_layer_by_name('snail'):
             if obj.name == 'snail':
                 Snail((obj.x, obj.y), level_frames['snail'], (self.all_sprites, self.semi_collision_sprites), self.collision_sprites)
         
-        # door
-        for obj in tmx_map.get_layer_by_name('doors'):
-            if obj.name == 'door':
-                Door((obj.x, obj.y), surface, self.all_sprites)
-        
         # player
-        for obj in tmx_map.get_layer_by_name('player'):
+        for obj in tmx_map.get_layer_by_name('objects'):
             if obj.name == 'player':
                 self.player = Player(
                     position= (obj.x, obj.y),
