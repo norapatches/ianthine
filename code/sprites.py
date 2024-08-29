@@ -72,6 +72,15 @@ class MovingSprite(AnimatedSprite):
             self.image = pygame.transform.flip(self.image, self.reverse['x'], self.reverse['y'])
 
 
+class FloorSpike(Sprite):
+    def __init__(self, position, surface, groups) -> None:
+        super().__init__(position, surface, groups)
+        
+        self.map_image = pygame.Surface((1, 1))
+        self.map_image.fill('red')
+        self.map_rect = self.map_image.get_frect(topleft = (position[0] / TILE_SIZE, position[1] / TILE_SIZE))
+
+
 class Floor(Sprite):
     def __init__(self, position, surface, groups, hidden=False) -> None:
         super().__init__(position, surface, groups)

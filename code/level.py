@@ -1,5 +1,5 @@
 from settings import *
-from sprites import Sprite, Floor, Door
+from sprites import Sprite, Floor, FloorSpike, Door
 from camera import CameraGroup
 
 from npc import Creature, Ghost, Snail
@@ -22,6 +22,7 @@ class Level:
         
         self.collision_sprites = pygame.sprite.Group()          # floor
         self.semi_collision_sprites = pygame.sprite.Group()     # platforms
+        self.damage_sprites = pygame.sprite.Group()             # spikes, enemies, anything that damages player
         self.snail_collision_sprites = pygame.sprite.Group()    # snails
         
         self.setup(tmx_map, level_frames)
@@ -42,7 +43,7 @@ class Level:
         
         # spikes
         for x, y, surface in tmx_map.get_layer_by_name('spike').tiles():
-            Sprite((x * TILE_SIZE, y * TILE_SIZE), surface, (self.all_sprites, self.collision_sprites))
+            FloorSpike((x * TILE_SIZE, y * TILE_SIZE), surface, (self.all_sprites, self.collision_sprites, self.damage_sprites))
         
         # NPC
         for obj in tmx_map.get_layer_by_name('npc'):
