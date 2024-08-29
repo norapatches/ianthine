@@ -2,7 +2,7 @@ from settings import *
 from sprites import Sprite, Floor, Door
 from camera import CameraGroup
 
-from npc import Ghost, Snail
+from npc import Creature, Ghost, Snail
 from player import Player
 
 class Level:
@@ -49,6 +49,11 @@ class Level:
                 Ghost((obj.x, obj.y), level_frames['ghost'], self.all_sprites)
             if obj.name == 'snail':
                 Snail((obj.x, obj.y), level_frames['snail'], (self.all_sprites, self.snail_collision_sprites), self.collision_sprites)
+        
+        # moving objects
+        for obj in tmx_map.get_layer_by_name('moving_objects'):
+            if obj.name == 'creature':
+                Creature((obj.x, obj.y), level_frames['creature'], self.all_sprites)
         
         # player
         for obj in tmx_map.get_layer_by_name('objects'):

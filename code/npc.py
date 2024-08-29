@@ -1,4 +1,37 @@
 from settings import *
+from random import choice
+
+class Creature(pygame.sprite.Sprite):
+    def __init__(self, position, frames, groups) -> None:
+        super().__init__(groups)
+        self.state = 'chomp'
+        self.facing_right = True
+        self.frames, self.frame_index = frames, 0
+        self.image = self.frames[self.state][self.frame_index]
+        self.rect = self.image.get_frect(topleft= position)
+        
+        # minimap
+        self.map_image = pygame.Surface((1, 1))
+        self.map_image.fill('white')
+        self.map_rect = self.map_image.get_frect(topleft = (position[0] / TILE_SIZE, position[1] / TILE_SIZE))
+        
+        self.z = Z_LAYERS['main']
+        
+        self.direction = 1
+        
+        self.speed = 100
+        
+    
+    def animate(self, dt) -> None:
+        self.frame_index += ANIMATION_SPEED * dt
+                
+        self.image = self.frames[self.state][int(self.frame_index) % len(self.frames[self.state])]
+        self.image = self.image if self.facing_right else pygame.transform.flip(self.image, True, False)
+    
+    def update(self, dt) -> None:
+        
+        self.animate(dt)
+
 
 class Ghost(pygame.sprite.Sprite):
     def __init__(self, position, frames, groups) -> None:
@@ -47,7 +80,8 @@ class Snail(pygame.sprite.Sprite):
         
         self.z = Z_LAYERS['main']
         
-        self.direction = vector(1, 0)
+        dir = choice((-1, 1))
+        self.direction = vector(dir, 0)
         
         self.collision_rects = [sprite.rect for sprite in collision_sprites]
                 
