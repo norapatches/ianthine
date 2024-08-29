@@ -25,13 +25,15 @@ class Level:
         self.setup(tmx_map, level_frames)
     
     def setup(self, tmx_map, level_frames):
-        
+        '''Read tile and object layers from tmx map file'''
         # tiles
-        for layer in ['bg', 'terrain', 'platform']:
+        for layer in ['bg', 'terrain', 'terrain_hidden', 'platform']:
             for x, y, surface in tmx_map.get_layer_by_name(layer).tiles():
                 groups = [self.all_sprites]
                 if layer == 'terrain':
                     Floor((x * TILE_SIZE, y * TILE_SIZE), surface, (self.all_sprites, self.collision_sprites))
+                if layer == 'terrain_hidden':
+                    Floor((x * TILE_SIZE, y * TILE_SIZE), surface, (self.all_sprites, self.collision_sprites), hidden=True)
                 if layer == 'platform': groups.append(self.semi_collision_sprites)
                 
                 Sprite((x * TILE_SIZE, y * TILE_SIZE), surface, groups, Z_LAYERS['bg_tiles'])
@@ -59,6 +61,7 @@ class Level:
                 )
     
     def run(self, dt):
+        '''Run the given level, update all sprites, center camera around player'''
         self.display.fill('black')
         
         self.all_sprites.update(dt)

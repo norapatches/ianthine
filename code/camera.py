@@ -9,8 +9,10 @@ class CameraGroup(pygame.sprite.Group):
         self.offset = vector()
         self.width, self.height = width * TILE_SIZE, height * TILE_SIZE
         
+        # minimap
         self.minimap = MiniMap(width, height)
         
+        # camera boundaries
         self.borders = {
             'left': 0,
             'right': -self.width + SCREEN_WIDTH,
