@@ -1,6 +1,7 @@
 from settings import *
 
 class Sprite(pygame.sprite.Sprite):
+    '''A regular static sprite'''
     def __init__(self, position, surface= pygame.Surface((TILE_SIZE, TILE_SIZE)), groups= None, z= Z_LAYERS['main']) -> None:
         super().__init__(groups)
         self.image = surface
@@ -10,6 +11,7 @@ class Sprite(pygame.sprite.Sprite):
 
 
 class AnimatedSprite(Sprite):
+    '''A static but animated sprite'''
     def __init__(self, position, frames, groups, z= Z_LAYERS['main'], animation_speed = ANIMATION_SPEED) -> None:
         self.frames, self.frame_index = frames, 0
         super().__init__(position, self.frames[self.frame_index], groups, z)
@@ -24,6 +26,7 @@ class AnimatedSprite(Sprite):
 
 
 class MovingSprite(AnimatedSprite):
+    '''A moving animated sprite'''
     def __init__(self, frames, groups, start_pos, end_pos, move_dir, speed, flip= False) -> None:
         super().__init__(start_pos, frames, groups)
         
@@ -73,6 +76,7 @@ class MovingSprite(AnimatedSprite):
 
 
 class FloorSpike(Sprite):
+    '''A spike that damages the player'''
     def __init__(self, position, surface, groups) -> None:
         super().__init__(position, surface, groups)
         
@@ -82,6 +86,7 @@ class FloorSpike(Sprite):
 
 
 class Floor(Sprite):
+    '''Regular static terrain, the minimap visibility can be toggled as an argument'''
     def __init__(self, position, surface, groups, hidden=False) -> None:
         super().__init__(position, surface, groups)
         
@@ -93,6 +98,7 @@ class Floor(Sprite):
 
 
 class Door(Sprite):
+    '''The door is the way out of the given level'''
     def __init__(self, position, surface, groups):
         super().__init__(position, surface, groups)
         self.old_rect = self.rect.copy()
