@@ -1,5 +1,4 @@
 from settings import *
-from gtimer import Timer
 
 class Ghost(pygame.sprite.Sprite):
     def __init__(self, position, frames, groups) -> None:

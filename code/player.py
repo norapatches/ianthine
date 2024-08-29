@@ -2,7 +2,7 @@ from settings import *
 from gtimer import Timer
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, position, groups, collision_sprites, semi_collision_sprites, frames):
+    def __init__(self, position, groups, collision_sprites, semi_collision_sprites, snail_sprites, frames):
         # general setup
         super().__init__(groups)
         self.z = Z_LAYERS['main']
@@ -42,6 +42,7 @@ class Player(pygame.sprite.Sprite):
         # collision
         self.collision_sprites = collision_sprites
         self.semi_collision_sprites = semi_collision_sprites
+        self.snail_sprites = snail_sprites
         self.on_surface = {'floor': False, 'left': False, 'right': False}
         self.platform = None
         
@@ -139,6 +140,7 @@ class Player(pygame.sprite.Sprite):
         
         self.collision('vertical')
         self.semi_collision()
+        self.snail_collision()
         self.rect.center = self.hitbox_rect.center
         self.map_rect.x, self.map_rect.y = (self.hitbox_rect.x / TILE_SIZE), self.hitbox_rect.y / TILE_SIZE
     
@@ -153,14 +155,15 @@ class Player(pygame.sprite.Sprite):
         
         collide_rects = [sprite.rect for sprite in self.collision_sprites]
         semi_collide_rects = [sprite.rect for sprite in self.semi_collision_sprites]
+        snail_rects = [sprite.hitbox_rect for sprite in self.snail_sprites]
         
         # collisions
-        self.on_surface['floor'] = True if self.floor_rect.collidelist(collide_rects) >= 0 or self.floor_rect.collidelist(semi_collide_rects) >= 0 and self.direction.y >= 0 else False
+        self.on_surface['floor'] = True if self.floor_rect.collidelist(collide_rects) >= 0 or self.floor_rect.collidelist(semi_collide_rects) >= 0 or self.floor_rect.collidelist(snail_rects) >= 0 and self.direction.y >= 0 else False
         self.on_surface['right'] = True if self.right_rect.collidelist(collide_rects) >= 0 else False
         self.on_surface['left'] = True if self.left_rect.collidelist(collide_rects) >= 0 else False
         
         self.platform = None
-        sprites = self.collision_sprites.sprites() + self.semi_collision_sprites.sprites()
+        sprites = self.collision_sprites.sprites() + self.semi_collision_sprites.sprites() + self.snail_sprites.sprites()
         for sprite in [sprite for sprite in sprites if hasattr(sprite, 'moving')]:
             if sprite.rect.colliderect(self.floor_rect):
                 self.platform = sprite
@@ -190,7 +193,16 @@ class Player(pygame.sprite.Sprite):
                         self.hitbox_rect.bottom = sprite.rect.top
                         if self.direction.y > 0:
                             self.direction.y = 0
-       
+    
+    def snail_collision(self) -> None:
+        if not self.timers['platform_skip'].active:
+            for sprite in self.snail_sprites:
+                if sprite.hitbox_rect.colliderect(self.hitbox_rect):
+                    if self.hitbox_rect.bottom >= sprite.hitbox_rect.top and int(self.old_rect.bottom) <= int(sprite.old_rect.top):
+                        self.hitbox_rect.bottom = sprite.hitbox_rect.top
+                        if self.direction.y > 0:
+                            self.direction.y = 0
+    
     def update_timers(self) -> None:
         for timer in self.timers.values():
             timer.update()

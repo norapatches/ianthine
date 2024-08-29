@@ -1,5 +1,4 @@
 from settings import *
-from gtimer import Timer
 
 class Sprite(pygame.sprite.Sprite):
     def __init__(self, position, surface= pygame.Surface((TILE_SIZE, TILE_SIZE)), groups= None, z= Z_LAYERS['main']) -> None:

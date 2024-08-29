@@ -19,8 +19,9 @@ class Level:
             height= tmx_map.height
         )
         
-        self.collision_sprites = pygame.sprite.Group()
-        self.semi_collision_sprites = pygame.sprite.Group()
+        self.collision_sprites = pygame.sprite.Group()          # floor
+        self.semi_collision_sprites = pygame.sprite.Group()     # platforms
+        self.snail_collision_sprites = pygame.sprite.Group()    # snails
         
         self.setup(tmx_map, level_frames)
     
@@ -47,7 +48,7 @@ class Level:
             if obj.name == 'ghost':
                 Ghost((obj.x, obj.y), level_frames['ghost'], self.all_sprites)
             if obj.name == 'snail':
-                Snail((obj.x, obj.y), level_frames['snail'], (self.all_sprites, self.semi_collision_sprites), self.collision_sprites)
+                Snail((obj.x, obj.y), level_frames['snail'], (self.all_sprites, self.snail_collision_sprites), self.collision_sprites)
         
         # player
         for obj in tmx_map.get_layer_by_name('objects'):
@@ -57,6 +58,7 @@ class Level:
                     groups= self.all_sprites,
                     collision_sprites= self.collision_sprites,
                     semi_collision_sprites= self.semi_collision_sprites,
+                    snail_sprites= self.snail_collision_sprites,
                     frames= level_frames['player']
                 )
     
