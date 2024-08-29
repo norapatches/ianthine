@@ -13,7 +13,7 @@ class Soldier(pygame.sprite.Sprite):
         self.direction = choice((-1, 1))
         self.collision_rects = [sprite.rect for sprite in collision_sprites]
         
-        self.speed = 200
+        self.speed = 128
         self.hit_timer = Timer(250)
     
     def reverse(self) -> None:
