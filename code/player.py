@@ -50,7 +50,7 @@ class Player(pygame.sprite.Sprite):
         self.timers = {
             'platform_skip': Timer(400),
             'walljump': Timer(200),
-            'wallslide_block': Timer(300),
+            'wallslide_block': Timer(400),
             'dash': Timer(400)
         }
     

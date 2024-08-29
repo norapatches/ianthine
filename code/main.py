@@ -27,6 +27,7 @@ class Game:
             'player': import_sub_folders('.', 'assets', 'graphic', 'player'),
             'snail': import_folder('.', 'assets', 'graphic', 'npc', 'snail'),
             'ghost': import_folder('.', 'assets', 'graphic', 'npc', 'ghost'),
+            'key': import_folder('.', 'assets', 'graphic', 'items', 'key'),
             'creature': import_sub_folders('.', 'assets', 'graphic', 'npc', 'creature'),
             'soldier': import_folder('.', 'assets', 'graphic', 'enemy', 'soldier'),
             'spike': import_image('.', 'assets', 'graphic', 'level', 'spike')

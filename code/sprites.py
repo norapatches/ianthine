@@ -97,6 +97,17 @@ class Floor(Sprite):
             self.map_rect = self.map_image.get_frect(topleft = (position[0] / TILE_SIZE, position[1] / TILE_SIZE))
 
 
+class Item(AnimatedSprite):
+    def __init__(self, item_type, position, frames, groups):
+        super().__init__(position, frames, groups)
+        self.rect.center = position
+        self.item_type = item_type
+    
+    def activate(self) -> None:
+        if self.item_type == 'key':
+            pass
+
+
 class Door(Sprite):
     '''The door is the way out of the given level'''
     def __init__(self, position, surface, groups):
