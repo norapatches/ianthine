@@ -2,6 +2,7 @@ from settings import *
 from random import choice
 
 class Creature(pygame.sprite.Sprite):
+    '''Creature is a neutral NPC that can get angry and chomp'''
     def __init__(self, position, frames, groups) -> None:
         super().__init__(groups)
         self.state = 'chomp'
@@ -33,6 +34,7 @@ class Creature(pygame.sprite.Sprite):
 
 
 class Ghost(pygame.sprite.Sprite):
+    '''Ghost is a friendly NPC that appears on some levels and trades with the player'''
     def __init__(self, position, frames, groups) -> None:
         super().__init__(groups)
         self.frames, self.frame_index = frames, 0
@@ -54,6 +56,7 @@ class Ghost(pygame.sprite.Sprite):
 
 
 class Snail(pygame.sprite.Sprite):
+    '''Snail is a friendly NPC that the player can ride on to avoid spike damage'''
     def __init__(self, position, frames, groups, collision_sprites) -> None:
         super().__init__(groups)
         self.moving = True
