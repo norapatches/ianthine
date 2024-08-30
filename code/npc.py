@@ -47,8 +47,6 @@ class Ghost(pygame.sprite.Sprite):
         self.z = Z_LAYERS['main']
         
         self.direction = 1
-        
-        self.speed = 100
     
     def animate(self, dt) -> None:
         self.frame_index += ANIMATION_SPEED * dt
@@ -84,7 +82,7 @@ class Snail(pygame.sprite.Sprite):
         
         self.collision_rects = [sprite.rect for sprite in collision_sprites]
                 
-        self.speed = 10
+        self.speed = 8
     
     def reverse(self) -> None:
         floor_rect_right = pygame.FRect(self.hitbox_rect.bottomright, (1, 1))

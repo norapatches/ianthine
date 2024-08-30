@@ -31,12 +31,12 @@ class Player(pygame.sprite.Sprite):
         
         # movement
         self.direction = vector()
-        self.speed = 256
-        self.fallspeed_max = 512
-        self.gravity = 2048
+        self.speed = 128
+        self.fallspeed_max = 256
+        self.gravity = 1024
         self.crouch = False
         self.jump = False
-        self.jump_height = 384
+        self.jump_height = 256
         self.dash = False
               
         # collision
@@ -48,10 +48,10 @@ class Player(pygame.sprite.Sprite):
         
         # timers
         self.timers = {
-            'platform_skip': Timer(400),
-            'walljump': Timer(200),
-            'wallslide_block': Timer(400),
-            'dash': Timer(400)
+            'platform_skip': Timer(200),
+            'walljump': Timer(100),
+            'wallslide_block': Timer(200),
+            'dash': Timer(200)
         }
     
     def input(self) -> None:

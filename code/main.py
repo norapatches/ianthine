@@ -37,7 +37,7 @@ class Game:
         '''The game loop, runs current stage'''
         while True:
             # get delta time
-            dt = self.clock.tick(60)
+            dt = self.clock.tick() / 1000
             # limit delta time
             max_dt = 0.005
             dt = min(dt, max_dt)
