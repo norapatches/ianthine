@@ -11,16 +11,9 @@ class Creature(pygame.sprite.Sprite):
         self.image = self.frames[self.state][self.frame_index]
         self.rect = self.image.get_frect(topleft= position)
         
-        # minimap
-        self.map_image = pygame.Surface((1, 1))
-        self.map_image.fill('white')
-        self.map_rect = self.map_image.get_frect(topleft = (position[0] / TILE_SIZE, position[1] / TILE_SIZE))
-        
         self.z = Z_LAYERS['main']
         
         self.direction = 1
-        
-        self.speed = 100
         
     def animate(self, dt) -> None:
         self.frame_index += ANIMATION_SPEED * dt
@@ -56,7 +49,7 @@ class Ghost(pygame.sprite.Sprite):
 
 
 class Snail(pygame.sprite.Sprite):
-    '''Snail is a friendly NPC that the player can ride on to avoid spike damage'''
+    '''Snail is a friendly NPC that moves left and right. The player can ride on it to avoid spike damage'''
     def __init__(self, position, frames, groups, collision_sprites) -> None:
         super().__init__(groups)
         self.moving = True
@@ -64,11 +57,6 @@ class Snail(pygame.sprite.Sprite):
         self.frames, self.frame_index = frames, 0
         self.image = self.frames[self.frame_index]
         self.rect = self.image.get_frect(topleft= position)
-        
-        # minimap
-        self.map_image = pygame.Surface((1, 1))
-        self.map_image.fill('yellow')
-        self.map_rect = self.map_image.get_frect(topleft = (position[0] / TILE_SIZE, position[1] / TILE_SIZE))
         
         self.hitbox_rect = pygame.FRect((self.rect.topleft + vector(4, 1)), (7, 7))
         self.old_rect = self.hitbox_rect.copy()
@@ -104,6 +92,7 @@ class Snail(pygame.sprite.Sprite):
         self.image = pygame.transform.flip(self.image, True, False) if self.direction.x < 0 else self.image
     
     def show_hitbox(self):
+        '''Display a colourful hitbox for debug purposes'''
         surf = pygame.Surface(self.hitbox_rect.size)
         surf.fill('yellow')
         self.image.blit(surf, (4, 1))
