@@ -1,4 +1,5 @@
 from settings import *
+from gtimer import Timer
 
 class Sprite(pygame.sprite.Sprite):
     '''A regular static sprite'''
@@ -103,3 +104,19 @@ class Floor(Sprite):
             self.map_image.fill('white')
             self.map_rect = self.map_image.get_frect(topleft = (position[0] / TILE_SIZE, position[1] / TILE_SIZE))
 
+
+class CollapseFloor(Floor):
+    '''A tile that falls after a certain amount of time. After falling for a certain amount of time, the sprite is then killed'''
+    def __init__(self, position, surface, groups) -> None:
+        super().__init__(position, surface, groups)
+        
+        # minimap
+        self.map_image = pygame.Surface((1, 1))
+        self.map_image.fill('white')
+        self.map_rect = self.map_image.get_frect(topleft = (position[0] / TILE_SIZE, position[1] / TILE_SIZE))
+        
+        # timers
+        self.timers = {
+            'stand': Timer(500),
+            'fall' : Timer(1000)
+        }

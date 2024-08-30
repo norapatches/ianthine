@@ -1,5 +1,5 @@
 from settings import *
-from sprites import Sprite, AnimatedSprite, MovingSprite, Floor
+from sprites import Sprite, AnimatedSprite, MovingSprite, Floor, CollapseFloor
 from camera import CameraGroup
 
 from npc import Creature, Ghost, Snail
@@ -21,25 +21,29 @@ class Level:
         )
         
         self.collision_sprites = pygame.sprite.Group()          # floor
+        self.collapse_sprites = pygame.sprite.Group()           # collapsing floor
         self.semi_collision_sprites = pygame.sprite.Group()     # platforms
-        self.damage_sprites = pygame.sprite.Group()             # spikes, enemies, anything that damages player
+        self.damage_sprites = pygame.sprite.Group()             # spikes, traps, enemies, anything that damages player
         self.snail_collision_sprites = pygame.sprite.Group()    # snails
         
         self.setup(tmx_map, level_frames)
     
     def setup(self, tmx_map, level_frames):
         '''Read tile and object layers from tmx map file'''
+        
         # tiles
-        for layer in ['bg', 'terrain', 'terrain_hidden', 'platform']:
+        for layer in ['bg', 'terrain', 'terrain_hidden', 'terrain_collapse', 'platform']:
             for x, y, surface in tmx_map.get_layer_by_name(layer).tiles():
-                groups = [self.all_sprites]
                 if layer == 'terrain':
                     Floor((x * TILE_SIZE, y * TILE_SIZE), surface, (self.all_sprites, self.collision_sprites))
                 if layer == 'terrain_hidden':
                     Floor((x * TILE_SIZE, y * TILE_SIZE), surface, (self.all_sprites, self.collision_sprites), hidden=True)
-                if layer == 'platform': groups.append(self.semi_collision_sprites)
-                
-                Sprite((x * TILE_SIZE, y * TILE_SIZE), surface, groups, Z_LAYERS['bg_tiles'])
+                if layer == 'terrain_collapse':
+                    CollapseFloor((x * TILE_SIZE, y * TILE_SIZE), surface, (self.all_sprites, self.collision_sprites, self.collapse_sprites))
+                if layer == 'platform':
+                    Floor((x * TILE_SIZE, y * TILE_SIZE), surface, (self.all_sprites, self.semi_collision_sprites))
+                else:
+                    Sprite((x * TILE_SIZE, y * TILE_SIZE), surface, self.all_sprites, Z_LAYERS['bg_tiles'])
         
         # spikes
         for x, y, surface in tmx_map.get_layer_by_name('spike').tiles():
