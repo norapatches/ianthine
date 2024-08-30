@@ -1,6 +1,6 @@
 from settings import *
 from support import *
-from debug import debug, debug_multiple, show_fps
+from debug import debug, show_fps
 from level import Level
 
 from os.path import join
@@ -51,8 +51,9 @@ class Game:
             # run current stage
             self.current_stage.run(dt)
             
-            # DEBUG show fps
+            # DEBUG show fps & dt
             show_fps(self.clock.get_fps())
+            debug(f'dt: {dt:.2f}')
             
             # update display
             pygame.display.update()

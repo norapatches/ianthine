@@ -4,9 +4,11 @@ class Sprite(pygame.sprite.Sprite):
     '''A regular static sprite'''
     def __init__(self, position, surface= pygame.Surface((TILE_SIZE, TILE_SIZE)), groups= None, z= Z_LAYERS['main']) -> None:
         super().__init__(groups)
+        
         self.image = surface
         self.rect = self.image.get_frect(topleft= position)
         self.old_rect = self.rect.copy()
+        
         self.z = z
 
 
@@ -18,11 +20,26 @@ class AnimatedSprite(Sprite):
         self.animation_speed = animation_speed
     
     def animate(self, dt) -> None:
+        '''Animate through sprite frames'''
         self.frame_index += self.animation_speed * dt
         self.image = self.frames[int(self.frame_index % len(self.frames))]
     
     def update(self, dt) -> None:
+        '''The update method'''
         self.animate(dt)
+
+
+class Item(AnimatedSprite):
+    def __init__(self, item_type, position, frames, groups):
+        super().__init__(position, frames, groups)
+        self.rect.center = position
+        self.item_type = item_type
+    
+    def activate(self) -> None:
+        if self.item_type == 'key':
+            pass
+        if self.item_type == 'potion':
+            pass
 
 
 class MovingSprite(AnimatedSprite):
@@ -75,16 +92,6 @@ class MovingSprite(AnimatedSprite):
             self.image = pygame.transform.flip(self.image, self.reverse['x'], self.reverse['y'])
 
 
-class FloorSpike(Sprite):
-    '''A spike that damages the player'''
-    def __init__(self, position, surface, groups) -> None:
-        super().__init__(position, surface, groups)
-        
-        self.map_image = pygame.Surface((1, 1))
-        self.map_image.fill('red')
-        self.map_rect = self.map_image.get_frect(topleft = (position[0] / TILE_SIZE, position[1] / TILE_SIZE))
-
-
 class Floor(Sprite):
     '''Regular static terrain, the minimap visibility can be toggled as an argument'''
     def __init__(self, position, surface, groups, hidden=False) -> None:
@@ -96,28 +103,3 @@ class Floor(Sprite):
             self.map_image.fill('white')
             self.map_rect = self.map_image.get_frect(topleft = (position[0] / TILE_SIZE, position[1] / TILE_SIZE))
 
-
-class Item(AnimatedSprite):
-    def __init__(self, item_type, position, frames, groups):
-        super().__init__(position, frames, groups)
-        self.rect.center = position
-        self.item_type = item_type
-    
-    def activate(self) -> None:
-        if self.item_type == 'key':
-            pass
-
-
-class Door(Sprite):
-    '''The door is the way out of the given level'''
-    def __init__(self, position, surface, groups):
-        super().__init__(position, surface, groups)
-        self.old_rect = self.rect.copy()
-        
-        # minimap
-        self.map_image = pygame.Surface((1, 1))
-        self.map_image.fill('gray')
-        self.map_rect = self.map_image.get_frect(topleft = (position[0] / TILE_SIZE, position[1] / TILE_SIZE))
-    
-    def update(self, dt) -> None:
-        self.old_rect = self.rect.copy()

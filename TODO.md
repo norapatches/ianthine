@@ -54,7 +54,6 @@ The naming convention is \<*objectname*> or \<*static*>
 - [ ] data
     - level data
 
-
 ## PLAYER
 ### Abilities
 - [x] movement
@@ -62,6 +61,8 @@ The naming convention is \<*objectname*> or \<*static*>
     - **move right** - RIGHT ARROW
 - [x] jumping
     - **jump** - SPACEBAR
+- [ ] double jump
+    - **double jump** - SPACEBAR *(in mid-air)*
 - [x] walljump
     - **walljump** - SPACEBAR *(when wallsliding)*
 - [ ] dash

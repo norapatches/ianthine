@@ -1,5 +1,5 @@
 from settings import *
-from sprites import Sprite, Floor, FloorSpike, Door
+from sprites import Sprite, AnimatedSprite, MovingSprite, Floor
 from camera import CameraGroup
 
 from npc import Creature, Ghost, Snail
@@ -43,7 +43,7 @@ class Level:
         
         # spikes
         for x, y, surface in tmx_map.get_layer_by_name('spike').tiles():
-            FloorSpike((x * TILE_SIZE, y * TILE_SIZE), surface, (self.all_sprites, self.collision_sprites, self.damage_sprites))
+            Sprite((x * TILE_SIZE, y * TILE_SIZE), surface, (self.all_sprites, self.collision_sprites, self.damage_sprites))
         
         # NPC
         for obj in tmx_map.get_layer_by_name('npc'):
