@@ -4,12 +4,12 @@ from os.path import join
 import pygame
 
 def import_image(*path, alpha=True, format='png') -> pygame.Surface:
-    '''Import a single image from a file path'''
+    '''Imports a single image from the specified file path and returns it as a Pygame Surface object.'''
     full_path = join(*path) + f'.{format}'
     return pygame.image.load(full_path).convert_alpha() if alpha else pygame.image.load(full_path).convert()
 
 def import_folder(*path) -> list:
-    '''Import images from a folder and store them in a list'''
+    '''Imports all images from a specified folder and returns them as a list of Pygame Surface objects.'''
     frames = []
     for folder_path, _, image_names in walk(join(*path)):
         for image_name in sorted(image_names):
@@ -23,7 +23,8 @@ def import_folder(*path) -> list:
     return frames
 
 def import_folder_dict(*path) -> dict:
-    '''Import images from a folder and store them in a dictionary'''
+    '''Imports all images from a specified folder and returns them as a dictionary.
+    The keys are integers derived from the image filenames, and the values are Pygame Surface objects.'''
     frame_dict = {}
     for folder_path, _, image_names in walk(join(*path)):
         for image_name in image_names:
@@ -38,7 +39,8 @@ def import_folder_dict(*path) -> dict:
     return frame_dict
 
 def import_sub_folders(*path) -> dict:
-    '''Import assets from a folder and store them in a dictionary where the keys are the subfolder names'''
+    '''Imports assets from all subfolders within a specified folder and returns them as a dictionary.
+    The keys are the subfolder names, and the values are lists of Pygame Surface objects representing the images within each subfolder.'''
     frame_dict = {}
     for _, sub_folders, __ in walk(join(*path)):
         if sub_folders:
