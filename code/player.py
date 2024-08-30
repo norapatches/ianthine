@@ -31,7 +31,7 @@ class Player(pygame.sprite.Sprite):
         
         # movement
         self.direction = vector()
-        self.speed = 128
+        self.speed = 96
         self.fallspeed_max = 256
         self.gravity = 1024
         self.crouch = False
@@ -99,10 +99,8 @@ class Player(pygame.sprite.Sprite):
             self.direction.y = 1
     
     def move(self, dt) -> None:
-        if self.crouch:
-            self.speed = 100
-        elif not self.crouch:
-            self.speed = 200
+        self.speed = 96
+        self.speed = self.speed if not self.crouch else self.speed / 2
         
         # horizontal movement
         if self.timers['dash'].active:
@@ -115,7 +113,7 @@ class Player(pygame.sprite.Sprite):
         self.collision('horizontal')
         
         # vertical movement
-        if not self.on_surface['floor'] and any((self.on_surface['left'], self.on_surface['right'])) and not self.timers['wallslide_block'].active:
+        if not self.on_surface['floor'] and any((self.on_surface['left'], self.on_surface['right'])) and not self.timers['wallslide_block'].active and self.abilities['walljump']:
             self.direction.y = 0
             self.hitbox_rect.y += self.gravity / 14 * dt
         else:
