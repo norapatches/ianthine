@@ -1,4 +1,7 @@
-# TERRAIN LAYERS
+# TODO
+These are the currently open tasks on each topic
+
+## TERRAIN LAYERS
 All terrain layers are always *Tile Layers* in the **tmx_maps**
 - [ ] **terrain**           *Floor class*
     - visible & static
@@ -22,8 +25,8 @@ All terrain layers are always *Tile Layers* in the **tmx_maps**
     - doesn't appear on minimap
     - death on collision
 
-# PLAYER
-## Abilities
+## PLAYER
+### Abilities
 - [x] movement
 - [x] jumping
 - [x] walljump

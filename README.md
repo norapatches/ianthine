@@ -6,6 +6,9 @@
 - Graphic Assets made with [Aseprite](https://aseprite.org) *1.3.8*
 - Tilesets and Maps made with [Tiled](https://mapeditor.org) *1.11.0*
 
+## TODO list
+View the current [TODO](TODO.md) tasks
+
 ## Project Description
 **'Stickman'** is a simple 2D *platformer* video game, where the player controls a stick figure. The game has an **overworld stage** and several individual **level stage**s. The player unlocks access to new levels on the overworld as progressing with finishing prior ones. The level stages have **checkpoints** where the player can respawn. The game has a **pause screen** both on the overworld and the level stages where the player can exit the game or resume gameplay.
 
