@@ -41,15 +41,19 @@ class Game:
             # limit delta time
             max_dt = 0.005
             dt = min(dt, max_dt)
-            # check for events
+            
+            # check for pygame events
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
+            
             # run current stage
             self.current_stage.run(dt)
+            
             # DEBUG show fps
             show_fps(self.clock.get_fps())
+            
             # update display
             pygame.display.update()
 
