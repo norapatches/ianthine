@@ -21,7 +21,6 @@ class Creature(pygame.sprite.Sprite):
         
         self.speed = 100
         
-    
     def animate(self, dt) -> None:
         self.frame_index += ANIMATION_SPEED * dt
                 
