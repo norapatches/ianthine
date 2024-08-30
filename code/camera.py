@@ -2,7 +2,7 @@ from settings import *
 
 class CameraGroup(pygame.sprite.Group):
     def __init__(self, width, height) -> None:
-        '''The CameraGroup serves as a moving zoomed-in display surface that displays all sprites on level'''
+        '''The CameraGroup serves as a moving zoomed-in display surface that displays all sprites on level stages'''
         super().__init__()
         self.display = pygame.display.get_surface()
         self.screen = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
@@ -21,12 +21,12 @@ class CameraGroup(pygame.sprite.Group):
         }
     
     def camera_constraint(self) -> None:
-        '''Don't allow camera movement on sides'''
+        '''Don't allow camera movement when reaching level stage sides'''
         self.offset.x = self.offset.x if self.offset.x < self.borders['left'] else 0
         self.offset.x = self.offset.x if self.offset.x > self.borders['right'] else self.borders['right']
     
     def toggle_minimap(self) -> None:
-        '''Show minimap while holding a key'''
+        '''Show minimap while holding M key'''
         keys = pygame.key.get_pressed()
         if keys[pygame.K_m]:
             self.display.blit(self.minimap.scaled_surface, (10, WINDOW_HEIGHT - self.minimap.scaled_surface.height - 10))
