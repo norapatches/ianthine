@@ -6,7 +6,7 @@
     Tilesets and Maps made with Tiled 1.11.0
 
 ## Project Description
-'Stickman' is a simple 2D platformer video game, where the player controls a stick figure. The game has an overworld stage and several individual level stages. The player unlocks access to new levels on the overworld as progressing with finishing prior ones.
+'Stickman' is a simple 2D platformer video game, where the player controls a stick figure. The game has an overworld stage and several individual level stages. The player unlocks access to new levels on the overworld as progressing with finishing prior ones. The level stages have checkpoints where the player can respawn. The game has a pause screen both on the overworld and the level stages where the player can exit the game or resume gameplay.
 
 ### Overworld
 There are Nodes and Paths on the Overworld that represent level stages and the progression between them. A new path only becomes available to traverse if a previous level stage has been finished.
