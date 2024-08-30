@@ -1,41 +1,24 @@
-# STICKMAN
+# VIDEO GAME PROJECT
+    Project Title: 'Stickman'
+    Language: Python 3.12.2
+    Library: pygame-ce 2.5.1 (SDL 2.30.6)
+    Graphic Assets made with Aseprite 1.3.8
+    Tilesets and Maps made with Tiled 1.11.0
 
-*v0.0.1*
+## Project Description
+'Stickman' is a simple 2D platformer video game, where the player controls a stick figure. The game has an overworld stage and several individual level stages. The player unlocks access to new levels on the overworld as progressing with finishing prior ones.
 
-*pygame-ce v2.5.1 | Python 3.12.2*
+### Overworld
+There are Nodes and Paths on the Overworld that represent level stages and the progression between them. A new path only becomes available to traverse if a previous level stage has been finished.
 
-Stickman is a 2d platformer game that uses the [pygame-ce](http://pyga.me) library. The player character is a stick figure who can move left and right and is affected by gravity but can overcome it by jumping. The main goal of the game is exploring the given level, finding the key to the door, avoiding obstacles and/or enemies and finding the door.
+### Levels
+The player has to find a key that unlocks a door leading out of the level stage. The key can either be found somewhere on the level or another item can be found and traded to an NPC, who then either directly gives the key to the player in return, or opens a new part of the level to be discovered where the key can be located.
 
-## PLAYER
+### Obstacles
+There are spikes and other traps on the levels. Collision with said traps and spikes results in death and being respawned at a checkpoint on the level. If the player has not reached the first checkpoint yet, they spawn back on the overworld.
 
-### Player abilities
-**movement**
-    - pressing the *LEFT* and *RIGHT* arrows
+### Enemies
+There are enemies on each level stage that damage the player if collision occurs between their sprites or hitboxes. The player can also take damage by colliding with one of the enemy projectiles.
 
-**jumping**
-    - pressing the *SPACEBAR*
-    - holding *SPACEBAR* increases jump length
-
-**dashing**
-    - pressing *X* key
-
-**wall sliding**
-    - when colliding with a wall, the gravity is reduced
-
-**wall jumping**
-    - when wall sliding is active the player can jump once
-
-**crouching**
-    - holding the *DOWN* arrow makes the character crouch
-    - walking while crouching halves movement speed
-
-**platform skip**
-    - pressing the *DOWN* arrow key on semi-collidable platforms allows the player to fall downwards
-
-### Snail
-- they keep moving in a direction as long as not colliding with a wall or if there is no more surface to walk on
-- they can move on spikes as if it was standard terrain
-- the player is able to stand on the snail's shell and thus be carried over spikes
-
-### Ghost
-- they can be interacted with and they help with saving progress
+### Checkpoints
+There are checkpoints on longer levels. Shall the player lose all lives or collide with a spike or other trap, they don't spawn on the overworld but at the last checkpoint location.
