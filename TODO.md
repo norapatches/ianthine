@@ -25,11 +25,48 @@ All terrain layers are always *Tile Layers* in the **tmx_maps**
     - doesn't appear on minimap
     - death on collision
 
+## OBJECT LAYERS
+The object layers' layout is the following:
+- [ ] bg_details
+The naming convention is \<*objectname*> or \<*static*>
+    - animated background elements
+    - static background elements
+    - no collision
+- [ ] objects
+    - player
+    - animated static platforms
+    - static objects
+    - door
+    - static traps
+- [ ] moving_objects
+    - moving platforms
+    - moving traps
+- [ ] items
+    - potions
+    - trade items
+    - key
+- [ ] enemies
+    - moving enemy
+    - shooting enemy
+- [ ] npc
+    - snails
+    - traders
+- [ ] data
+    - level data
+
+
 ## PLAYER
 ### Abilities
 - [x] movement
+    - **move left** - LEFT ARROW
+    - **move right** - RIGHT ARROW
 - [x] jumping
+    - **jump** - SPACEBAR
 - [x] walljump
+    - **walljump** - SPACEBAR *(when wallsliding)*
 - [ ] dash
+    - **horizontal dash** - X KEY
 - [x] crouch / platform skip
+    - **crouch** - DOWN ARROW *(skips semi-collison surfaces)*
 - [ ] interaction
+    - **interact** - UP ARROW
