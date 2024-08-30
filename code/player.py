@@ -256,8 +256,7 @@ class Player(pygame.sprite.Sprite):
         self.get_state()
         self.animate(dt)
         
-        # hitbox and side rects
+        '''hitbox and side rects'''
         #self.show_hitbox()
         #self.show_collision_detect()
-        
 
