@@ -11,7 +11,7 @@ def import_image(*path, alpha=True, format='png') -> pygame.Surface:
 def import_folder(*path) -> list:
     '''Import images from a folder and store them in a list'''
     frames = []
-    for folder_path, subfolders, image_names in walk(join(*path)):
+    for folder_path, _, image_names in walk(join(*path)):
         for image_name in sorted(image_names):
             try:
                 int(image_name.split('.')[0])
