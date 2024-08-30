@@ -84,7 +84,6 @@ class Snail(pygame.sprite.Sprite):
         self.hitbox_rect.x += self.direction.x * self.speed * dt
         
         self.rect.topleft = self.hitbox_rect.topleft + vector(-4, -1)
-        self.map_rect.x, self.map_rect.y = (self.hitbox_rect.x / TILE_SIZE), self.hitbox_rect.y / TILE_SIZE
     
     def animate(self, dt) -> None:
         self.frame_index += ANIMATION_SPEED * dt
