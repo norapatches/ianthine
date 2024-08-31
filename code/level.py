@@ -3,7 +3,7 @@ from sprites import Sprite, AnimatedSprite, MovingSprite, Floor, CollapseFloor
 from camera import CameraGroup
 
 from npc import Creature, Ghost, Snail
-from enemies import Soldier
+from enemies import Crawler, Soldier
 from player import Player
 
 class Level:
@@ -65,6 +65,8 @@ class Level:
         for obj in tmx_map.get_layer_by_name('enemies'):
             if obj.name == 'soldier':
                 Soldier((obj.x, obj.y), level_frames['soldier'], self.all_sprites, self.collision_sprites)
+            if obj.name == 'crawler':
+                Crawler((obj.x, obj.y), level_frames['crawler'], (self.all_sprites, self.damage_sprites), self.collision_sprites)
         
         # player
         for obj in tmx_map.get_layer_by_name('objects'):

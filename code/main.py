@@ -30,6 +30,7 @@ class Game:
             'key': import_folder('.', 'assets', 'graphic', 'items', 'key'),
             'creature': import_sub_folders('.', 'assets', 'graphic', 'npc', 'creature'),
             'soldier': import_folder('.', 'assets', 'graphic', 'enemy', 'soldier'),
+            'crawler': import_folder('.', 'assets', 'graphic', 'enemy', 'crawler'),
             'spike': import_image('.', 'assets', 'graphic', 'level', 'spike')
         }
     
@@ -53,7 +54,6 @@ class Game:
             
             # DEBUG show fps & dt
             show_fps(self.clock.get_fps())
-            debug(f'dt: {dt:.2f}')
             
             # update display
             pygame.display.update()

@@ -259,4 +259,3 @@ class Player(pygame.sprite.Sprite):
         '''hitbox and side rects'''
         #self.show_hitbox()
         #self.show_collision_detect()
-
