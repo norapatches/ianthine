@@ -134,13 +134,13 @@ class Player(pygame.sprite.Sprite):
                     self.direction.y = -self.jump_height
                     self.timers['wallslide_block'].start()
                     self.hitbox_rect.bottom -= 1
-                    self.sound.jump()
+                    #self.sound.jump()
                 # walljump
                 elif any((self.on_surface['left'], self.on_surface['right'])) and not self.timers['wallslide_block'].active and self.abilities['walljump']:
                     self.timers['walljump'].start()
                     self.direction.y = -self.jump_height
                     self.direction.x = 1 if self.on_surface['left'] else -1
-                    self.sound.jump()
+                    #self.sound.jump()
             self.jump = False
         
         self.collision('vertical')
