@@ -44,6 +44,7 @@ class Soldier(pygame.sprite.Sprite):
 
 
 class Crawler(pygame.sprite.Sprite):
+    '''The Crawler can move on any surface endlessly'''
     def __init__(self, position, frames, groups, collision_sprites) -> None:
         super().__init__(groups)
         self.frames, self.frame_index = frames, 0

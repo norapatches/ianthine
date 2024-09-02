@@ -20,7 +20,7 @@ All terrain layers are always *Tile Layers* in the **tmx_maps**
     - visible & static
     - appears on minimap
     - semi-collision
-- [ ] **spike**             *Spike class*
+- [ ] **spike**             *Sprite class*
     - visible & static
     - doesn't appear on minimap
     - death on collision

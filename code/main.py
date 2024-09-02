@@ -3,6 +3,7 @@ from support import *
 from debug import debug, show_fps
 from level import Level
 
+from managers import SoundManager
 from os.path import join
 from pytmx.util_pygame import load_pygame
 
@@ -14,12 +15,14 @@ class Game:
         self.clock = pygame.time.Clock()
         self.display = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
         
+        self.soundManager = SoundManager()
+        
         self.import_assets()
         
         self.tmx_maps = {
             0: load_pygame(join('.', 'data', 'levels', 'test.tmx'))
         }
-        self.current_stage = Level(self.tmx_maps[0], self.level_frames)
+        self.current_stage = Level(self.tmx_maps[0], self.level_frames, self.soundManager)
     
     def import_assets(self):
         '''Import game assets'''

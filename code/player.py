@@ -2,7 +2,7 @@ from settings import *
 from gtimer import Timer
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, position, groups, collision_sprites, semi_collision_sprites, snail_sprites, frames):
+    def __init__(self, position, groups, collision_sprites, semi_collision_sprites, snail_sprites, frames, sound):
         # general setup
         super().__init__(groups)
         self.z = Z_LAYERS['main']
@@ -14,6 +14,9 @@ class Player(pygame.sprite.Sprite):
         self.frames, self.frame_index = frames, 0
         self.state, self.facing_right = 'idle', True
         self.image = self.frames[self.state][self.frame_index]
+        
+        # sounds
+        self.sound = sound
         
         # minimap
         self.map_image = pygame.Surface((1, 1))
@@ -49,8 +52,8 @@ class Player(pygame.sprite.Sprite):
         # timers
         self.timers = {
             'platform_skip': Timer(200),
-            'walljump': Timer(100),
-            'wallslide_block': Timer(200),
+            'walljump': Timer(200),
+            'wallslide_block': Timer(400),
             'dash': Timer(200)
         }
     
@@ -110,6 +113,7 @@ class Player(pygame.sprite.Sprite):
             self.dash = False
         else:
             self.hitbox_rect.x += self.direction.x * self.speed * dt
+        
         self.collision('horizontal')
         
         # vertical movement
@@ -130,11 +134,13 @@ class Player(pygame.sprite.Sprite):
                     self.direction.y = -self.jump_height
                     self.timers['wallslide_block'].start()
                     self.hitbox_rect.bottom -= 1
+                    self.sound.jump()
                 # walljump
                 elif any((self.on_surface['left'], self.on_surface['right'])) and not self.timers['wallslide_block'].active and self.abilities['walljump']:
                     self.timers['walljump'].start()
                     self.direction.y = -self.jump_height
                     self.direction.x = 1 if self.on_surface['left'] else -1
+                    self.sound.jump()
             self.jump = False
         
         self.collision('vertical')
