@@ -1,7 +1,7 @@
 from settings import *
 
 class CameraGroup(pygame.sprite.Group):
-    def __init__(self, width, height) -> None:
+    def __init__(self, width: float, height: float) -> None:
         '''The CameraGroup serves as a moving zoomed-in display surface that displays all sprites on level stages'''
         super().__init__()
         self.display = pygame.display.get_surface()
