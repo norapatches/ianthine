@@ -7,7 +7,7 @@ from enemies import Crawler, Soldier
 from player import Player
 
 class Level:
-    def __init__(self, tmx_map, level_frames, sound_manager) -> None:
+    def __init__(self, tmx_map, level_frames) -> None:
         self.display = pygame.display.get_surface()
                 
         # level data
@@ -26,9 +26,9 @@ class Level:
         self.damage_sprites = pygame.sprite.Group()             # spikes, traps, enemies, anything that damages player
         self.snail_collision_sprites = pygame.sprite.Group()    # snails
         
-        self.setup(tmx_map, level_frames, sound_manager)
+        self.setup(tmx_map, level_frames)
     
-    def setup(self, tmx_map, level_frames, sound_manager) -> None:
+    def setup(self, tmx_map, level_frames) -> None:
         '''Read tile and object layers from tmx map file'''
         
         # tiles
@@ -77,11 +77,10 @@ class Level:
                     collision_sprites= self.collision_sprites,
                     semi_collision_sprites= self.semi_collision_sprites,
                     snail_sprites= self.snail_collision_sprites,
-                    frames= level_frames['player'],
-                    sound= sound_manager
+                    frames= level_frames['player']
                 )
     
-    def run(self, dt):
+    def run(self, dt: float):
         '''Run the given level, update all sprites, center camera around player'''
         self.display.fill('black')
         

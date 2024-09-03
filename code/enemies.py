@@ -54,7 +54,7 @@ class Crawler(pygame.sprite.Sprite):
         self.z = Z_LAYERS['main']
         
         self.direction = vector(1, 0)
-        self.speed = 4
+        self.speed = 8
         self.collision_rects = [sprite.rect for sprite in collision_sprites]
         
         self.on_surface = {'bottom': False, 'top': False, 'left': False, 'right': False}
@@ -82,6 +82,10 @@ class Crawler(pygame.sprite.Sprite):
             self.rotate['right'] = True
         else:
             self.rotate['left'], self.rotate['right'] = False, False
+        
+        if self.on_surface['bottom'] and not any((self.on_surface['left'], self.on_surface['right'])):
+            self.direction.x = 1
+            self.direction.y = 0
         
         if self.on_surface['bottom'] and self.on_surface['right']:
             self.direction.y = -1

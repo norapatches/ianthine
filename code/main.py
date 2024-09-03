@@ -3,9 +3,8 @@ from support import *
 from debug import debug, show_fps
 from level import Level
 
-from managers import SoundManager
 from os.path import join
-from pytmx.util_pygame import load_pygame
+from pytmx.util_pygame import load_pygame   
 
 class Game:
     def __init__(self) -> None:
@@ -15,16 +14,14 @@ class Game:
         self.clock = pygame.time.Clock()
         self.display = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
         
-        self.soundManager = SoundManager()
-        
         self.import_assets()
         
         self.tmx_maps = {
             0: load_pygame(join('.', 'data', 'levels', 'test.tmx'))
         }
-        self.current_stage = Level(self.tmx_maps[0], self.level_frames, self.soundManager)
+        self.current_stage = Level(self.tmx_maps[0], self.level_frames)
     
-    def import_assets(self):
+    def import_assets(self) -> None:
         '''Import game assets'''
         self.level_frames = {
             'player': import_sub_folders('.', 'assets', 'graphic', 'player'),
@@ -36,15 +33,21 @@ class Game:
             'crawler': import_folder('.', 'assets', 'graphic', 'enemy', 'crawler'),
             'spike': import_image('.', 'assets', 'graphic', 'level', 'spike')
         }
+        self.sfx = {
+            'jump': pygame.mixer.Sound(join('.', 'assets', 'sound', 'sfx', 'jump.wav')),
+            'land': pygame.mixer.Sound(join('.', 'assets', 'sound', 'sfx', 'jump_land.wav')),
+            'step': pygame.mixer.Sound(join('.', 'assets', 'sound', 'sfx', 'footstep.wav'))
+        }
     
     def run(self) -> None:
         '''The game loop, runs current stage'''
         while True:
             # get delta time
             dt = self.clock.tick() / 1000
+            
             # limit delta time
             max_dt = 0.005
-            dt = min(dt, max_dt)
+            #dt = min(dt, max_dt)
             
             # check for pygame events
             for event in pygame.event.get():

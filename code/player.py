@@ -2,7 +2,7 @@ from settings import *
 from gtimer import Timer
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, position, groups, collision_sprites, semi_collision_sprites, snail_sprites, frames, sound):
+    def __init__(self, position, groups, collision_sprites, semi_collision_sprites, snail_sprites, frames):
         # general setup
         super().__init__(groups)
         self.z = Z_LAYERS['main']
@@ -14,13 +14,10 @@ class Player(pygame.sprite.Sprite):
         self.frames, self.frame_index = frames, 0
         self.state, self.facing_right = 'idle', True
         self.image = self.frames[self.state][self.frame_index]
-        
-        # sounds
-        self.sound = sound
-        
+                
         # minimap
         self.map_image = pygame.Surface((1, 1))
-        self.map_image.fill('gray')
+        self.map_image.fill('red')
         self.map_rect = self.map_image.get_frect(topleft = (position[0] / TILE_SIZE, position[1] / TILE_SIZE))
         
         # rects
@@ -40,7 +37,7 @@ class Player(pygame.sprite.Sprite):
         self.crouch = False
         self.jump = False
         self.jump_height = 256
-        self.dash = False
+        self.attacking = False
               
         # collision
         self.collision_sprites = collision_sprites
@@ -54,7 +51,7 @@ class Player(pygame.sprite.Sprite):
             'platform_skip': Timer(200),
             'walljump': Timer(200),
             'wallslide_block': Timer(400),
-            'dash': Timer(200)
+            'attack_lock': Timer(200)
         }
     
     def input(self) -> None:
@@ -89,10 +86,12 @@ class Player(pygame.sprite.Sprite):
             if released[pygame.K_UP]:
                 self.does_interact = False
             
-            # dash
+            # melee
             if jpressed[pygame.K_x]:
-                self.dash = True
-                self.timers['dash'].start()
+                self.attack('melee')
+            # ranged
+            if jpressed[pygame.K_c]:
+                self.attack('ranged')
             
             self.direction.x = input_vector.normalize().x if input_vector else input_vector.x
         # jumping
@@ -101,16 +100,23 @@ class Player(pygame.sprite.Sprite):
         if released[pygame.K_SPACE] and self.direction.y <= 0:
             self.direction.y = 1
     
+    def attack(self, type) -> None:
+        if type == 'melee':
+            if not self.timers['attack_lock'].active:
+                self.attacking = True
+                self.frame_index = 0
+                self.timers['attack_lock'].start()
+        if type == 'ranged':
+            pass
+    
     def move(self, dt) -> None:
         self.speed = 96
         self.speed = self.speed if not self.crouch else self.speed / 2
         
         # horizontal movement
-        if self.timers['dash'].active:
+        if not self.on_surface['floor'] and self.attacking:
             self.direction.y = 0
-            self.direction.x = 1 if self.facing_right else -1
-            self.hitbox_rect.x += self.direction.x * self.speed * dt
-            self.dash = False
+            self.hitbox_rect.x += self.speed * dt if self.facing_right else -self.speed * dt
         else:
             self.hitbox_rect.x += self.direction.x * self.speed * dt
         
@@ -134,13 +140,11 @@ class Player(pygame.sprite.Sprite):
                     self.direction.y = -self.jump_height
                     self.timers['wallslide_block'].start()
                     self.hitbox_rect.bottom -= 1
-                    #self.sound.jump()
                 # walljump
                 elif any((self.on_surface['left'], self.on_surface['right'])) and not self.timers['wallslide_block'].active and self.abilities['walljump']:
                     self.timers['walljump'].start()
                     self.direction.y = -self.jump_height
                     self.direction.x = 1 if self.on_surface['left'] else -1
-                    #self.sound.jump()
             self.jump = False
         
         self.collision('vertical')
@@ -210,22 +214,35 @@ class Player(pygame.sprite.Sprite):
             timer.update()
     
     def animate(self, dt) -> None:
-        self.frame_index += ANIMATION_SPEED * dt
-                
+        if self.state in ['melee', 'air_melee']:
+            self.frame_index += ANIMATION_SPEED * 2 * dt
+        else:
+            self.frame_index += ANIMATION_SPEED * dt
+        
+        if self.state in ['melee', 'air_melee'] and self.frame_index >= len(self.frames[self.state]):
+            self.state = 'idle'
+        
         self.image = self.frames[self.state][int(self.frame_index) % len(self.frames[self.state])]
         self.image = self.image if self.facing_right else pygame.transform.flip(self.image, True, False)
+        
+        if self.attacking and self.frame_index > len(self.frames[self.state]):
+            self.attacking = False
     
     def get_state(self) -> None:
         if self.on_surface['floor']:
-            self.state = 'idle' if self.direction.x == 0 else 'walk'
-            self.state = 'crouch' if self.crouch else self.state
-        else:
-            if any((self.on_surface['left'], self.on_surface['right'])):
-                    self.state = 'wallslide'
+            if self.attacking:
+                self.state = 'melee'
             else:
-                self.state = 'jump' if self.direction.y < 0 else 'fall'
-        if self.timers['dash'].active:
-            self.state = 'dash'
+                self.state = 'idle' if self.direction.x == 0 else 'walk'
+                self.state = 'crouch' if self.crouch else self.state
+        else:
+            if self.attacking:
+                self.state = 'air_melee'
+            else:
+                if any((self.on_surface['left'], self.on_surface['right'])):
+                        self.state = 'wallslide'
+                else:
+                    self.state = 'jump' if self.direction.y < 0 else 'fall'
         if self.crouch and self.direction.x != 0 and self.direction.y == 0:
             self.state = 'crouch_walk'
     
