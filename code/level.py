@@ -56,6 +56,18 @@ class Level:
             if obj.name == 'snail':
                 Snail((obj.x, obj.y), level_frames['snail'], (self.all_sprites, self.snail_collision_sprites), self.collision_sprites)
         
+        # objects
+        for obj in tmx_map.get_layer_by_name('objects'):
+            if obj.name == 'player':
+                self.player = Player(
+                    position= (obj.x, obj.y),
+                    groups= self.all_sprites,
+                    collision_sprites= self.collision_sprites,
+                    semi_collision_sprites= self.semi_collision_sprites,
+                    snail_sprites= self.snail_collision_sprites,
+                    frames= level_frames['player']
+                )
+        
         # moving objects
         for obj in tmx_map.get_layer_by_name('moving_objects'):
             frames = level_frames[obj.name]
@@ -77,18 +89,6 @@ class Level:
                 Soldier((obj.x, obj.y), level_frames['soldier'], self.all_sprites, self.collision_sprites)
             if obj.name == 'crawler':
                 Crawler((obj.x, obj.y), level_frames['crawler'], (self.all_sprites, self.damage_sprites), self.collision_sprites)
-        
-        # player
-        for obj in tmx_map.get_layer_by_name('objects'):
-            if obj.name == 'player':
-                self.player = Player(
-                    position= (obj.x, obj.y),
-                    groups= self.all_sprites,
-                    collision_sprites= self.collision_sprites,
-                    semi_collision_sprites= self.semi_collision_sprites,
-                    snail_sprites= self.snail_collision_sprites,
-                    frames= level_frames['player']
-                )
     
     def run(self, dt: float):
         '''Run the given level, update all sprites, center camera around player'''

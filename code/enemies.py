@@ -82,11 +82,7 @@ class Crawler(pygame.sprite.Sprite):
             self.rotate['right'] = True
         else:
             self.rotate['left'], self.rotate['right'] = False, False
-        
-        if self.on_surface['bottom'] and not any((self.on_surface['left'], self.on_surface['right'])):
-            self.direction.x = 1
-            self.direction.y = 0
-        
+
         if self.on_surface['bottom'] and self.on_surface['right']:
             self.direction.y = -1
             self.direction.x = 0

@@ -49,7 +49,7 @@ class Game:
             dt = self.clock.tick() / 1000
             
             # limit delta time
-            max_dt = 0.005
+            max_dt = 0.006
             dt = min(dt, max_dt)
             
             # check for pygame events

@@ -29,10 +29,6 @@ class Player(pygame.sprite.Sprite):
         self.hitbox_rect = self.rect.inflate(-8, 0)
         self.old_rect = self.hitbox_rect.copy()
         
-        self.floor_rect = pygame.Rect(self.hitbox_rect.bottomleft, (self.hitbox_rect.width, 1))  # rect UNDER player
-        self.right_rect = pygame.Rect((self.hitbox_rect.topright + vector(0, self.hitbox_rect.height / 4)), (1, self.rect.height / 2))    # rect on RIGHT side of player
-        self.left_rect = pygame.Rect((self.hitbox_rect.topleft + vector(-2, self.hitbox_rect.height / 4)), (1, self.rect.height / 2))    # rect on LEFT side of player
-        
         # movement
         self.direction = vector()
         self.speed = 96
@@ -78,7 +74,8 @@ class Player(pygame.sprite.Sprite):
             
             # platform skip / crouch
             if pressed[self.controls.down]:
-                self.timers['platform_skip'].start()
+                if self.on_surface['floor']:
+                    self.timers['platform_skip'].start()
                 self.crouch = True if self.on_surface['floor'] else False
             
             if released[self.controls.down]:
@@ -167,23 +164,23 @@ class Player(pygame.sprite.Sprite):
             self.hitbox_rect.topleft += self.platform.direction * self.platform.speed * dt
     
     def check_contact(self) -> None:
-        self.floor_rect = pygame.Rect(self.hitbox_rect.bottomleft, (self.hitbox_rect.width, 1))  # rect UNDER player
-        self.right_rect = pygame.Rect((self.hitbox_rect.topright + vector(0, self.hitbox_rect.height / 4)), (1, self.rect.height / 2))    # rect on RIGHT side of player
-        self.left_rect = pygame.Rect((self.hitbox_rect.topleft + vector(-2, self.hitbox_rect.height / 4)), (1, self.rect.height / 2))    # rect on LEFT side of player
+        floor_rect = pygame.Rect(self.hitbox_rect.bottomleft, (self.hitbox_rect.width, 2))  # rect UNDER player
+        right_rect = pygame.Rect((self.hitbox_rect.topright + vector(0, self.hitbox_rect.height / 4)), (2, self.rect.height / 2))    # rect on RIGHT side of player
+        left_rect = pygame.Rect((self.hitbox_rect.topleft + vector(-2, self.hitbox_rect.height / 4)), (2, self.rect.height / 2))    # rect on LEFT side of player
         
         collide_rects = [sprite.rect for sprite in self.collision_sprites]
         semi_collide_rects = [sprite.rect for sprite in self.semi_collision_sprites]
         snail_rects = [sprite.hitbox_rect for sprite in self.snail_sprites]
         
         # collisions
-        self.on_surface['floor'] = True if self.floor_rect.collidelist(collide_rects) >= 0 or self.floor_rect.collidelist(semi_collide_rects) >= 0 or self.floor_rect.collidelist(snail_rects) >= 0 and self.direction.y >= 0 else False
-        self.on_surface['right'] = True if self.right_rect.collidelist(collide_rects) >= 0 else False
-        self.on_surface['left'] = True if self.left_rect.collidelist(collide_rects) >= 0 else False
+        self.on_surface['floor'] = True if floor_rect.collidelist(collide_rects) >= 0 or floor_rect.collidelist(semi_collide_rects) >= 0 or floor_rect.collidelist(snail_rects) >= 0 and self.direction.y >= 0 else False
+        self.on_surface['right'] = True if right_rect.collidelist(collide_rects) >= 0 else False
+        self.on_surface['left'] = True if left_rect.collidelist(collide_rects) >= 0 else False
         
         self.platform = None
         sprites = self.collision_sprites.sprites() + self.semi_collision_sprites.sprites() + self.snail_sprites.sprites()
         for sprite in [sprite for sprite in sprites if hasattr(sprite, 'moving')]:
-            if sprite.rect.colliderect(self.floor_rect):
+            if sprite.rect.colliderect(floor_rect):
                 self.platform = sprite
     
     def collision(self, axis) -> None:

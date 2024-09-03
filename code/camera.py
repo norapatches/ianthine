@@ -67,3 +67,4 @@ class MiniMap:
         
         scaled = pygame.transform.scale(self.surface, self.scaled_surface.size)
         self.scaled_surface.blit(scaled, (0, 0))
+
