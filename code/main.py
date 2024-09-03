@@ -20,6 +20,8 @@ class Game:
             0: load_pygame(join('.', 'data', 'levels', 'test.tmx'))
         }
         self.current_stage = Level(self.tmx_maps[0], self.level_frames)
+        
+        self.paused = False
     
     def import_assets(self) -> None:
         '''Import game assets'''
@@ -31,7 +33,8 @@ class Game:
             'creature': import_sub_folders('.', 'assets', 'graphic', 'npc', 'creature'),
             'soldier': import_folder('.', 'assets', 'graphic', 'enemy', 'soldier'),
             'crawler': import_folder('.', 'assets', 'graphic', 'enemy', 'crawler'),
-            'spike': import_image('.', 'assets', 'graphic', 'level', 'spike')
+            'spike': import_image('.', 'assets', 'graphic', 'level', 'spike'),
+            'moving_platform': import_folder('.', 'assets', 'graphic', 'level', 'moving_platform')
         }
         self.sfx = {
             'jump': pygame.mixer.Sound(join('.', 'assets', 'sound', 'sfx', 'jump.wav')),
@@ -39,14 +42,14 @@ class Game:
             'step': pygame.mixer.Sound(join('.', 'assets', 'sound', 'sfx', 'footstep.wav'))
         }
     
-    def run(self) -> None:
+    def run(self) -> None:        
         '''The game loop, runs current stage'''
         while True:
             # get delta time
-            dt = self.clock.tick(60) / 1000
+            dt = self.clock.tick() / 1000
             
             # limit delta time
-            max_dt = 0.013
+            max_dt = 0.005
             dt = min(dt, max_dt)
             
             # check for pygame events
@@ -61,6 +64,7 @@ class Game:
             # DEBUG show fps & dt
             show_fps(self.clock.get_fps())
             debug(f'dt: {dt}')
+            
             # update display
             pygame.display.update()
 

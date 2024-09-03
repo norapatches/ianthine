@@ -58,8 +58,18 @@ class Level:
         
         # moving objects
         for obj in tmx_map.get_layer_by_name('moving_objects'):
-            if obj.name == 'creature':
-                Creature((obj.x, obj.y), level_frames['creature'], self.all_sprites)
+            frames = level_frames[obj.name]
+            groups = (self.all_sprites, self.semi_collision_sprites) if obj.properties['platform'] else (self.all_sprites, self.damage_sprites)
+            if obj.width > obj.height:
+                move_direction = 'x'
+                start_pos = (obj.x, obj.y + obj.height / 2)
+                end_pos = (obj.x + obj.width, obj.y + obj.height / 2)
+            else:
+                move_direction = 'y'
+                start_pos = (obj.x + obj.width / 2, obj.y)
+                end_pos = (obj.x + obj.width / 2, obj.y + obj.height)
+            speed = obj.properties['speed']
+            MovingSprite(frames, groups, start_pos, end_pos, move_direction, speed)
         
         # enemies
         for obj in tmx_map.get_layer_by_name('enemies'):

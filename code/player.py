@@ -29,9 +29,9 @@ class Player(pygame.sprite.Sprite):
         self.hitbox_rect = self.rect.inflate(-8, 0)
         self.old_rect = self.hitbox_rect.copy()
         
-        self.floor_rect = pygame.Rect(self.hitbox_rect.bottomleft, (self.hitbox_rect.width, 2))  # rect UNDER player
-        self.right_rect = pygame.Rect((self.hitbox_rect.topright + vector(0, self.hitbox_rect.height / 4)), (2, self.rect.height / 2))    # rect on RIGHT side of player
-        self.left_rect = pygame.Rect((self.hitbox_rect.topleft + vector(-2, self.hitbox_rect.height / 4)), (2, self.rect.height / 2))    # rect on LEFT side of player
+        self.floor_rect = pygame.Rect(self.hitbox_rect.bottomleft, (self.hitbox_rect.width, 1))  # rect UNDER player
+        self.right_rect = pygame.Rect((self.hitbox_rect.topright + vector(0, self.hitbox_rect.height / 4)), (1, self.rect.height / 2))    # rect on RIGHT side of player
+        self.left_rect = pygame.Rect((self.hitbox_rect.topleft + vector(-2, self.hitbox_rect.height / 4)), (1, self.rect.height / 2))    # rect on LEFT side of player
         
         # movement
         self.direction = vector()
@@ -176,7 +176,7 @@ class Player(pygame.sprite.Sprite):
         snail_rects = [sprite.hitbox_rect for sprite in self.snail_sprites]
         
         # collisions
-        self.on_surface['floor'] = True if (self.floor_rect.collidelist(collide_rects) >= 0 or self.floor_rect.collidelist(semi_collide_rects) >= 0 or self.floor_rect.collidelist(snail_rects) >= 0) and self.direction.y >= 0 else False
+        self.on_surface['floor'] = True if self.floor_rect.collidelist(collide_rects) >= 0 or self.floor_rect.collidelist(semi_collide_rects) >= 0 or self.floor_rect.collidelist(snail_rects) >= 0 and self.direction.y >= 0 else False
         self.on_surface['right'] = True if self.right_rect.collidelist(collide_rects) >= 0 else False
         self.on_surface['left'] = True if self.left_rect.collidelist(collide_rects) >= 0 else False
         
