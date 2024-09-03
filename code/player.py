@@ -41,7 +41,8 @@ class Player(pygame.sprite.Sprite):
         self.crouch = False
         self.jump = False
         self.jump_height = 256
-        self.attacking = False
+        self.melee_atk = False
+        self.ranged_atk = False
               
         # collision
         self.collision_sprites = collision_sprites
@@ -55,7 +56,7 @@ class Player(pygame.sprite.Sprite):
             'platform_skip': Timer(200),
             'walljump': Timer(200),
             'wallslide_block': Timer(400),
-            'attack_lock': Timer(200)
+            'attack_lock': Timer(500)
         }
     
     def input(self) -> None:
@@ -107,18 +108,21 @@ class Player(pygame.sprite.Sprite):
     def attack(self, type) -> None:
         if type == 'melee':
             if not self.timers['attack_lock'].active:
-                self.attacking = True
+                self.melee_atk = True
                 self.frame_index = 0
                 self.timers['attack_lock'].start()
         if type == 'ranged':
-            pass
+            if not self.timers['attack_lock'].active:
+                self.ranged_atk = True
+                self.frame_index = 0
+                self.timers['attack_lock'].start()
     
     def move(self, dt) -> None:
         self.speed = 96
         self.speed = self.speed if not self.crouch else self.speed / 2
         
         # horizontal movement
-        if not self.on_surface['floor'] and self.attacking:
+        if not self.on_surface['floor'] and self.melee_atk:
             self.direction.y = 0
             self.hitbox_rect.x += self.speed * dt if self.facing_right else -self.speed * dt
         else:
@@ -218,30 +222,36 @@ class Player(pygame.sprite.Sprite):
             timer.update()
     
     def animate(self, dt) -> None:
-        if self.state in ['melee', 'air_melee']:
+        if self.state in ['melee', 'air_melee', 'ranged', 'air_ranged']:
             self.frame_index += ANIMATION_SPEED * 2 * dt
         else:
             self.frame_index += ANIMATION_SPEED * dt
         
-        if self.state in ['melee', 'air_melee'] and self.frame_index >= len(self.frames[self.state]):
+        if self.state in ['melee', 'air_melee', 'ranged', 'air_ranged'] and self.frame_index >= len(self.frames[self.state]):
             self.state = 'idle'
         
         self.image = self.frames[self.state][int(self.frame_index) % len(self.frames[self.state])]
         self.image = self.image if self.facing_right else pygame.transform.flip(self.image, True, False)
         
-        if self.attacking and self.frame_index > len(self.frames[self.state]):
-            self.attacking = False
+        if self.melee_atk and self.frame_index > len(self.frames[self.state]):
+            self.melee_atk = False
+        if self.ranged_atk and self.frame_index > len(self.frames[self.state]):
+            self.ranged_atk = False
     
     def get_state(self) -> None:
         if self.on_surface['floor']:
-            if self.attacking:
+            if self.melee_atk:
                 self.state = 'melee'
+            elif self.ranged_atk:
+                self.state = 'ranged'
             else:
                 self.state = 'idle' if self.direction.x == 0 else 'walk'
                 self.state = 'crouch' if self.crouch else self.state
         else:
-            if self.attacking:
+            if self.melee_atk:
                 self.state = 'air_melee'
+            elif self.ranged_atk:
+                self.state = 'air_ranged'
             else:
                 if any((self.on_surface['left'], self.on_surface['right'])):
                         self.state = 'wallslide'

@@ -46,8 +46,8 @@ class Game:
             dt = self.clock.tick() / 1000
             
             # limit delta time
-            max_dt = 0.005
-            dt = min(dt, max_dt)
+            max_dt = 0.017
+            #dt = min(dt, max_dt)
             
             # check for pygame events
             for event in pygame.event.get():
@@ -60,7 +60,7 @@ class Game:
             
             # DEBUG show fps & dt
             show_fps(self.clock.get_fps())
-            debug(dt)
+            debug(f'dt: {dt}')
             # update display
             pygame.display.update()
 
