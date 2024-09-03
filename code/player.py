@@ -1,4 +1,5 @@
 from settings import *
+from controls import LevelControls
 from gtimer import Timer
 
 class Player(pygame.sprite.Sprite):
@@ -9,6 +10,9 @@ class Player(pygame.sprite.Sprite):
                 
         # abilities
         self.abilities = {'double_jump': False, 'walljump': False}
+        
+        # controls
+        self.controls = LevelControls()
         
         # image
         self.frames, self.frame_index = frames, 0
@@ -63,41 +67,41 @@ class Player(pygame.sprite.Sprite):
         # we ignore input for a short time while on the wall
         if not self.timers['walljump'].active:
             # movement
-            if pressed[pygame.K_RIGHT]:
+            if pressed[self.controls.right]:
                 input_vector.x += 1
                 self.facing_right = True
             
-            if pressed[pygame.K_LEFT]:
+            if pressed[self.controls.left]:
                 input_vector.x -= 1
                 self.facing_right = False
             
             # platform skip / crouch
-            if pressed[pygame.K_DOWN]:
+            if pressed[self.controls.down]:
                 self.timers['platform_skip'].start()
                 self.crouch = True if self.on_surface['floor'] else False
             
-            if released[pygame.K_DOWN]:
+            if released[self.controls.down]:
                 self.crouch = False
                 self.frame_index = 0
             
             # interaction
-            if pressed[pygame.K_UP]:
+            if pressed[self.controls.up]:
                 self.does_interact = True
-            if released[pygame.K_UP]:
+            if released[self.controls.up]:
                 self.does_interact = False
             
             # melee
-            if jpressed[pygame.K_x]:
+            if jpressed[self.controls.melee]:
                 self.attack('melee')
             # ranged
-            if jpressed[pygame.K_c]:
+            if jpressed[self.controls.ranged]:
                 self.attack('ranged')
             
             self.direction.x = input_vector.normalize().x if input_vector else input_vector.x
         # jumping
-        if pressed[pygame.K_SPACE]:
+        if pressed[self.controls.jump]:
             self.jump = True
-        if released[pygame.K_SPACE] and self.direction.y <= 0:
+        if released[self.controls.jump] and self.direction.y <= 0:
             self.direction.y = 1
     
     def attack(self, type) -> None:
