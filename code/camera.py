@@ -31,7 +31,7 @@ class CameraGroup(pygame.sprite.Group):
         if keys[pygame.K_m]:
             self.display.blit(self.minimap.scaled_surface, (10, WINDOW_HEIGHT - self.minimap.scaled_surface.height - 10))
     
-    def draw(self, target_position: tuple[int, int], dt: float):
+    def draw(self, target_position, dt):
         '''The custom draw method for the CameraGroup that draws in Z layer order'''
         self.offset.x = -(target_position[0] - SCREEN_WIDTH / 2)
         self.offset.y = -(target_position[1] - SCREEN_HEIGHT / 2)
@@ -42,8 +42,7 @@ class CameraGroup(pygame.sprite.Group):
         self.screen.fill('black')
         
         for sprite in sorted(self, key= lambda sprite: sprite.z):
-            offset_pos = int(sprite.rect.x + self.offset.x), int(sprite.rect.y + self.offset.y)
-            #offset_pos = sprite.rect.topleft + self.offset
+            offset_pos = sprite.rect.topleft + self.offset
             self.screen.blit(sprite.image, offset_pos)
         
         scaled = pygame.transform.scale(self.screen, (WINDOW_WIDTH, WINDOW_HEIGHT))
