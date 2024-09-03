@@ -43,11 +43,11 @@ class Game:
         '''The game loop, runs current stage'''
         while True:
             # get delta time
-            dt = self.clock.tick() / 1000
+            dt = self.clock.tick(60) / 1000
             
             # limit delta time
-            max_dt = 0.017
-            #dt = min(dt, max_dt)
+            max_dt = 0.013
+            dt = min(dt, max_dt)
             
             # check for pygame events
             for event in pygame.event.get():

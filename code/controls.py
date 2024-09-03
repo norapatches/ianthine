@@ -16,7 +16,7 @@ class LevelControls:
             'jump': pygame.K_SPACE, 'melee': pygame.K_j, 'ranged': pygame.K_i, 'map': pygame.K_TAB
         }
     ]
-    def __init__(self, gamepad=False, scheme= 0) -> None:
+    def __init__(self, scheme= 0, gamepad=False) -> None:
         if gamepad:
             pass
         else:

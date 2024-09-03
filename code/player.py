@@ -65,7 +65,7 @@ class Player(pygame.sprite.Sprite):
         released = pygame.key.get_just_released()
         input_vector = vector(0, 0)
         
-        # we ignore input for a short time while on the wall
+        # we ignore input for a short time while jumping off the wall
         if not self.timers['walljump'].active:
             # movement
             if pressed[self.controls.right]:
@@ -99,6 +99,7 @@ class Player(pygame.sprite.Sprite):
                 self.attack('ranged')
             
             self.direction.x = input_vector.normalize().x if input_vector else input_vector.x
+        
         # jumping
         if pressed[self.controls.jump]:
             self.jump = True
