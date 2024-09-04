@@ -2,6 +2,7 @@ from settings import *
 from support import *
 from debug import debug_multiple, show_fps
 from level import Level
+from ui import UI
 
 from os.path import join
 from pytmx.util_pygame import load_pygame   
@@ -22,6 +23,9 @@ class Game:
         self.current_stage = Level(self.tmx_maps[0], self.level_frames)
         
         self.paused = False
+        
+        self.ui = UI(pygame.font.Font(None, 16), self.ui_frames, self.current_stage.display)
+        self.ui.create_hearts(5)
     
     def import_assets(self) -> None:
         '''Import game assets'''
@@ -41,6 +45,9 @@ class Game:
             'jump': pygame.mixer.Sound(join('.', 'assets', 'sound', 'sfx', 'jump.wav')),
             'land': pygame.mixer.Sound(join('.', 'assets', 'sound', 'sfx', 'jump_land.wav')),
             'step': pygame.mixer.Sound(join('.', 'assets', 'sound', 'sfx', 'footstep.wav'))
+        }
+        self.ui_frames = {
+            'heart': import_folder(join('.', 'assets', 'graphic', 'ui', 'heart'))
         }
     
     def run(self) -> None:        
@@ -62,9 +69,12 @@ class Game:
             # run current stage
             self.current_stage.run(dt)
             
+            # show UI
+            self.ui.update(dt)
+            
             # DEBUG show fps & dt
-            show_fps(self.clock.get_fps())
-            debug_multiple((f'dt: {dt}',))
+            #show_fps(self.clock.get_fps())
+            #debug_multiple((f'dt: {dt}',))
             
             # update display
             pygame.display.update()

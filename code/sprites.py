@@ -108,6 +108,15 @@ class MovingSprite(AnimatedSprite):
             self.image = pygame.transform.flip(self.image, self.reverse['x'], self.reverse['y'])
 
 
+class Heart(AnimatedSprite):
+    def __init__(self, position, frames, groups) -> None:
+        super().__init__(position, frames, groups)
+        self.z = Z_LAYERS['fg']
+    
+    def update(self, dt) -> None:
+        self.animate(dt)
+
+
 class Floor(Sprite):
     '''Regular static terrain, the minimap visibility can be toggled as an argument'''
     def __init__(self, position, surface, groups, hidden=False) -> None:

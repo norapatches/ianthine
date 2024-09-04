@@ -113,9 +113,8 @@ class Level:
     def create_projectile(self, position, direction) -> None:
         Projectile(position, (self.all_sprites, self.projectile_sprites), direction, 128)
     
-    def run(self, dt: float):
+    def run(self, dt):
         '''Run the given level, update all sprites, center camera around player'''
-        self.display.fill('black')
         
         self.all_sprites.update(dt)
         
