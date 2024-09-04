@@ -23,8 +23,9 @@ class Level:
         self.collision_sprites = pygame.sprite.Group()          # floor
         self.collapse_sprites = pygame.sprite.Group()           # collapsing floor
         self.semi_collision_sprites = pygame.sprite.Group()     # platforms
-        self.damage_sprites = pygame.sprite.Group()             # spikes, traps, enemies, anything that damages player
+        self.damage_sprites = pygame.sprite.Group()             # anything that damages player
         self.snail_collision_sprites = pygame.sprite.Group()    # snails
+        self.enemy_sprites = pygame.sprite.Group()              # enemies
         self.projectile_sprites = pygame.sprite.Group()         # projectiles
         
         self.setup(tmx_map, level_frames)
@@ -88,12 +89,26 @@ class Level:
         # enemies
         for obj in tmx_map.get_layer_by_name('enemies'):
             if obj.name == 'soldier':
-                Soldier((obj.x, obj.y), level_frames['soldier'], self.all_sprites, self.collision_sprites)
+                Soldier((obj.x, obj.y), level_frames['soldier'], (self.all_sprites, self.enemy_sprites), self.collision_sprites)
             if obj.name == 'crawler':
                 Crawler((obj.x, obj.y), level_frames['crawler'], (self.all_sprites, self.damage_sprites), self.collision_sprites)
     
+    def melee_collision(self) -> None:
+        for target in self.enemy_sprites.sprites():
+            facing_target = self.player.rect.centerx < target.rect.centerx and self.player.facing_right or\
+                            self.player.rect.centerx > target.rect.centerx and not self.player.facing_right
+            if target.rect.colliderect(self.player.rect) and self.player.melee_atk and facing_target:
+                target.reverse()
+    
+    def ranged_collision(self) -> None:
+        groups = self.collision_sprites.sprites() + self.enemy_sprites.sprites()
+        for sprite in groups:
+            sprite = pygame.sprite.spritecollide(sprite, self.projectile_sprites, True)
+            if sprite:
+                pass
+    
     def create_projectile(self, position, direction) -> None:
-        Projectile(position, (self.all_sprites, self.projectile_sprites), direction, 64)
+        Projectile(position, (self.all_sprites, self.projectile_sprites), direction, 128)
     
     def run(self, dt: float):
         '''Run the given level, update all sprites, center camera around player'''
@@ -101,4 +116,7 @@ class Level:
         
         self.all_sprites.update(dt)
         
-        self.all_sprites.draw(self.player.rect.center, dt)
+        self.melee_collision()
+        self.ranged_collision()
+        
+        self.all_sprites.draw(self.player.hitbox_rect.center, dt)
