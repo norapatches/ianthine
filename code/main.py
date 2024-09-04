@@ -53,6 +53,8 @@ class Game:
     def run(self) -> None:        
         '''The game loop, runs current stage'''
         while True:
+            self.display.fill('black')
+            
             # get delta time
             dt = self.clock.tick() / 1000
             
