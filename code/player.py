@@ -3,7 +3,7 @@ from controls import LevelControls
 from gtimer import Timer
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, position, groups, collision_sprites, semi_collision_sprites, snail_sprites, frames):
+    def __init__(self, position, groups, collision_sprites, semi_collision_sprites, snail_sprites, frames, projectile):
         # general setup
         super().__init__(groups)
         self.z = Z_LAYERS['main']
@@ -39,6 +39,8 @@ class Player(pygame.sprite.Sprite):
         self.jump_height = 320 
         self.melee_atk = False
         self.ranged_atk = False
+        self.has_fired = False
+        self.create_projectile = projectile
               
         # collision
         self.collision_sprites = collision_sprites
@@ -52,7 +54,7 @@ class Player(pygame.sprite.Sprite):
             'platform_skip': Timer(200),
             'walljump': Timer(200),
             'wallslide_block': Timer(400),
-            'attack_lock': Timer(500)
+            'attack_lock': Timer(800)
         }
     
     def input(self) -> None:
@@ -225,8 +227,13 @@ class Player(pygame.sprite.Sprite):
         else:
             self.frame_index += ANIMATION_SPEED * dt
         
+        if self.state in ['ranged', 'air_ranged'] and int(self.frame_index) == 1 and not self.has_fired:
+            self.create_projectile(self.hitbox_rect.center, 1 if self.facing_right else -1)
+            self.has_fired = True
+        
         if self.state in ['melee', 'air_melee', 'ranged', 'air_ranged'] and self.frame_index >= len(self.frames[self.state]):
             self.state = 'idle'
+            self.has_fired = False
         
         self.image = self.frames[self.state][int(self.frame_index) % len(self.frames[self.state])]
         self.image = self.image if self.facing_right else pygame.transform.flip(self.image, True, False)
@@ -294,3 +301,28 @@ class Player(pygame.sprite.Sprite):
         '''hitbox and side rects'''
         #self.show_hitbox()
         #self.show_collision_detect()
+
+
+class Projectile(pygame.sprite.Sprite):
+    def __init__(self, position, groups, direction, speed) -> None:
+        self.projectile = True
+        super().__init__(groups)
+        self.image = pygame.Surface((2, 2))
+        self.image.fill('white')
+        self.rect = self.image.get_frect(center= position + vector(4 * direction, -4))
+        self.direction = direction
+        self.speed = speed
+        self.z = Z_LAYERS['main']
+        
+        self.timers = {
+            'lifetime': Timer(2000)
+        }
+        self.timers['lifetime'].start()
+    
+    def update(self, dt) -> None:
+        for timer in self.timers.values():
+            timer.update()
+        self.rect.x += self.direction * self.speed * dt
+        
+        if not self.timers['lifetime'].active:
+            self.kill()

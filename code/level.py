@@ -4,7 +4,7 @@ from camera import CameraGroup
 
 from npc import Creature, Ghost, Snail
 from enemies import Crawler, Soldier
-from player import Player
+from player import Player, Projectile
 
 class Level:
     def __init__(self, tmx_map, level_frames) -> None:
@@ -25,6 +25,7 @@ class Level:
         self.semi_collision_sprites = pygame.sprite.Group()     # platforms
         self.damage_sprites = pygame.sprite.Group()             # spikes, traps, enemies, anything that damages player
         self.snail_collision_sprites = pygame.sprite.Group()    # snails
+        self.projectile_sprites = pygame.sprite.Group()         # projectiles
         
         self.setup(tmx_map, level_frames)
     
@@ -65,7 +66,8 @@ class Level:
                     collision_sprites= self.collision_sprites,
                     semi_collision_sprites= self.semi_collision_sprites,
                     snail_sprites= self.snail_collision_sprites,
-                    frames= level_frames['player']
+                    frames= level_frames['player'],
+                    projectile=self.create_projectile
                 )
         
         # moving objects
@@ -89,6 +91,9 @@ class Level:
                 Soldier((obj.x, obj.y), level_frames['soldier'], self.all_sprites, self.collision_sprites)
             if obj.name == 'crawler':
                 Crawler((obj.x, obj.y), level_frames['crawler'], (self.all_sprites, self.damage_sprites), self.collision_sprites)
+    
+    def create_projectile(self, position, direction) -> None:
+        Projectile(position, (self.all_sprites, self.projectile_sprites), direction, 64)
     
     def run(self, dt: float):
         '''Run the given level, update all sprites, center camera around player'''
