@@ -9,7 +9,7 @@ class Player(pygame.sprite.Sprite):
         self.z = Z_LAYERS['main']
                 
         # abilities
-        self.abilities = {'double_jump': False, 'walljump': False}
+        self.abilities = {'double_jump': False, 'walljump': True}
         
         # controls
         self.controls = LevelControls()
