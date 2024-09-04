@@ -122,11 +122,7 @@ class Player(pygame.sprite.Sprite):
         self.speed = self.speed if not self.crouch else self.speed / 2
         
         # horizontal movement
-        if not self.on_surface['floor'] and self.melee_atk:
-            self.direction.y = 0
-            self.hitbox_rect.x += self.speed * dt if self.facing_right else -self.speed * dt
-        else:
-            self.hitbox_rect.x += self.direction.x * self.speed * dt
+        self.hitbox_rect.x += self.direction.x * self.speed * dt
         
         self.collision('horizontal')
         
@@ -315,7 +311,7 @@ class Projectile(pygame.sprite.Sprite):
         self.z = Z_LAYERS['main']
         
         self.timers = {
-            'lifetime': Timer(2000)
+            'lifetime': Timer(3000)
         }
         self.timers['lifetime'].start()
     
