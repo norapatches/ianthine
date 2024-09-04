@@ -43,6 +43,21 @@ class Item(AnimatedSprite):
             pass
 
 
+class ParticleEffect(AnimatedSprite):
+    def __init__(self, position, frames, groups) -> None:
+        super().__init__(position, frames, groups)
+        self.rect.center = position
+        self.z = Z_LAYERS['fg']
+        self.animation_speed = 16
+    
+    def animate(self, dt) -> None:
+        self.frame_index += self.animation_speed * dt
+        if self.frame_index < len(self.frames):
+            self.image = self.frames[int(self.frame_index)]
+        else:
+            self.kill()
+
+
 class MovingSprite(AnimatedSprite):
     '''A moving animated sprite'''
     def __init__(self, frames, groups, start_pos, end_pos, move_dir, speed, flip= False) -> None:

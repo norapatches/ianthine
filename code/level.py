@@ -1,5 +1,5 @@
 from settings import *
-from sprites import Sprite, AnimatedSprite, MovingSprite, Floor, CollapseFloor
+from sprites import Sprite, AnimatedSprite, MovingSprite, Floor, CollapseFloor, ParticleEffect
 from camera import CameraGroup
 
 from npc import Creature, Ghost, Snail
@@ -29,6 +29,9 @@ class Level:
         self.projectile_sprites = pygame.sprite.Group()         # projectiles
         
         self.setup(tmx_map, level_frames)
+        
+        # frames
+        self.particle_frames = level_frames['particle']
     
     def setup(self, tmx_map, level_frames) -> None:
         '''Read tile and object layers from tmx map file'''
@@ -105,7 +108,7 @@ class Level:
         for sprite in groups:
             sprite = pygame.sprite.spritecollide(sprite, self.projectile_sprites, True)
             if sprite:
-                pass
+                ParticleEffect((sprite[0].rect.center), self.particle_frames, self.all_sprites)
     
     def create_projectile(self, position, direction) -> None:
         Projectile(position, (self.all_sprites, self.projectile_sprites), direction, 128)
