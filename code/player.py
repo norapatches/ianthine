@@ -106,6 +106,7 @@ class Player(pygame.sprite.Sprite):
         else:
             if pressed[self.controls.jump]:
                 self.jump = True
+        
         if released[self.controls.jump] and self.direction.y <= 0:
             self.direction.y = 1
     
