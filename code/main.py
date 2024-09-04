@@ -1,6 +1,6 @@
 from settings import *
 from support import *
-from debug import debug, show_fps
+from debug import debug_multiple, show_fps
 from level import Level
 
 from os.path import join
@@ -63,7 +63,7 @@ class Game:
             
             # DEBUG show fps & dt
             show_fps(self.clock.get_fps())
-            debug(f'dt: {dt}')
+            debug_multiple((f'dt: {dt}',))
             
             # update display
             pygame.display.update()
