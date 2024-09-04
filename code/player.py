@@ -33,10 +33,10 @@ class Player(pygame.sprite.Sprite):
         self.direction = vector()
         self.speed = 96
         self.fallspeed_max = 256
-        self.gravity = 1024
+        self.gravity = 960
         self.crouch = False
         self.jump = False
-        self.jump_height = 256
+        self.jump_height = 320 
         self.melee_atk = False
         self.ranged_atk = False
               
@@ -98,7 +98,7 @@ class Player(pygame.sprite.Sprite):
             self.direction.x = input_vector.normalize().x if input_vector else input_vector.x
         
         # jumping
-        if pressed[self.controls.jump]:
+        if jpressed[self.controls.jump]:
             self.jump = True
         if released[self.controls.jump] and self.direction.y <= 0:
             self.direction.y = 1
