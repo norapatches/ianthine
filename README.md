@@ -6,6 +6,9 @@
 - Graphic Assets made with [Aseprite](https://aseprite.org) *1.3.8*
 - Tilesets and Maps made with [Tiled](https://mapeditor.org) *1.11.0*
 
+## Project Management
+ClickUp board [LINK](https://app.clickup.com/9012231275/home)
+
 ## TODO list
 View the current [TODO](TODO.md) tasks
 
