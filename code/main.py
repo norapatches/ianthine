@@ -22,8 +22,6 @@ class Game:
         }
         self.current_stage = Level(self.tmx_maps[0], self.level_frames)
         
-        self.paused = False
-        
         self.ui = UI(pygame.font.Font(None, 16), self.ui_frames, self.current_stage.display)
         self.ui.create_hearts(5)
     
