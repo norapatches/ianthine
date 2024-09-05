@@ -1,5 +1,7 @@
 from settings import *
 
+'''TODO: Rewrite the class to represent player and enemies with different health'''
+
 class GameData:
     def __init__(self, ui) -> None:
         self.ui = ui
@@ -18,4 +20,3 @@ class GameData:
     def health(self, value) -> None:
         self._health = value
         self.ui.create_hearts(value)
-    

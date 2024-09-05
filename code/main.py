@@ -5,9 +5,6 @@ from level import Level
 from gdata import GameData
 from ui import UI
 
-from os.path import join
-from pytmx.util_pygame import load_pygame   
-
 class Game:
     def __init__(self) -> None:
         '''Game setup, load assets, load maps, init pygame library, define resolution'''
