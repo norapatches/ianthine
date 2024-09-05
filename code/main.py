@@ -2,6 +2,7 @@ from settings import *
 from support import *
 from debug import debug_multiple, show_fps
 from level import Level
+from gdata import GameData
 from ui import UI
 
 from os.path import join
@@ -17,13 +18,13 @@ class Game:
         
         self.import_assets()
         
+        self.ui = UI(pygame.font.Font(None, 16), self.ui_frames)
+        self.data = GameData(self.ui)
+        
         self.tmx_maps = {
             0: load_pygame(join('.', 'data', 'levels', 'test.tmx'))
         }
-        self.current_stage = Level(self.tmx_maps[0], self.level_frames)
-        
-        self.ui = UI(pygame.font.Font(None, 16), self.ui_frames, self.current_stage.display)
-        self.ui.create_hearts(5)
+        self.current_stage = Level(self.tmx_maps[0], self.level_frames, self.data)
     
     def import_assets(self) -> None:
         '''Import game assets'''
@@ -51,8 +52,6 @@ class Game:
     def run(self) -> None:        
         '''The game loop, runs current stage'''
         while True:
-            self.display.fill('black')
-            
             # get delta time
             dt = self.clock.tick() / 1000
             

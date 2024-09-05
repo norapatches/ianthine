@@ -3,9 +3,10 @@ from controls import LevelControls
 from gtimer import Timer
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, position, groups, collision_sprites, semi_collision_sprites, snail_sprites, frames, projectile):
+    def __init__(self, position, groups, collision_sprites, semi_collision_sprites, snail_sprites, frames, data, projectile):
         # general setup
         super().__init__(groups)
+        self.data = data
         self.z = Z_LAYERS['main']
                 
         # abilities

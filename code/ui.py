@@ -2,8 +2,8 @@ from settings import *
 from sprites import Sprite
 
 class UI:
-    def __init__(self, font, frames, display) -> None:
-        self.display = display
+    def __init__(self, font, frames) -> None:
+        self.display = pygame.display.get_surface()
         self.sprites = pygame.sprite.Group()
         self.font = font
         

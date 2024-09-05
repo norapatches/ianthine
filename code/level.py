@@ -7,9 +7,10 @@ from enemies import Crawler, Soldier
 from player import Player, Projectile
 
 class Level:
-    def __init__(self, tmx_map, level_frames) -> None:
+    def __init__(self, tmx_map, level_frames, data) -> None:
         self.display = pygame.display.get_surface()
-                
+        self.data = data
+        
         # level data
         self.level_width = tmx_map.width * TILE_SIZE
         self.level_height = tmx_map.height * TILE_SIZE
@@ -71,7 +72,8 @@ class Level:
                     semi_collision_sprites= self.semi_collision_sprites,
                     snail_sprites= self.snail_collision_sprites,
                     frames= level_frames['player'],
-                    projectile=self.create_projectile
+                    projectile=self.create_projectile,
+                    data= self.data
                 )
         
         # moving objects
