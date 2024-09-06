@@ -32,7 +32,7 @@ class Player(pygame.sprite.Sprite):
         
         # movement
         self.direction = vector()
-        self.speed = 64
+        
         self.fallspeed_max = 256
         self.gravity = 960
         self.crouch = False
