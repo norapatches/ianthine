@@ -107,13 +107,13 @@ class Level:
                 target.reverse()
     
     def ranged_collision(self) -> None:
-        groups = self.collision_sprites.sprites() + self.enemy_sprites.sprites()
         
-        # collision with terrain
+        # particle effect and destroy projectile on collision
+        groups = self.collision_sprites.sprites() + self.enemy_sprites.sprites()
         for sprite in groups:
             sprite = pygame.sprite.spritecollide(sprite, self.projectile_sprites, True)
             if sprite:
-                ParticleEffect((sprite[0].rect.center), self.particle_frames, self.all_sprites)
+                ParticleEffect((sprite[0].rect.center), self.particle_frames, self.all_sprites)       
     
     def create_projectile(self, position, direction) -> None:
         Projectile(position, (self.all_sprites, self.projectile_sprites), direction, 128)
