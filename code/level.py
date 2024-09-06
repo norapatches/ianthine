@@ -3,7 +3,7 @@ from sprites import Sprite, AnimatedSprite, MovingSprite, Floor, CollapseFloor, 
 from camera import CameraGroup
 
 from npc import Creature, Ghost, Snail
-from enemies import Crawler, Soldier, ShadowMan
+from enemies import Crawler, Walker, Chaser
 from player import Player, Projectile
 
 class Level:
@@ -95,11 +95,11 @@ class Level:
         # enemies
         for obj in tmx_map.get_layer_by_name('enemies'):
             if obj.name == 'soldier':
-                Soldier((obj.x, obj.y), level_frames['soldier'], (self.all_sprites, self.enemy_sprites), self.collision_sprites)
+                Walker((obj.x, obj.y), level_frames['soldier'], (self.all_sprites, self.enemy_sprites), self.collision_sprites)
             if obj.name == 'crawler':
                 Crawler((obj.x, obj.y), level_frames['crawler'], (self.all_sprites, self.damage_sprites), self.collision_sprites)
             if obj.name == 'shadowman':
-                ShadowMan((obj.x, obj.y), level_frames['shadowman'], (self.all_sprites, self.enemy_sprites), self.collision_sprites, self.player)
+                Chaser((obj.x, obj.y), level_frames['shadowman'], (self.all_sprites, self.enemy_sprites), self.collision_sprites, self.player)
     
     def melee_collision(self) -> None:
         for target in self.enemy_sprites.sprites():

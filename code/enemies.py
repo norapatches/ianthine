@@ -2,15 +2,18 @@ from settings import *
 from gtimer import Timer
 from random import choice
 
-'''Enemies on the level stages
-Enemy types:
-    Walker      walks left-right
-    Crawler     walks on surfaces
-    Shooter     shoots projectiles at player
-    Skipper     jumps around on level endlessly
+'''Enemy types:
+    *Walker     img=frames[idx]            walks left-right, turns around on edges & walls
+    Crawler     img=frames[idx]            walks on surfaces, changes direction in corners
+    Chaser      img=frames[state][idx]     is idle until player near, moves towards player, turns around on edges & walls
+    *Shooter    img=frames[state][idx]     stationary, shoots projectiles at player if near
+    *Skipper    img=frames[idx]            jumps around on level endlessly
+    Floater     img=frames[state][idx]     moves around on level towards player if near, ignores collision and physics
+
+Using these enemy archetypes we can use different assets and have more enemies in total.
 '''
 
-class Soldier(pygame.sprite.Sprite):
+class Walker(pygame.sprite.Sprite):
     def __init__(self, position, frames, groups, collision_sprites) -> None:
         super().__init__(groups)
         self.enemy = True
@@ -129,7 +132,7 @@ class Crawler(pygame.sprite.Sprite):
         self.animate(dt)
 
 
-class ShadowMan(pygame.sprite.Sprite):
+class Chaser(pygame.sprite.Sprite):
     def __init__(self, position, frames, groups, collision_sprites, player) -> None:
         super().__init__(groups)
         self.frames, self.frame_index = frames, 0
@@ -201,3 +204,6 @@ class ShadowMan(pygame.sprite.Sprite):
         
         self.get_state()
         self.animate(dt)
+
+
+class Floater(pygame.sprite.Sprite): pass
