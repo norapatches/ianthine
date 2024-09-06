@@ -1,6 +1,7 @@
 from settings import *
 from gtimer import Timer
 
+# BLUEPRINTS
 class Sprite(pygame.sprite.Sprite):
     '''A regular static sprite'''
     def __init__(self, position, surface= pygame.Surface((TILE_SIZE, TILE_SIZE)), groups= None, z= Z_LAYERS['main']) -> None:
@@ -77,7 +78,9 @@ class MovingSprite(AnimatedSprite):
         if self.flip:
             self.image = pygame.transform.flip(self.image, self.reverse['x'], self.reverse['y'])
 
+# LEVEL
 class Item(AnimatedSprite):
+    '''An item that can be picked up by player'''
     def __init__(self, item_type, position, frames, groups):
         super().__init__(position, frames, groups)
         self.rect.center = position
@@ -90,6 +93,7 @@ class Item(AnimatedSprite):
             pass
 
 class ParticleEffect(AnimatedSprite):
+    '''A visual effect used for projectile collisions'''
     def __init__(self, position, frames, groups) -> None:
         super().__init__(position, frames, groups)
         self.rect.center = position
@@ -103,7 +107,9 @@ class ParticleEffect(AnimatedSprite):
         else:
             self.kill()
 
+# UI
 class Heart(AnimatedSprite):
+    '''A heart for the ui'''
     def __init__(self, position, frames, groups) -> None:
         super().__init__(position, frames, groups)
         self.z = Z_LAYERS['main']
@@ -124,6 +130,7 @@ class Floor(Sprite):
             self.map_rect = self.map_image.get_frect(topleft = (position[0] / TILE_SIZE, position[1] / TILE_SIZE))
 
 class Platform(Floor):
-    def __init__(self, position, surface, groups, hidden=False) -> None:
+    '''Regular static platform'''
+    def __init__(self, position, surface, groups) -> None:
         super().__init__(position, surface, groups)
         self.map_image.fill('gray')
