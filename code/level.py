@@ -1,9 +1,9 @@
 from settings import *
 from camera import CameraGroup
-from sprites import Sprite, AnimatedSprite, MovingSprite, Floor, Platform, ParticleEffect
+from sprites import Sprite, MovingSprite, Floor, Platform, ParticleEffect
 
 from npc import Creature, Ghost, Snail
-from enemies import Chaser, Crawler, Floater, Walker
+from enemies import Chaser, Crawler, Floater, Shooter, Skipper, Walker
 from player import Player, Projectile
 
 class Level:
