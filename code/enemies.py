@@ -57,7 +57,6 @@ class Walker(pygame.sprite.Sprite):
             wall_rect.collidelist(self.collision_rects) != -1:
             self.direction *= -1
 
-
 class Crawler(pygame.sprite.Sprite):
     '''The Crawler can move on any surface endlessly'''
     def __init__(self, position, frames, groups, collision_sprites) -> None:
@@ -131,7 +130,6 @@ class Crawler(pygame.sprite.Sprite):
         
         self.animate(dt)
 
-
 class Chaser(pygame.sprite.Sprite):
     def __init__(self, position, frames, groups, collision_sprites, player) -> None:
         super().__init__(groups)
@@ -144,7 +142,7 @@ class Chaser(pygame.sprite.Sprite):
         self.z = Z_LAYERS['main']
         
         self.direction = vector()
-        self.speed = 24
+        self.speed = 32
         
         self.collision_rects = [sprite.rect for sprite in collision_sprites]
         self.player = player
@@ -204,6 +202,5 @@ class Chaser(pygame.sprite.Sprite):
         
         self.get_state()
         self.animate(dt)
-
 
 class Floater(pygame.sprite.Sprite): pass
