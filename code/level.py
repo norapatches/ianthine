@@ -18,12 +18,13 @@ class Level:
         # groups
         self.all_sprites = CameraGroup(
             width= tmx_map.width,
-            height= tmx_map.height
+            height= tmx_map.height,
+            data= data
         )
         
         self.collision_sprites = pygame.sprite.Group()          # floor
         self.collapse_sprites = pygame.sprite.Group()           # collapsing floor
-        self.semi_collision_sprites = pygame.sprite.Group()     # platforms
+        self.semi_collision_sprites = pygame.sprite.Group()     # platforms, moving platforms
         self.damage_sprites = pygame.sprite.Group()             # anything that damages player
         self.snail_collision_sprites = pygame.sprite.Group()    # snails
         self.enemy_sprites = pygame.sprite.Group()              # enemies
@@ -107,6 +108,8 @@ class Level:
     
     def ranged_collision(self) -> None:
         groups = self.collision_sprites.sprites() + self.enemy_sprites.sprites()
+        
+        # collision with terrain
         for sprite in groups:
             sprite = pygame.sprite.spritecollide(sprite, self.projectile_sprites, True)
             if sprite:
@@ -125,5 +128,3 @@ class Level:
         self.ranged_collision()
         
         self.all_sprites.draw(self.player.hitbox_rect.center, dt)
-        
-        self.data.ui.sprites.draw(self.display)

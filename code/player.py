@@ -55,7 +55,7 @@ class Player(pygame.sprite.Sprite):
             'platform_skip': Timer(200),
             'walljump': Timer(300),
             'wallslide_block': Timer(400),
-            'attack_lock': Timer(800)
+            'attack_lock': Timer(600)
         }
     
     def input(self) -> None:

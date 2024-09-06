@@ -2,9 +2,19 @@ from settings import *
 from gtimer import Timer
 from random import choice
 
+'''Enemies on the level stages
+Enemy types:
+    Walker      walks left-right
+    Crawler     walks on surfaces
+    Shooter     shoots projectiles at player
+    Skipper     jumps around on level endlessly
+'''
+
 class Soldier(pygame.sprite.Sprite):
     def __init__(self, position, frames, groups, collision_sprites) -> None:
         super().__init__(groups)
+        self.enemy = True
+        
         self.frames, self.frame_index = frames, 0
         self.image = self.frames[self.frame_index]
         self.rect = self.image.get_frect(topleft= position)
@@ -13,8 +23,7 @@ class Soldier(pygame.sprite.Sprite):
         self.direction = choice((-1, 1))
         self.collision_rects = [sprite.rect for sprite in collision_sprites]
         
-        self.moving = True
-        self.speed = 64
+        self.speed = 32
         self.hit_timer = Timer(250)
     
     def reverse(self) -> None:
@@ -106,7 +115,7 @@ class Crawler(pygame.sprite.Sprite):
         
         self.image = pygame.transform.rotate(self.image, 90) if self.rotate['left'] else self.image
         self.image = pygame.transform.rotate(self.image, -90) if self.rotate['right'] else self.image
-        self.image = pygame.transform.flip(self.image, False, True) if self.on_surface['top'] else self.image
+        self.image = pygame.transform.flip(self.image, True, True) if self.on_surface['top'] else self.image
     
     def update(self, dt) -> None:
         self.old_rect = self.rect.copy()
