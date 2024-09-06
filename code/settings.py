@@ -6,7 +6,7 @@ import pickle
 
 # Game Settings
 WINDOW_WIDTH, WINDOW_HEIGHT = 1280, 960     # the game window
-SCREEN_WIDTH, SCREEN_HEIGHT = 240, 180      # resolution - will be upscaled to window
+SCREEN_WIDTH, SCREEN_HEIGHT = 200, 150      # resolution - will be upscaled to window
 TILE_SIZE = 16                              # tile size in tmx_map
 
 ANIMATION_SPEED = 4
