@@ -1,9 +1,9 @@
 from settings import *
-from sprites import Sprite, AnimatedSprite, MovingSprite, Floor, CollapseFloor, ParticleEffect
 from camera import CameraGroup
+from sprites import Sprite, AnimatedSprite, MovingSprite, Floor, Platform, ParticleEffect
 
 from npc import Creature, Ghost, Snail
-from enemies import Crawler, Walker, Chaser
+from enemies import Chaser, Crawler, Floater, Walker
 from player import Player, Projectile
 
 class Level:
@@ -39,17 +39,16 @@ class Level:
         '''Read tile and object layers from tmx map file'''
         
         # tiles
-        for layer in ['bg', 'terrain', 'terrain_hidden', 'terrain_collapse', 'platform']:
+        for layer in ['bg', 'terrain', 'terrain_hidden', 'platform']:
             for x, y, surface in tmx_map.get_layer_by_name(layer).tiles():
                 if layer == 'terrain':
                     Floor((x * TILE_SIZE, y * TILE_SIZE), surface, (self.all_sprites, self.collision_sprites))
                 if layer == 'terrain_hidden':
                     Floor((x * TILE_SIZE, y * TILE_SIZE), surface, (self.all_sprites, self.collision_sprites), hidden=True)
-                if layer == 'terrain_collapse':
-                    CollapseFloor((x * TILE_SIZE, y * TILE_SIZE), surface, (self.all_sprites, self.collision_sprites, self.collapse_sprites))
                 if layer == 'platform':
-                    Floor((x * TILE_SIZE, y * TILE_SIZE), surface, (self.all_sprites, self.semi_collision_sprites))
+                    Platform((x * TILE_SIZE, y * TILE_SIZE), surface, (self.all_sprites, self.semi_collision_sprites))
                 else:
+                    # bg
                     Sprite((x * TILE_SIZE, y * TILE_SIZE), surface, self.all_sprites, Z_LAYERS['bg_tiles'])
         
         # spikes

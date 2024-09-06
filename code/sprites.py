@@ -111,6 +111,7 @@ class Heart(AnimatedSprite):
     def update(self, dt) -> None:
         self.animate(dt)
 
+# TERRAIN
 class Floor(Sprite):
     '''Regular static terrain, the minimap visibility can be toggled as an argument'''
     def __init__(self, position, surface, groups, hidden=False) -> None:
@@ -122,18 +123,7 @@ class Floor(Sprite):
             self.map_image.fill('white')
             self.map_rect = self.map_image.get_frect(topleft = (position[0] / TILE_SIZE, position[1] / TILE_SIZE))
 
-class CollapseFloor(Floor):
-    '''A tile that falls after a certain amount of time. After falling for a certain amount of time, the sprite is then killed'''
-    def __init__(self, position, surface, groups) -> None:
+class Platform(Floor):
+    def __init__(self, position, surface, groups, hidden=False) -> None:
         super().__init__(position, surface, groups)
-        
-        # minimap
-        self.map_image = pygame.Surface((1, 1))
-        self.map_image.fill('white')
-        self.map_rect = self.map_image.get_frect(topleft = (position[0] / TILE_SIZE, position[1] / TILE_SIZE))
-        
-        # timers
-        self.timers = {
-            'stand': Timer(500),
-            'fall' : Timer(1000)
-        }
+        self.map_image.fill('gray')
