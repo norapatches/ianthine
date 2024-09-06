@@ -18,6 +18,7 @@ class Soldier(pygame.sprite.Sprite):
         self.frames, self.frame_index = frames, 0
         self.image = self.frames[self.frame_index]
         self.rect = self.image.get_frect(topleft= position)
+        self.hitbox_rect = self.rect.inflate(-6, 0)
         self.z = Z_LAYERS['main']
         
         self.direction = choice((-1, 1))
@@ -40,12 +41,13 @@ class Soldier(pygame.sprite.Sprite):
         self.image = pygame.transform.flip(self.image, True, False) if self.direction < 0 else self.image
         
         # movement
-        self.rect.x += self.direction * self.speed * dt
+        self.hitbox_rect.x += self.direction * self.speed * dt
+        self.rect.center = self.hitbox_rect.center
         
         # reverse direction
-        floor_rect_right = pygame.FRect(self.rect.bottomright, (1, 1))
-        floor_rect_left = pygame.FRect(self.rect.bottomleft, (-1, 1))
-        wall_rect = pygame.FRect(self.rect.topleft + vector(-1, 0), (self.rect.width + 2, 1))
+        floor_rect_right = pygame.FRect(self.hitbox_rect.bottomright, (1, 1))
+        floor_rect_left = pygame.FRect(self.hitbox_rect.bottomleft, (-1, 1))
+        wall_rect = pygame.FRect(self.hitbox_rect.topleft + vector(-1, 0), (self.hitbox_rect.width + 2, 1))
         
         if floor_rect_right.collidelist(self.collision_rects) < 0 and self.direction > 0 or\
             floor_rect_left.collidelist(self.collision_rects) < 0 and self.direction < 0 or\
@@ -124,4 +126,78 @@ class Crawler(pygame.sprite.Sprite):
         self.move(dt)
         self.change_move_dir()
         
+        self.animate(dt)
+
+
+class ShadowMan(pygame.sprite.Sprite):
+    def __init__(self, position, frames, groups, collision_sprites, player) -> None:
+        super().__init__(groups)
+        self.frames, self.frame_index = frames, 0
+        self.state, self.facing_right = 'asleep', True
+        self.image = self.frames[self.state][self.frame_index]
+        self.rect = self.image.get_frect(topleft= position)
+        self.hitbox_rect = self.rect.inflate(-6, 0)
+        self.old_rect = self.hitbox_rect.copy()
+        self.z = Z_LAYERS['main']
+        
+        self.direction = vector()
+        self.speed = 24
+        
+        self.collision_rects = [sprite.rect for sprite in collision_sprites]
+        self.player = player
+        
+        self.player_near = False
+        self.player_level = False
+        
+        self.hit_timer = Timer(250)
+    
+    def reverse(self) -> None:
+        if not self.hit_timer.active:
+            self.direction *= -1
+            self.hitbox_rect.move_ip(-12, 0) if self.direction.x < 0 else self.hitbox_rect.move_ip(12, 0)
+            self.hit_timer.start()
+    
+    def check_player_near(self) -> None:
+        player_pos, shman_pos = vector(self.player.hitbox_rect.center), vector(self.hitbox_rect.center)
+        self.player_near = shman_pos.distance_to(player_pos) < 64
+        self.player_level = abs(shman_pos.y - player_pos.y) < 16
+    
+    def check_contact(self) -> None:
+        floor_rect_right = pygame.FRect((self.hitbox_rect.bottomright), (2, 2))
+        floor_rect_left = pygame.FRect((self.hitbox_rect.bottomleft + vector(-2, 0)), (2, 2))
+        wall_rect = pygame.FRect((self.hitbox_rect.topleft + vector(-2, 0)), (self.hitbox_rect.width + 4, 2))
+        
+        if floor_rect_right.collidelist(self.collision_rects) < 0 and self.direction.x > 0 or\
+            floor_rect_left.collidelist(self.collision_rects) < 0 and self.direction.x < 0 or\
+            wall_rect.collidelist(self.collision_rects) != -1:
+            self.direction.x *= -1
+            self.hitbox_rect.move_ip(-2, 0) if self.direction.x < 0 else self.hitbox_rect.move_ip(2, 0)
+    
+    def move(self, dt) -> None:
+        if self.player_near and self.player_level and not self.player.crouch:
+            self.direction.x = -1 if self.player.hitbox_rect.centerx <= self.hitbox_rect.centerx else 1
+            self.hitbox_rect.x += self.direction.x * self.speed * dt
+            self.check_contact()
+        self.rect.center = self.hitbox_rect.center
+    
+    def get_state(self) -> None:
+        self.state = 'asleep'
+        if self.player_near and not self.player_level and not self.player.crouch:
+            self.state = 'idle'
+        if self.player_near and self.player_level and not self.player.crouch:
+            self.state = 'walk'
+    
+    def animate(self, dt) -> None:
+        self.frame_index += ANIMATION_SPEED * dt
+        self.image = self.frames[self.state][int(self.frame_index % len(self.frames[self.state]))]
+        self.image = pygame.transform.flip(self.image, True, False) if self.direction.x < 0 else self.image
+    
+    def update(self, dt) -> None:
+        self.old_rect = self.hitbox_rect.copy()
+        self.hit_timer.update()
+        self.check_player_near()
+        
+        self.move(dt)
+        
+        self.get_state()
         self.animate(dt)

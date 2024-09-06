@@ -3,7 +3,7 @@ from sprites import Sprite, AnimatedSprite, MovingSprite, Floor, CollapseFloor, 
 from camera import CameraGroup
 
 from npc import Creature, Ghost, Snail
-from enemies import Crawler, Soldier
+from enemies import Crawler, Soldier, ShadowMan
 from player import Player, Projectile
 
 class Level:
@@ -98,12 +98,14 @@ class Level:
                 Soldier((obj.x, obj.y), level_frames['soldier'], (self.all_sprites, self.enemy_sprites), self.collision_sprites)
             if obj.name == 'crawler':
                 Crawler((obj.x, obj.y), level_frames['crawler'], (self.all_sprites, self.damage_sprites), self.collision_sprites)
+            if obj.name == 'shadowman':
+                ShadowMan((obj.x, obj.y), level_frames['shadowman'], (self.all_sprites, self.enemy_sprites), self.collision_sprites, self.player)
     
     def melee_collision(self) -> None:
         for target in self.enemy_sprites.sprites():
             facing_target = self.player.rect.centerx < target.rect.centerx and self.player.facing_right or\
                             self.player.rect.centerx > target.rect.centerx and not self.player.facing_right
-            if target.rect.colliderect(self.player.rect) and self.player.melee_atk and facing_target:
+            if target.hitbox_rect.colliderect(self.player.hitbox_rect) and self.player.melee_atk and facing_target:
                 target.reverse()
     
     def ranged_collision(self) -> None:
@@ -113,7 +115,7 @@ class Level:
         for sprite in groups:
             sprite = pygame.sprite.spritecollide(sprite, self.projectile_sprites, True)
             if sprite:
-                ParticleEffect((sprite[0].rect.center), self.particle_frames, self.all_sprites)       
+                ParticleEffect((sprite[0].rect.center), self.particle_frames, self.all_sprites)
     
     def create_projectile(self, position, direction) -> None:
         Projectile(position, (self.all_sprites, self.projectile_sprites), direction, 128)

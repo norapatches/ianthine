@@ -33,6 +33,7 @@ class Game:
             'key': import_folder('.', 'assets', 'graphic', 'items', 'key'),
             'creature': import_sub_folders('.', 'assets', 'graphic', 'npc', 'creature'),
             'soldier': import_folder('.', 'assets', 'graphic', 'enemy', 'soldier'),
+            'shadowman': import_sub_folders('.', 'assets', 'graphic', 'enemy', 'shadowman'),
             'crawler': import_folder('.', 'assets', 'graphic', 'enemy', 'crawler'),
             'spike': import_image('.', 'assets', 'graphic', 'level', 'spike'),
             'moving_platform': import_folder('.', 'assets', 'graphic', 'level', 'moving_platform')

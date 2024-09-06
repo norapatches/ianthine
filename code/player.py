@@ -229,7 +229,7 @@ class Player(pygame.sprite.Sprite):
     
     def animate(self, dt) -> None:
         if self.state in ['melee', 'air_melee', 'ranged', 'air_ranged']:
-            self.frame_index += ANIMATION_SPEED * 2 * dt
+            self.frame_index += ANIMATION_SPEED * 2.5 * dt
         else:
             self.frame_index += ANIMATION_SPEED * dt
         
