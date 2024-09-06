@@ -1,5 +1,5 @@
 from settings import *
-from sprites import Sprite
+from sprites import Heart
 
 class UI:
     def __init__(self, font, frames) -> None:
@@ -19,7 +19,7 @@ class UI:
         for heart in range(amount):
             x = 16 + heart * (self.heart_surface_width + self.heart_padding)
             y = 16
-            Sprite((x, y), self.heart_frames[0], self.sprites)
+            Heart((x, y), self.heart_frames, self.sprites)
     
     def update(self, dt) -> None:
         self.sprites.update(dt)

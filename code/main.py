@@ -64,10 +64,7 @@ class Game:
             
             # run current stage
             self.current_stage.run(dt)
-            
-            # show UI
-            self.ui.update(dt)
-            
+                        
             # DEBUG show fps & dt
             #show_fps(self.clock.get_fps())
             #debug_multiple((f'dt: {dt}',))

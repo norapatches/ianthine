@@ -4,6 +4,7 @@ class CameraGroup(pygame.sprite.Group):
     def __init__(self, width, height) -> None:
         '''The CameraGroup serves as a moving zoomed-in display surface that displays all sprites on level stages'''
         super().__init__()
+        
         self.display = pygame.display.get_surface()
         self.screen = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
         self.offset = vector()
@@ -44,7 +45,7 @@ class CameraGroup(pygame.sprite.Group):
         for sprite in sorted(self, key= lambda sprite: sprite.z):
             offset_pos = sprite.rect.topleft + self.offset
             self.screen.blit(sprite.image, offset_pos)
-        
+                
         scaled = pygame.transform.scale(self.screen, (WINDOW_WIDTH, WINDOW_HEIGHT))
         self.display.blit(scaled, (0, 0))
         self.toggle_minimap()

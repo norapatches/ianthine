@@ -119,8 +119,11 @@ class Level:
         '''Run the given level, update all sprites, center camera around player'''
         
         self.all_sprites.update(dt)
+        self.data.ui.sprites.update(dt)
         
         self.melee_collision()
         self.ranged_collision()
         
         self.all_sprites.draw(self.player.hitbox_rect.center, dt)
+        
+        self.data.ui.sprites.draw(self.display)

@@ -111,7 +111,7 @@ class MovingSprite(AnimatedSprite):
 class Heart(AnimatedSprite):
     def __init__(self, position, frames, groups) -> None:
         super().__init__(position, frames, groups)
-        self.z = Z_LAYERS['fg']
+        self.z = Z_LAYERS['main']
     
     def update(self, dt) -> None:
         self.animate(dt)
