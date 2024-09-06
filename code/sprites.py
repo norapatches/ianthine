@@ -12,7 +12,6 @@ class Sprite(pygame.sprite.Sprite):
         
         self.z = z
 
-
 class AnimatedSprite(Sprite):
     '''A static but animated sprite'''
     def __init__(self, position, frames, groups, z= Z_LAYERS['main'], animation_speed = ANIMATION_SPEED) -> None:
@@ -28,35 +27,6 @@ class AnimatedSprite(Sprite):
     def update(self, dt) -> None:
         '''The update method'''
         self.animate(dt)
-
-
-class Item(AnimatedSprite):
-    def __init__(self, item_type, position, frames, groups):
-        super().__init__(position, frames, groups)
-        self.rect.center = position
-        self.item_type = item_type
-    
-    def activate(self) -> None:
-        if self.item_type == 'key':
-            pass
-        if self.item_type == 'potion':
-            pass
-
-
-class ParticleEffect(AnimatedSprite):
-    def __init__(self, position, frames, groups) -> None:
-        super().__init__(position, frames, groups)
-        self.rect.center = position
-        self.z = Z_LAYERS['fg']
-        self.animation_speed = 16
-    
-    def animate(self, dt) -> None:
-        self.frame_index += self.animation_speed * dt
-        if self.frame_index < len(self.frames):
-            self.image = self.frames[int(self.frame_index)]
-        else:
-            self.kill()
-
 
 class MovingSprite(AnimatedSprite):
     '''A moving animated sprite'''
@@ -107,6 +77,31 @@ class MovingSprite(AnimatedSprite):
         if self.flip:
             self.image = pygame.transform.flip(self.image, self.reverse['x'], self.reverse['y'])
 
+class Item(AnimatedSprite):
+    def __init__(self, item_type, position, frames, groups):
+        super().__init__(position, frames, groups)
+        self.rect.center = position
+        self.item_type = item_type
+    
+    def activate(self) -> None:
+        if self.item_type == 'key':
+            pass
+        if self.item_type == 'potion':
+            pass
+
+class ParticleEffect(AnimatedSprite):
+    def __init__(self, position, frames, groups) -> None:
+        super().__init__(position, frames, groups)
+        self.rect.center = position
+        self.z = Z_LAYERS['fg']
+        self.animation_speed = 16
+    
+    def animate(self, dt) -> None:
+        self.frame_index += self.animation_speed * dt
+        if self.frame_index < len(self.frames):
+            self.image = self.frames[int(self.frame_index)]
+        else:
+            self.kill()
 
 class Heart(AnimatedSprite):
     def __init__(self, position, frames, groups) -> None:
@@ -115,7 +110,6 @@ class Heart(AnimatedSprite):
     
     def update(self, dt) -> None:
         self.animate(dt)
-
 
 class Floor(Sprite):
     '''Regular static terrain, the minimap visibility can be toggled as an argument'''
@@ -127,7 +121,6 @@ class Floor(Sprite):
             self.map_image = pygame.Surface((1, 1))
             self.map_image.fill('white')
             self.map_rect = self.map_image.get_frect(topleft = (position[0] / TILE_SIZE, position[1] / TILE_SIZE))
-
 
 class CollapseFloor(Floor):
     '''A tile that falls after a certain amount of time. After falling for a certain amount of time, the sprite is then killed'''
