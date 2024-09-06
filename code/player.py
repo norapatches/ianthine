@@ -32,7 +32,7 @@ class Player(pygame.sprite.Sprite):
         
         # movement
         self.direction = vector()
-        self.speed = 96
+        self.speed = 64
         self.fallspeed_max = 256
         self.gravity = 960
         self.crouch = False
@@ -52,8 +52,8 @@ class Player(pygame.sprite.Sprite):
         
         # timers
         self.timers = {
-            'platform_skip': Timer(200),
-            'walljump': Timer(300),
+            'platform_skip': Timer(100),
+            'walljump': Timer(150),
             'wallslide_block': Timer(400),
             'attack_lock': Timer(600)
         }
@@ -105,8 +105,12 @@ class Player(pygame.sprite.Sprite):
             if jpressed[self.controls.jump]:
                 self.jump = True
         else:
-            if pressed[self.controls.jump]:
-                self.jump = True
+            if not any((self.on_surface['left'], self.on_surface['right'])):
+                if jpressed[self.controls.jump]:
+                    self.jump = True
+            else:
+                if pressed[self.controls.jump]:
+                    self.jump = True
         
         if released[self.controls.jump] and self.direction.y <= 0:
             self.direction.y = 1
@@ -124,7 +128,7 @@ class Player(pygame.sprite.Sprite):
                 self.timers['attack_lock'].start()
     
     def move(self, dt) -> None:
-        self.speed = 96
+        self.speed = 64
         self.speed = self.speed if not self.crouch else self.speed / 2
         
         # horizontal movement
