@@ -1,7 +1,6 @@
 from settings import *
 from os import walk
 from os.path import join
-import pygame
 
 def import_image(*path, alpha=True, format='png') -> pygame.Surface:
     '''Imports a single image from the specified file path and returns it as a Pygame Surface object.'''
