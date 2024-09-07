@@ -113,7 +113,6 @@ class Level:
     
     def ranged_collision(self) -> None:
         
-        # particle effect and destroy projectile on collision
         groups = self.collision_sprites.sprites() + self.enemy_sprites.sprites()
         for sprite in groups:
             sprite = pygame.sprite.spritecollide(sprite, self.projectile_sprites, True)
@@ -123,13 +122,21 @@ class Level:
     def create_projectile(self, position, direction) -> None:
         Projectile(position, (self.all_sprites, self.projectile_sprites), direction, 128)
     
+    def item_collision(self) -> None:
+        if self.item_sprites:
+            for sprite in self.item_sprites:
+                if sprite.rect.colliderect(self.player.hitbox_rect):
+                    sprite.activate()
+                    ParticleEffect((sprite.rect.center), self.particle_frames, self.all_sprites)
+    
     def run(self, dt):
         '''Run the given level, update all sprites, center camera around player'''
         
         self.all_sprites.update(dt)
-        self.data.ui.sprites.update(dt)
+        #self.data.ui.sprites.update(dt)
         
         self.melee_collision()
         self.ranged_collision()
+        self.item_collision()
         
         self.all_sprites.draw(self.player.hitbox_rect.center, dt)

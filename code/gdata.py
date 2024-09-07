@@ -6,6 +6,8 @@ class GameData:
     def __init__(self, ui) -> None:
         self.ui = ui
         
+        self._coins = 0
+        
         self._health = 5
         self.ui.create_hearts(self._health)
         
@@ -20,3 +22,12 @@ class GameData:
     def health(self, value) -> None:
         self._health = value
         self.ui.create_hearts(value)
+
+    @property
+    def coins(self):
+        return self._coins
+    
+    @coins.setter
+    def coins(self, value):
+        self._coins = value
+    

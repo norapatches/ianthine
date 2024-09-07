@@ -165,7 +165,7 @@ class Player(pygame.sprite.Sprite):
         self.semi_collision()
         
         self.rect.center = self.hitbox_rect.center
-        self.map_rect.x, self.map_rect.y = (self.hitbox_rect.x / TILE_SIZE), self.hitbox_rect.y / TILE_SIZE
+        self.map_rect.x, self.map_rect.y = self.hitbox_rect.x / TILE_SIZE, self.hitbox_rect.y / TILE_SIZE
     
     def platform_move(self, dt) -> None:
         if self.platform:
@@ -198,15 +198,19 @@ class Player(pygame.sprite.Sprite):
         for sprite in self.collision_sprites:
             if sprite.rect.colliderect(self.hitbox_rect):
                 if axis == 'horizontal':
+                    # WESTBOUND
                     if self.hitbox_rect.left <= sprite.rect.right and int(self.old_rect.left) >= int(sprite.old_rect.right):
                         self.hitbox_rect.left = sprite.rect.right
+                    # EASTBOUND
                     if self.hitbox_rect.right >= sprite.rect.left and int(self.old_rect.right) <= int(sprite.old_rect.left):
                         self.hitbox_rect.right = sprite.rect.left
                 if axis == 'vertical':
+                    # NORTHBOUND
                     if self.hitbox_rect.top <= sprite.rect.bottom and int(self.old_rect.top) >= int(sprite.old_rect.bottom):
                         self.hitbox_rect.top = sprite.rect.bottom
                         if hasattr(sprite, 'moving'):
                             self.hitbox_rect.top += 1
+                    # SOUTHBOUND
                     if self.hitbox_rect.bottom >= sprite.rect.top and int(self.old_rect.bottom) <= int(sprite.old_rect.top):
                         self.hitbox_rect.bottom = sprite.rect.top
                     self.direction.y = 0

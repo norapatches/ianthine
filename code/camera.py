@@ -48,8 +48,8 @@ class CameraGroup(pygame.sprite.Group):
             offset_pos = sprite.rect.topleft + self.offset
             self.screen.blit(sprite.image, offset_pos)
         
-        for sprite in self.ui_sprites:
-            self.screen.blit(sprite.image, sprite.rect)
+        #for sprite in self.ui_sprites:
+        #    self.screen.blit(sprite.image, sprite.rect)
         
         pygame.transform.scale(self.screen, (WINDOW_WIDTH, WINDOW_HEIGHT), self.display)
         

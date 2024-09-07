@@ -86,12 +86,14 @@ class Item(AnimatedSprite):
         super().__init__(position, frames, groups)
         self.rect.center = position
         self.item_type = item_type
+        self.animation_speed = ANIMATION_SPEED * 1.5
     
     def activate(self) -> None:
         if self.item_type == 'coin':
-            self.animation_speed = ANIMATION_SPEED + 1.5
+            self.data.coins += 1
         if self.item_type == 'key':
             pass
+        self.kill()
 
 class ParticleEffect(AnimatedSprite):
     '''A visual effect used for projectile collisions'''

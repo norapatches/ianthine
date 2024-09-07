@@ -33,18 +33,18 @@ class Chaser(pygame.sprite.Sprite):
         self.player_near = False
         self.player_level = False
         
-        self.hit_timer = Timer(250)
+        self.timers = {'hit': Timer(250), 'edge': Timer(500)}
     
     def reverse(self) -> None:
-        if not self.hit_timer.active:
+        if not self.timers['hit'].active:
             self.direction *= -1
-            self.hitbox_rect.move_ip(-12, 0) if self.direction.x < 0 else self.hitbox_rect.move_ip(12, 0)
-            self.hit_timer.start()
+            self.hitbox_rect.move_ip(-16, 0) if self.direction.x < 0 else self.hitbox_rect.move_ip(16, 0)
+            self.timers['hit'].start()
     
     def check_player_near(self) -> None:
-        player_pos, shman_pos = vector(self.player.hitbox_rect.center), vector(self.hitbox_rect.center)
-        self.player_near = shman_pos.distance_to(player_pos) < 64
-        self.player_level = abs(shman_pos.y - player_pos.y) < 16
+        player_pos, chaser_pos = vector(self.player.hitbox_rect.center), vector(self.hitbox_rect.center)
+        self.player_near = chaser_pos.distance_to(player_pos) <= 64
+        self.player_level = abs(chaser_pos.y - player_pos.y) <= 16
     
     def check_contact(self) -> None:
         floor_rect_right = pygame.FRect((self.hitbox_rect.bottomright), (2, 2))
@@ -54,15 +54,16 @@ class Chaser(pygame.sprite.Sprite):
         if floor_rect_right.collidelist(self.collision_rects) < 0 and self.direction.x > 0 or\
             floor_rect_left.collidelist(self.collision_rects) < 0 and self.direction.x < 0 or\
             wall_rect.collidelist(self.collision_rects) != -1:
-            self.direction.x *= -1
-            self.hitbox_rect.move_ip(-2, 0) if self.direction.x < 0 else self.hitbox_rect.move_ip(2, 0)
+            self.timers['edge'].start()
+            self.hitbox_rect.move_ip(-1, 0) if self.direction.x > 0 else self.hitbox_rect.move_ip(1, 0)
     
     def move(self, dt) -> None:
-        if self.player_near and self.player_level and not self.player.crouch:
-            self.direction.x = -1 if self.player.hitbox_rect.centerx <= self.hitbox_rect.centerx else 1
-            self.hitbox_rect.x += self.direction.x * self.speed * dt
-            self.check_contact()
-        self.rect.center = self.hitbox_rect.center
+        if not self.timers['edge'].active:
+            if self.player_near and self.player_level and not self.player.crouch:
+                self.direction.x = -1 if self.player.hitbox_rect.centerx <= self.hitbox_rect.centerx else 1
+                self.hitbox_rect.x += self.direction.x * self.speed * dt
+                self.check_contact()
+            self.rect.center = self.hitbox_rect.center
     
     def get_state(self) -> None:
         self.state = 'asleep'
@@ -76,9 +77,13 @@ class Chaser(pygame.sprite.Sprite):
         self.image = self.frames[self.state][int(self.frame_index % len(self.frames[self.state]))]
         self.image = pygame.transform.flip(self.image, True, False) if self.direction.x < 0 else self.image
     
+    def update_timers(self) -> None:
+        for timer in self.timers.values():
+            timer.update()
+    
     def update(self, dt) -> None:
         self.old_rect = self.hitbox_rect.copy()
-        self.hit_timer.update()
+        self.update_timers()
         self.check_player_near()
         
         self.move(dt)

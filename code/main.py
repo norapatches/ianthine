@@ -68,8 +68,8 @@ class Game:
             self.current_stage.run(dt)
                         
             # DEBUG show fps & dt
-            show_fps(self.clock.get_fps())
-            debug_multiple((f'dt: {dt}',))
+            #show_fps(self.clock.get_fps())
+            #debug_multiple((f'dt: {dt}',))
             
             # update display
             pygame.display.update()
