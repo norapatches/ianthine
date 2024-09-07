@@ -24,6 +24,8 @@ class Game:
         }
         self.current_stage = Level(self.tmx_maps[0], self.level_frames, self.data)
         self.pause_menu = PauseScreen(self.level_frames['items'], self.fonts, self.data)
+        
+        self.cheat_list = []
     
     def import_assets(self) -> None:
         '''Import game assets'''
@@ -76,6 +78,8 @@ class Game:
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
                         self.data.paused = not self.data.paused
+                    if self.enter_cheat(event.key) == True:
+                        self.current_stage.player.abilities['walljump'] = True
             
             if not self.data.paused:
                 # run current stage
@@ -89,6 +93,17 @@ class Game:
             
             # update display
             pygame.display.update()
+    
+    def enter_cheat(self, key) -> bool:
+        if len(self.cheat_list) < 10:
+            self.cheat_list.append(key)
+        else:
+            if self.cheat_list == [pygame.K_UP, pygame.K_UP, pygame.K_DOWN, pygame.K_DOWN, pygame.K_LEFT, pygame.K_RIGHT, pygame.K_LEFT, pygame.K_RIGHT, pygame.K_x, pygame.K_c]:
+                return True
+            else:
+                self.cheat_list.pop(0)
+                self.cheat_list.append(key)
+                return False
 
 
 if __name__ == "__main__":
