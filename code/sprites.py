@@ -92,7 +92,7 @@ class Item(AnimatedSprite):
         if self.item_type == 'coin':
             self.data.coins += 1
         if self.item_type == 'key':
-            pass
+            self.data.key = True
         self.kill()
 
 class ParticleEffect(AnimatedSprite):

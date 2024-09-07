@@ -18,12 +18,12 @@ class Game:
         
         self.ui = UI(pygame.font.Font(None, 16), self.ui_frames)
         self.data = GameData(self.ui)
-        self.pause_menu = PauseScreen(self.level_frames['items']['coin'], self.fonts, self.data)
         
         self.tmx_maps = {
             0: load_pygame(join('.', 'data', 'levels', 'test.tmx'))
         }
         self.current_stage = Level(self.tmx_maps[0], self.level_frames, self.data)
+        self.pause_menu = PauseScreen(self.level_frames['items'], self.fonts, self.data)
     
     def import_assets(self) -> None:
         '''Import game assets'''
@@ -75,9 +75,9 @@ class Game:
                     sys.exit()
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
-                        self.paused = not self.paused
+                        self.data.paused = not self.data.paused
             
-            if not self.paused:
+            if not self.data.paused:
                 # run current stage
                 self.current_stage.run(dt)
             else:
