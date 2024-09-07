@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.10" tiledversion="1.11.0" name="objects" tilewidth="16" tileheight="16" tilecount="13" columns="0">
+<tileset version="1.10" tiledversion="1.11.0" name="objects" tilewidth="16" tileheight="16" tilecount="14" columns="0">
  <grid orientation="orthogonal" width="1" height="1"/>
  <tile id="0">
   <image source="../../assets/graphic/objects/player.png" width="16" height="16"/>
@@ -39,5 +39,8 @@
  </tile>
  <tile id="12">
   <image source="../../assets/graphic/objects/coin.png" width="8" height="8"/>
+ </tile>
+ <tile id="13">
+  <image source="../../assets/graphic/objects/horn.png" width="16" height="16"/>
  </tile>
 </tileset>
