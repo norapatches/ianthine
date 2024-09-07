@@ -34,7 +34,7 @@ class Chaser(pygame.sprite.Sprite):
         
         self.timers = {'hit': Timer(400), 'edge': Timer(600)}
     
-    def reverse(self) -> None:
+    def take_hit(self) -> None:
         if not self.timers['hit'].active:
             self.direction.x *= -1
             self.hitbox_rect.move_ip(-16, 0) if self.direction.x < 0 else self.hitbox_rect.move_ip(16, 0)
@@ -188,7 +188,7 @@ class Walker(pygame.sprite.Sprite):
         self.speed = 32
         self.hit_timer = Timer(250)
     
-    def reverse(self) -> None:
+    def take_hit(self) -> None:
         if not self.hit_timer.active:
             self.direction *= -1
             self.hit_timer.start()

@@ -109,7 +109,7 @@ class Level:
             facing_target = self.player.rect.centerx < target.rect.centerx and self.player.facing_right or\
                             self.player.rect.centerx > target.rect.centerx and not self.player.facing_right
             if target.hitbox_rect.colliderect(self.player.rect) and self.player.melee_atk and facing_target:
-                target.reverse()
+                target.take_hit()
     
     def ranged_collision(self) -> None:
         
