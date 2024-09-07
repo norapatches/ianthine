@@ -105,7 +105,7 @@ class Level:
             Item(obj.name, (obj.x + TILE_SIZE / 2, obj.y + TILE_SIZE / 2), level_frames['items'][obj.name], (self.all_sprites, self.item_sprites), self.data)
     
     def melee_collision(self) -> None:
-        for target in self.enemy_sprites.sprites():
+        for target in self.enemy_sprites:
             facing_target = self.player.rect.centerx < target.rect.centerx and self.player.facing_right or\
                             self.player.rect.centerx > target.rect.centerx and not self.player.facing_right
             if target.hitbox_rect.colliderect(self.player.rect) and self.player.melee_atk and facing_target:
