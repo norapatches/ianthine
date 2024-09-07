@@ -2,6 +2,7 @@ from settings import *
 from support import *
 from debug import debug_multiple, show_fps
 from level import Level
+from pause import PauseScreen
 from gdata import GameData
 from ui import UI
 
@@ -17,6 +18,7 @@ class Game:
         
         self.ui = UI(pygame.font.Font(None, 16), self.ui_frames)
         self.data = GameData(self.ui)
+        self.pause_menu = PauseScreen(self.level_frames['items']['coin'], self.fonts, self.data)
         
         self.tmx_maps = {
             0: load_pygame(join('.', 'data', 'levels', 'test.tmx'))
@@ -48,6 +50,12 @@ class Game:
         self.ui_frames = {
             'heart': import_folder(join('.', 'assets', 'graphic', 'ui', 'heart'))
         }
+        self.fonts = {
+            'regular': pygame.font.Font(join('.', 'assets', 'fonts', 'regular.ttf'), 16),
+            'bold': pygame.font.Font(join('.', 'assets', 'fonts', 'bold.ttf'), 16),
+            'large_regular': pygame.font.Font(join('.', 'assets', 'fonts', '8_regular.ttf'), 32),
+            'large_bold': pygame.font.Font(join('.', 'assets', 'fonts', '8_bold.ttf'), 32)
+        }
         self.paused = False
     
     def run(self) -> None:
@@ -72,7 +80,8 @@ class Game:
             if not self.paused:
                 # run current stage
                 self.current_stage.run(dt)
-
+            else:
+                self.pause_menu.run(dt)
             # DEBUG show fps & dt
             #show_fps(self.clock.get_fps())
             #debug_multiple((f'dt: {dt}',))
