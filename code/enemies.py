@@ -191,23 +191,24 @@ class Walker(pygame.sprite.Sprite):
         self.hit_timer = Timer(250)
     
     def take_hit(self) -> None:
+        '''Take hit form player attack'''
         if not self.hit_timer.active:
             self.direction *= -1
             self.hit_timer.start()
     
-    def update(self, dt) -> None:
-        self.hit_timer.update()
-        
-        # animation
+    def move(self, dt) -> None:
+        '''The mobve method'''
+        self.hitbox_rect.x += self.direction * self.speed * dt
+        self.rect.center = self.hitbox_rect.center
+    
+    def animate(self, dt) -> None:
+        '''Animate movement'''
         self.frame_index += ANIMATION_SPEED * dt
         self.image = self.frames[int(self.frame_index % len(self.frames))]
         self.image = pygame.transform.flip(self.image, True, False) if self.direction < 0 else self.image
-        
-        # movement
-        self.hitbox_rect.x += self.direction * self.speed * dt
-        self.rect.center = self.hitbox_rect.center
-        
-        # reverse direction
+    
+    def check_contact(self) -> None:
+        '''Turn around on edges and walls'''
         floor_rect_right = pygame.FRect(self.hitbox_rect.bottomright, (1, 1))
         floor_rect_left = pygame.FRect(self.hitbox_rect.bottomleft, (-1, 1))
         wall_rect = pygame.FRect(self.hitbox_rect.topleft + vector(-1, 0), (self.hitbox_rect.width + 2, 1))
@@ -216,3 +217,10 @@ class Walker(pygame.sprite.Sprite):
             floor_rect_left.collidelist(self.collision_rects) < 0 and self.direction < 0 or\
             wall_rect.collidelist(self.collision_rects) != -1:
             self.direction *= -1
+    
+    def update(self, dt) -> None:
+        self.hit_timer.update()
+        
+        self.check_contact()
+        self.move(dt)
+        self.animate(dt)      
