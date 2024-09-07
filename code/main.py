@@ -48,8 +48,9 @@ class Game:
         self.ui_frames = {
             'heart': import_folder(join('.', 'assets', 'graphic', 'ui', 'heart'))
         }
+        self.paused = False
     
-    def run(self) -> None:        
+    def run(self) -> None:
         '''The game loop, runs current stage'''
         while True:
             # get delta time
@@ -64,10 +65,14 @@ class Game:
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_ESCAPE:
+                        self.paused = not self.paused
             
-            # run current stage
-            self.current_stage.run(dt)
-                        
+            if not self.paused:
+                # run current stage
+                self.current_stage.run(dt)
+            
             # DEBUG show fps & dt
             #show_fps(self.clock.get_fps())
             #debug_multiple((f'dt: {dt}',))
