@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="60" height="60" tilewidth="16" tileheight="16" infinite="0" nextlayerid="30" nextobjectid="59">
+<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="60" height="60" tilewidth="16" tileheight="16" infinite="0" nextlayerid="30" nextobjectid="91">
  <tileset firstgid="1" source="../tilesets/terrain.tsx"/>
  <tileset firstgid="145" source="../tilesets/objects.tsx"/>
  <layer id="19" name="bg" width="60" height="60">
@@ -380,8 +380,38 @@
  </objectgroup>
  <objectgroup id="26" name="items">
   <object id="38" name="key" gid="153" x="413" y="160" width="16" height="16"/>
-  <object id="40" name="potion" gid="154" x="304" y="32" width="16" height="16"/>
-  <object id="41" name="potion" gid="154" x="80" y="288" width="16" height="16"/>
+  <object id="59" name="coin" gid="157" x="99.3512" y="795.677" width="8" height="8"/>
+  <object id="60" name="coin" gid="157" x="147.786" y="795.677" width="8" height="8"/>
+  <object id="61" name="coin" gid="157" x="162.624" y="795.848" width="8" height="8"/>
+  <object id="62" name="coin" gid="157" x="274.844" y="795.848" width="8" height="8"/>
+  <object id="63" name="coin" gid="157" x="244.316" y="795.677" width="8" height="8"/>
+  <object id="64" name="coin" gid="157" x="132.096" y="748.436" width="8" height="8"/>
+  <object id="65" name="coin" gid="157" x="148.128" y="748.265" width="8" height="8"/>
+  <object id="66" name="coin" gid="157" x="228.796" y="747.754" width="8" height="8"/>
+  <object id="67" name="coin" gid="157" x="276.208" y="700.001" width="8" height="8"/>
+  <object id="68" name="coin" gid="157" x="261.882" y="699.66" width="8" height="8"/>
+  <object id="69" name="coin" gid="157" x="194.687" y="685.334" width="8" height="8"/>
+  <object id="70" name="coin" gid="157" x="147.957" y="686.357" width="8" height="8"/>
+  <object id="71" name="coin" gid="157" x="99.6923" y="701.365" width="8" height="8"/>
+  <object id="72" name="coin" gid="157" x="68.4823" y="653.271" width="8" height="8"/>
+  <object id="73" name="coin" gid="157" x="68.1412" y="699.83" width="8" height="8"/>
+  <object id="74" name="coin" gid="157" x="67.8001" y="747.072" width="8" height="8"/>
+  <object id="75" name="coin" gid="157" x="66.9474" y="568.85" width="8" height="8"/>
+  <object id="76" name="coin" gid="157" x="309.465" y="555.548" width="8" height="8"/>
+  <object id="77" name="coin" gid="157" x="308.782" y="604.324" width="8" height="8"/>
+  <object id="78" name="coin" gid="157" x="310.147" y="652.248" width="8" height="8"/>
+  <object id="79" name="coin" gid="157" x="310.488" y="749.459" width="8" height="8"/>
+  <object id="80" name="coin" gid="157" x="115.725" y="652.01" width="8" height="8"/>
+  <object id="81" name="coin" gid="157" x="147.901" y="636.046" width="8" height="8"/>
+  <object id="82" name="coin" gid="157" x="182.82" y="636.795" width="8" height="8"/>
+  <object id="83" name="coin" gid="157" x="235.699" y="644.527" width="8" height="8"/>
+  <object id="84" name="coin" gid="157" x="243.68" y="593.893" width="8" height="8"/>
+  <object id="85" name="coin" gid="157" x="127.697" y="590.9" width="8" height="8"/>
+  <object id="86" name="coin" gid="157" x="165.36" y="603.122" width="8" height="8"/>
+  <object id="87" name="coin" gid="157" x="212.751" y="602.623" width="8" height="8"/>
+  <object id="88" name="coin" gid="157" x="117.221" y="555.482" width="8" height="8"/>
+  <object id="89" name="coin" gid="157" x="272.614" y="556.729" width="8" height="8"/>
+  <object id="90" name="coin" gid="157" x="161.869" y="555.98" width="8" height="8"/>
  </objectgroup>
  <objectgroup id="9" name="npc">
   <object id="28" name="snail" gid="146" x="72" y="112" width="16" height="8"/>

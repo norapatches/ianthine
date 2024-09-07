@@ -81,15 +81,16 @@ class MovingSprite(AnimatedSprite):
 # LEVEL
 class Item(AnimatedSprite):
     '''An item that can be picked up by player'''
-    def __init__(self, item_type, position, frames, groups):
+    def __init__(self, item_type, position, frames, groups, data):
+        self.data = data
         super().__init__(position, frames, groups)
         self.rect.center = position
         self.item_type = item_type
     
     def activate(self) -> None:
+        if self.item_type == 'coin':
+            self.animation_speed = ANIMATION_SPEED + 1.5
         if self.item_type == 'key':
-            pass
-        if self.item_type == 'potion':
             pass
 
 class ParticleEffect(AnimatedSprite):

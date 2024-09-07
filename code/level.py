@@ -1,6 +1,6 @@
 from settings import *
 from camera import CameraGroup
-from sprites import Sprite, MovingSprite, Floor, Platform, ParticleEffect
+from sprites import Sprite, MovingSprite, Item, Floor, Platform, ParticleEffect
 
 from npc import Creature, Ghost, Snail
 from enemies import Chaser, Crawler, Floater, Shooter, Skipper, Walker
@@ -23,12 +23,12 @@ class Level:
         )
         
         self.collision_sprites = pygame.sprite.Group()          # floor
-        self.collapse_sprites = pygame.sprite.Group()           # collapsing floor
         self.semi_collision_sprites = pygame.sprite.Group()     # platforms, moving platforms
         self.damage_sprites = pygame.sprite.Group()             # anything that damages player
         self.snail_collision_sprites = pygame.sprite.Group()    # snails
         self.enemy_sprites = pygame.sprite.Group()              # enemies
         self.projectile_sprites = pygame.sprite.Group()         # projectiles
+        self.item_sprites = pygame.sprite.Group()               # items
         
         self.setup(tmx_map, level_frames)
         
@@ -99,6 +99,10 @@ class Level:
                 Crawler((obj.x, obj.y), level_frames['crawler'], (self.all_sprites, self.damage_sprites), self.collision_sprites)
             if obj.name == 'shadowman':
                 Chaser((obj.x, obj.y), level_frames['shadowman'], (self.all_sprites, self.enemy_sprites), self.collision_sprites, self.player)
+        
+        # items
+        for obj in tmx_map.get_layer_by_name('items'):
+            Item(obj.name, (obj.x + TILE_SIZE / 2, obj.y + TILE_SIZE / 2), level_frames['items'][obj.name], (self.all_sprites, self.item_sprites), self.data)
     
     def melee_collision(self) -> None:
         for target in self.enemy_sprites.sprites():

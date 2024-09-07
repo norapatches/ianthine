@@ -36,7 +36,8 @@ class Game:
             'shadowman': import_sub_folders('.', 'assets', 'graphic', 'enemy', 'shadowman'),
             'crawler': import_folder('.', 'assets', 'graphic', 'enemy', 'crawler'),
             'spike': import_image('.', 'assets', 'graphic', 'level', 'spike'),
-            'moving_platform': import_folder('.', 'assets', 'graphic', 'level', 'moving_platform')
+            'moving_platform': import_folder('.', 'assets', 'graphic', 'level', 'moving_platform'),
+            'items': import_sub_folders('.', 'assets', 'graphic', 'items')
         }
         self.sfx = {
             'jump': pygame.mixer.Sound(join('.', 'assets', 'sound', 'sfx', 'jump.wav')),
