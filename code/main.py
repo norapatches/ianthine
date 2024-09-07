@@ -37,7 +37,7 @@ class Game:
             'horn': import_sub_folders('.', 'assets', 'graphic', 'enemy', 'horn'),
             'crawler': import_folder('.', 'assets', 'graphic', 'enemy', 'crawler'),
             'spike': import_image('.', 'assets', 'graphic', 'level', 'spike'),
-            'moving_platform': import_folder('.', 'assets', 'graphic', 'level', 'moving_platform'),
+            'elevator': import_folder('.', 'assets', 'graphic', 'level', 'elevator'),
             'items': import_sub_folders('.', 'assets', 'graphic', 'items')
         }
         self.sfx = {
@@ -72,7 +72,7 @@ class Game:
             if not self.paused:
                 # run current stage
                 self.current_stage.run(dt)
-            
+
             # DEBUG show fps & dt
             #show_fps(self.clock.get_fps())
             #debug_multiple((f'dt: {dt}',))
