@@ -16,6 +16,8 @@ Using these enemy archetypes we can use different assets and have more enemies i
 class Chaser(pygame.sprite.Sprite):
     def __init__(self, position, frames, groups, collision_sprites, player) -> None:
         super().__init__(groups)
+        self.enemy = True
+        
         self.frames, self.frame_index = frames, 0
         self.state, self.facing_right = 'asleep', True
         self.image = self.frames[self.state][self.frame_index]
