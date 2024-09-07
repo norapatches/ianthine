@@ -97,8 +97,8 @@ class Level:
                 Walker((obj.x, obj.y), level_frames['soldier'], (self.all_sprites, self.enemy_sprites), self.collision_sprites)
             if obj.name == 'crawler':
                 Crawler((obj.x, obj.y), level_frames['crawler'], (self.all_sprites, self.damage_sprites), self.collision_sprites)
-            if obj.name == 'shadowman':
-                Chaser((obj.x, obj.y), level_frames['shadowman'], (self.all_sprites, self.enemy_sprites), self.collision_sprites, self.player)
+            if obj.name in ['shadowman', 'horn']:
+                Chaser((obj.x, obj.y), level_frames[obj.name], (self.all_sprites, self.enemy_sprites), self.collision_sprites, self.player)
         
         # items
         for obj in tmx_map.get_layer_by_name('items'):
@@ -108,7 +108,7 @@ class Level:
         for target in self.enemy_sprites.sprites():
             facing_target = self.player.rect.centerx < target.rect.centerx and self.player.facing_right or\
                             self.player.rect.centerx > target.rect.centerx and not self.player.facing_right
-            if target.hitbox_rect.colliderect(self.player.hitbox_rect) and self.player.melee_atk and facing_target:
+            if target.hitbox_rect.colliderect(self.player.rect) and self.player.melee_atk and facing_target:
                 target.reverse()
     
     def ranged_collision(self) -> None:
