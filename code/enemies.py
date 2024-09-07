@@ -25,13 +25,12 @@ class Chaser(pygame.sprite.Sprite):
         self.z = Z_LAYERS['main']
         
         self.direction = vector()
-        self.speed = 32
+        self.speed = 36
         
         self.collision_rects = [sprite.rect for sprite in collision_sprites]
         self.player = player
         
-        self.player_near = False
-        self.player_level = False
+        self.player_near = {'x': False, 'y': False}
         
         self.timers = {'hit': Timer(250), 'edge': Timer(500)}
     
@@ -43,8 +42,8 @@ class Chaser(pygame.sprite.Sprite):
     
     def check_player_near(self) -> None:
         player_pos, chaser_pos = vector(self.player.hitbox_rect.center), vector(self.hitbox_rect.center)
-        self.player_near = chaser_pos.distance_to(player_pos) <= 64
-        self.player_level = abs(chaser_pos.y - player_pos.y) <= 16
+        self.player_near['x'] = chaser_pos.distance_to(player_pos) <= 64
+        self.player_near['y'] = abs(chaser_pos.y - player_pos.y) <= 16
     
     def check_contact(self) -> None:
         floor_rect_right = pygame.FRect((self.hitbox_rect.bottomright), (2, 2))
@@ -59,7 +58,7 @@ class Chaser(pygame.sprite.Sprite):
     
     def move(self, dt) -> None:
         if not self.timers['edge'].active:
-            if self.player_near and self.player_level and not self.player.crouch:
+            if self.player_near['x'] and self.player_near['y'] and not self.player.crouch:
                 self.direction.x = -1 if self.player.hitbox_rect.centerx <= self.hitbox_rect.centerx else 1
                 self.hitbox_rect.x += self.direction.x * self.speed * dt
                 self.check_contact()
@@ -67,9 +66,9 @@ class Chaser(pygame.sprite.Sprite):
     
     def get_state(self) -> None:
         self.state = 'asleep'
-        if self.player_near and not self.player_level and not self.player.crouch:
+        if self.player_near['x'] and not self.player_near['y'] and not self.player.crouch:
             self.state = 'idle'
-        if self.player_near and self.player_level and not self.player.crouch:
+        if self.player_near['x'] and self.player_near['y'] and not self.player.crouch:
             self.state = 'walk'
     
     def animate(self, dt) -> None:
@@ -83,6 +82,7 @@ class Chaser(pygame.sprite.Sprite):
     
     def update(self, dt) -> None:
         self.old_rect = self.hitbox_rect.copy()
+        
         self.update_timers()
         self.check_player_near()
         
