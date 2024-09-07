@@ -32,11 +32,11 @@ class Chaser(pygame.sprite.Sprite):
         
         self.player_near = {'x': False, 'y': False}
         
-        self.timers = {'hit': Timer(250), 'edge': Timer(500)}
+        self.timers = {'hit': Timer(400), 'edge': Timer(600)}
     
     def reverse(self) -> None:
         if not self.timers['hit'].active:
-            self.direction *= -1
+            self.direction.x *= -1
             self.hitbox_rect.move_ip(-16, 0) if self.direction.x < 0 else self.hitbox_rect.move_ip(16, 0)
             self.timers['hit'].start()
     
@@ -60,6 +60,7 @@ class Chaser(pygame.sprite.Sprite):
         if not self.timers['edge'].active:
             if self.player_near['x'] and self.player_near['y'] and not self.player.crouch:
                 self.direction.x = -1 if self.player.hitbox_rect.centerx <= self.hitbox_rect.centerx else 1
+                self.direction.x = 0 if self.timers['hit'].active else self.direction.x
                 self.hitbox_rect.x += self.direction.x * self.speed * dt
                 self.check_contact()
             self.rect.center = self.hitbox_rect.center
