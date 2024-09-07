@@ -322,7 +322,7 @@ class Projectile(pygame.sprite.Sprite):
         super().__init__(groups)
         self.image = pygame.Surface((2, 2))
         self.image.fill('white')
-        self.rect = self.image.get_frect(center= position + vector(4 * direction, -4))
+        self.rect = self.image.get_frect(center= position + vector(6 * direction, -3))
         self.direction = direction
         self.speed = speed
         self.z = Z_LAYERS['main']
