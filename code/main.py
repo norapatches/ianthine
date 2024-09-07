@@ -75,6 +75,7 @@ class Game:
                     sys.exit()
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
+                        self.pause_menu.selected = 0
                         self.data.paused = not self.data.paused
             
             if not self.data.paused:
@@ -82,9 +83,10 @@ class Game:
                 self.current_stage.run(dt)
             else:
                 self.pause_menu.run(dt)
+            
             # DEBUG show fps & dt
-            #show_fps(self.clock.get_fps())
-            #debug_multiple((f'dt: {dt}',))
+            show_fps(self.clock.get_fps())
+            debug_multiple((f'dt: {dt}',))
             
             # update display
             pygame.display.update()
