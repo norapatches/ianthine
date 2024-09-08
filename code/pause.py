@@ -2,6 +2,7 @@ from settings import *
 from sprites import AnimatedSprite, Sprite
 
 class PauseScreen:
+    '''When the game is paused a screen is displayed with two buttons and info about current stage'''
     def __init__(self, frames, fonts, data) -> None:
         self.display = pygame.display.get_surface()
         self.pause_box = pygame.Surface((200, 150))
@@ -17,6 +18,7 @@ class PauseScreen:
         self.selected = 0
     
     def input(self) -> None:
+        '''Check keyboard input'''
         keys = pygame.key.get_just_pressed()
         
         if keys[pygame.K_LEFT]:
@@ -33,6 +35,7 @@ class PauseScreen:
                 self.data.paused = False
     
     def show_pause_text(self) -> None:
+        '''Display paused label'''
         text = self.fonts['large_bold'].render('PAUSED', False, 'white')
         rect = pygame.Rect(self.pause_box.get_width() / 2 - text.get_width() / 2,
                            16,
@@ -40,6 +43,7 @@ class PauseScreen:
         self.pause_box.blit(text, rect)
     
     def show_coin_text(self) -> None:
+        '''Display coins label'''
         text = self.fonts['regular'].render('coins', False, 'white')
         rect = pygame.Rect(int(self.coin.rect.x) - 2 * text.get_width(),
                            int(self.coin.rect.y) - 5,
@@ -52,10 +56,12 @@ class PauseScreen:
         self.pause_box.blit(coins, coin_rect)
     
     def show_key(self) -> None:
+        '''Display the key if in possession of it'''
         if self.data.key:
             Sprite((self.pause_box.get_width() / 2, self.pause_box.get_height() / 2 + 16), self.frames['key'][0], self.sprites)
     
     def show_buttons(self) -> None:
+        '''Display resume and quit buttons and draw rectangle around selected one'''
         resume = self.fonts['bold'].render('RESUME', False, 'white')
         quit = self.fonts['bold'].render('QUIT', False, 'white')
         resume_rect = pygame.Rect(self.pause_box.get_width() / 2 - resume.get_width(),
@@ -73,6 +79,7 @@ class PauseScreen:
         pygame.draw.rect(self.pause_box, 'white', buttons[self.selected], 1)
     
     def run(self, dt) -> None:
+        '''The run method'''
         self.pause_box.fill('black')
         self.show_pause_text()
         
