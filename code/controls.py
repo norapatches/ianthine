@@ -31,3 +31,28 @@ class LevelControls:
             self.map = LevelControls.keyboard[scheme]['map']
             
             self.menu = pygame.K_ESCAPE
+
+
+class MenuControls:
+    '''Control scheme for menu screens'''
+    keyboard = [
+        {
+            'left': pygame.K_LEFT, 'right': pygame.K_RIGHT, 'up': pygame.K_UP, 'down': pygame.K_DOWN,
+            'confirm': pygame.K_RETURN, 'cancel': pygame.K_ESCAPE
+        },
+        {
+            'left': pygame.K_a, 'right': pygame.K_d, 'up': pygame.K_w, 'down': pygame.K_s,
+            'confirm': pygame.K_RETURN, 'cancel': pygame.K_ESCAPE
+        }
+    ]
+    def __init__(self, scheme= 0, gamepad= False) -> None:
+        if gamepad:
+            pass
+        else:
+            self.left = MenuControls.keyboard[scheme]['left']
+            self.right = MenuControls.keyboard[scheme]['right']
+            self.up = MenuControls.keyboard[scheme]['up']
+            self.down = MenuControls.keyboard[scheme]['down']
+            
+            self.confirm = MenuControls.keyboard[scheme]['confirm']
+            self.cancel = MenuControls.keyboard[scheme]['cancel']
