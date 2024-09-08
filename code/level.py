@@ -1,6 +1,6 @@
 from settings import *
 from camera import CameraGroup
-from sprites import Sprite, MovingSprite, Item, Floor, Platform, ParticleEffect
+from sprites import Sprite, MovingSprite, Item, Floor, Platform, VFX
 
 from npc import Creature, Ghost, Snail
 from enemies import Chaser, Crawler, Floater, Shooter, Skipper, Walker
@@ -34,6 +34,7 @@ class Level:
         
         # frames
         self.particle_frames = level_frames['particle']
+        self.sparkle_frames = level_frames['sparkle']
     
     def setup(self, tmx_map, level_frames) -> None:
         '''Read tile and object layers from tmx map file'''
@@ -117,7 +118,7 @@ class Level:
         for sprite in groups:
             sprite = pygame.sprite.spritecollide(sprite, self.projectile_sprites, True)
             if sprite:
-                ParticleEffect((sprite[0].rect.center), self.particle_frames, self.all_sprites)
+                VFX((sprite[0].rect.center), self.particle_frames, self.all_sprites)
     
     def create_projectile(self, position, direction) -> None:
         Projectile(position, (self.all_sprites, self.projectile_sprites), direction, 128)
@@ -127,7 +128,7 @@ class Level:
             for sprite in self.item_sprites:
                 if sprite.rect.colliderect(self.player.hitbox_rect):
                     sprite.activate()
-                    ParticleEffect((sprite.rect.center), self.particle_frames, self.all_sprites)
+                    VFX((sprite.rect.center), self.sparkle_frames if sprite.item_type == 'key' else self.particle_frames, self.all_sprites)
     
     def run(self, dt):
         '''Run the given level, update all sprites, center camera around player'''

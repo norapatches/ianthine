@@ -95,7 +95,7 @@ class Item(AnimatedSprite):
             self.data.key = True
         self.kill()
 
-class ParticleEffect(AnimatedSprite):
+class VFX(AnimatedSprite):
     '''A visual effect used for projectile collisions'''
     def __init__(self, position, frames, groups) -> None:
         super().__init__(position, frames, groups)
