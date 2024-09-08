@@ -77,7 +77,7 @@ class CameraGroup(pygame.sprite.Group):
         #for sprite in self.ui_sprites:
         #    self.screen.blit(sprite.image, sprite.rect)
         
-        self.change_colours(self.screen, ColourPalette.purple, True)
+        #self.change_colours(self.screen, ColourPalette.nokia, True)
         
         pygame.transform.scale(self.screen, (WINDOW_WIDTH, WINDOW_HEIGHT), self.display)
         
