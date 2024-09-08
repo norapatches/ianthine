@@ -32,17 +32,22 @@ class Game:
         '''Import game assets'''
         self.level_frames = {
             'player': import_sub_folders('.', 'assets', 'graphic', 'player'),
+            # NPC
             'snail': import_folder('.', 'assets', 'graphic', 'npc', 'snail'),
-            'ghost': import_folder('.', 'assets', 'graphic', 'npc', 'ghost'),
-            'vfx': import_sub_folders('.', 'assets', 'graphic', 'vfx'),
-            'key': import_folder('.', 'assets', 'graphic', 'items', 'key'),
             'creature': import_sub_folders('.', 'assets', 'graphic', 'npc', 'creature'),
+            # VFX
+            'vfx': import_sub_folders('.', 'assets', 'graphic', 'vfx'),
+            # ENEMY
             'soldier': import_folder('.', 'assets', 'graphic', 'enemy', 'soldier'),
             'shadowman': import_sub_folders('.', 'assets', 'graphic', 'enemy', 'shadowman'),
             'horn': import_sub_folders('.', 'assets', 'graphic', 'enemy', 'horn'),
             'crawler': import_folder('.', 'assets', 'graphic', 'enemy', 'crawler'),
+            'ghost': import_folder('.', 'assets', 'graphic', 'npc', 'ghost'),
+            # TRAP
             'spike': import_image('.', 'assets', 'graphic', 'level', 'spike'),
+            # MOVING PLATFORM
             'elevator': import_folder('.', 'assets', 'graphic', 'level', 'elevator'),
+            # ITEM
             'items': import_sub_folders('.', 'assets', 'graphic', 'items')
         }
         self.sfx = {
