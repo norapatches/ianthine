@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="60" height="60" tilewidth="16" tileheight="16" infinite="0" nextlayerid="30" nextobjectid="93">
+<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="60" height="60" tilewidth="16" tileheight="16" infinite="0" nextlayerid="30" nextobjectid="94">
  <tileset firstgid="1" source="../tilesets/terrain.tsx"/>
  <tileset firstgid="145" source="../tilesets/objects.tsx"/>
  <layer id="19" name="bg" width="60" height="60">
@@ -324,7 +324,7 @@
 </data>
  </layer>
  <objectgroup id="24" name="objects">
-  <object id="27" name="player" gid="145" x="477.797" y="59.2681" width="16" height="16"/>
+  <object id="27" name="player" gid="145" x="871.132" y="441.531" width="16" height="16"/>
   <object id="42" name="door" gid="148" x="54" y="400" width="16" height="16"/>
   <object id="43" name="checkpoint" gid="155" x="756" y="448" width="16" height="16"/>
  </objectgroup>
@@ -413,7 +413,6 @@
  </objectgroup>
  <objectgroup id="9" name="npc">
   <object id="28" name="snail" gid="146" x="72" y="112" width="16" height="8"/>
-  <object id="29" name="ghost" gid="147" x="82" y="48" width="16" height="16"/>
   <object id="30" name="snail" gid="146" x="80" y="160" width="16" height="8"/>
  </objectgroup>
  <objectgroup id="10" name="enemies">
@@ -423,6 +422,7 @@
   <object id="57" name="soldier" gid="152" x="88" y="352" width="16" height="16"/>
   <object id="58" name="shadowman" gid="151" x="708" y="160" width="16" height="16"/>
   <object id="91" name="horn" gid="158" x="748" y="352" width="16" height="16"/>
+  <object id="93" name="ghost" gid="147" x="737.545" y="543.168" width="16" height="16"/>
  </objectgroup>
  <objectgroup id="28" name="data">
   <object id="39" name="data" x="0" y="0" width="16" height="16">

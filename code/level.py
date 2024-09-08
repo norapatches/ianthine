@@ -2,7 +2,7 @@ from settings import *
 from camera import CameraGroup
 from sprites import Sprite, MovingSprite, Item, Floor, Platform, VFX
 
-from npc import Creature, Ghost, Snail
+from npc import Creature, Snail
 from enemies import Chaser, Crawler, Floater, Shooter, Skipper, Walker
 from player import Player, Projectile
 
@@ -57,8 +57,6 @@ class Level:
         
         # NPC
         for obj in tmx_map.get_layer_by_name('npc'):
-            if obj.name == 'ghost':
-                Ghost((obj.x, obj.y), level_frames['ghost'], self.all_sprites)
             if obj.name == 'snail':
                 Snail((obj.x, obj.y), level_frames['snail'], (self.all_sprites, self.snail_collision_sprites), self.collision_sprites)
         
@@ -99,6 +97,8 @@ class Level:
                 Crawler((obj.x, obj.y), level_frames['crawler'], (self.all_sprites, self.damage_sprites), self.collision_sprites)
             if obj.name in ['shadowman', 'horn']:
                 Chaser((obj.x, obj.y), level_frames[obj.name], (self.all_sprites, self.enemy_sprites), self.collision_sprites, self.player)
+            if obj.name == 'ghost':
+                Floater((obj.x, obj.y), level_frames['ghost'], (self.all_sprites, self.enemy_sprites), self.player)
         
         # items
         for obj in tmx_map.get_layer_by_name('items'):
@@ -117,7 +117,7 @@ class Level:
         for sprite in groups:
             sprite = pygame.sprite.spritecollide(sprite, self.projectile_sprites, True)
             if sprite:
-                VFX((sprite[0].rect.center), self.vfx_frames['explosion'], self.all_sprites)
+                VFX((sprite[0].rect.center), self.vfx_frames['particle'], self.all_sprites)
     
     def create_projectile(self, position, direction) -> None:
         Projectile(position, (self.all_sprites, self.projectile_sprites), direction, 128)

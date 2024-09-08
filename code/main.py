@@ -42,7 +42,7 @@ class Game:
             'shadowman': import_sub_folders('.', 'assets', 'graphic', 'enemy', 'shadowman'),
             'horn': import_sub_folders('.', 'assets', 'graphic', 'enemy', 'horn'),
             'crawler': import_folder('.', 'assets', 'graphic', 'enemy', 'crawler'),
-            'ghost': import_folder('.', 'assets', 'graphic', 'npc', 'ghost'),
+            'ghost': import_sub_folders('.', 'assets', 'graphic', 'enemy', 'ghost'),
             # TRAP
             'spike': import_image('.', 'assets', 'graphic', 'level', 'spike'),
             # MOVING PLATFORM

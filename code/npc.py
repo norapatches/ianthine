@@ -26,28 +26,6 @@ class Creature(pygame.sprite.Sprite):
         self.animate(dt)
 
 
-class Ghost(pygame.sprite.Sprite):
-    '''Ghost is a friendly NPC that appears on some levels and trades with the player'''
-    def __init__(self, position, frames, groups) -> None:
-        super().__init__(groups)
-        self.frames, self.frame_index = frames, 0
-        self.image = self.frames[self.frame_index]
-        self.rect = self.image.get_frect(topleft= position)
-        
-        self.z = Z_LAYERS['main']
-        
-        self.direction = 1
-    
-    def animate(self, dt) -> None:
-        self.frame_index += ANIMATION_SPEED * dt
-        self.image = self.frames[int(self.frame_index % len(self.frames))]
-        self.image = pygame.transform.flip(self.image, True, False) if self.direction < 0 else self.image
-    
-    def update(self, dt) -> None:
-        
-        self.animate(dt)
-
-
 class Snail(pygame.sprite.Sprite):
     '''Snail is a friendly NPC that moves left and right. The player can ride on it to avoid spike damage'''
     def __init__(self, position, frames, groups, collision_sprites) -> None:
@@ -90,7 +68,7 @@ class Snail(pygame.sprite.Sprite):
         self.image = self.frames[int(self.frame_index % len(self.frames))]
         self.image = pygame.transform.flip(self.image, True, False) if self.direction.x < 0 else self.image
     
-    def show_hitbox(self):
+    def show_hitbox(self) -> None:
         '''Display a colourful hitbox for debug purposes'''
         surf = pygame.Surface(self.hitbox_rect.size)
         surf.fill('yellow')

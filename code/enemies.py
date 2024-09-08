@@ -14,6 +14,7 @@ Using these enemy archetypes we can use different assets and have more enemies i
 '''
 
 class Chaser(pygame.sprite.Sprite):
+    '''Stays asleep until player is nearby, goes idle if player is near on x axis, walks if player is near on both x, y axies'''
     def __init__(self, position, frames, groups, collision_sprites, player) -> None:
         super().__init__(groups)
         self.enemy = True
@@ -21,6 +22,7 @@ class Chaser(pygame.sprite.Sprite):
         self.frames, self.frame_index = frames, 0
         self.state, self.facing_right = 'asleep', True
         self.image = self.frames[self.state][self.frame_index]
+        
         self.rect = self.image.get_frect(topleft= position)
         self.hitbox_rect = self.rect.inflate(-6, 0)
         self.old_rect = self.hitbox_rect.copy()
@@ -167,7 +169,66 @@ class Crawler(pygame.sprite.Sprite):
         
         self.animate(dt)
 
-class Floater(pygame.sprite.Sprite): pass
+class Floater(pygame.sprite.Sprite):
+    def __init__(self, position, frames, groups, player) -> None:
+        super().__init__(groups)
+        self.enemy = True
+        
+        self.frames, self.frame_index = frames, 0
+        self.state, self.facing_right = 'asleep', True
+        self.image = self.frames[self.state][self.frame_index]
+        
+        self.rect = self.image.get_frect(topleft= position)
+        self.hitbox_rect = self.rect.inflate(-6, -2)
+        self.old_rect = self.hitbox_rect.copy()
+        self.z = Z_LAYERS['main']
+        
+        self.direction = vector()
+        self.facing_right = True
+        self.speed = 36
+        
+        self.player = player
+        self.player_near = {'x': False, 'y': False, 'facing_away': False}
+    
+    def check_player_near(self) -> None:
+        player_pos, floater_pos = vector(self.player.hitbox_rect.center), vector(self.hitbox_rect.center)
+        self.player_near['x'] = floater_pos.distance_to(player_pos) <= 80
+        self.player_near['y'] = abs(floater_pos.y - player_pos.y) <= 80
+        
+        self.facing_right = True if self.hitbox_rect.centerx < self.player.hitbox_rect.centerx else False
+        self.player_near['facing_away'] = True if \
+            all((self.player_near['x'], self.player_near['y'])) and \
+            ((self.hitbox_rect.centerx < self.player.hitbox_rect.centerx and all((self.facing_right, self.player.facing_right))) or\
+            (self.hitbox_rect.centerx > self.player.hitbox_rect.centerx and not self.facing_right and not self.player.facing_right)) else False
+    
+    def get_state(self) -> None:
+        self.state = 'asleep'
+        if all((self.player_near['x'], self.player_near['y'])) and not self.player_near['facing_away']:
+            self.state = 'idle'
+        if self.player_near['facing_away']:
+            self.state = 'move'
+
+    def move(self, dt) -> None:
+        if self.state == 'move':
+            self.direction.x = 1 if self.hitbox_rect.centerx <= self.player.hitbox_rect.centerx else -1
+            self.direction.y = 1 if self.hitbox_rect.centery <= self.player.hitbox_rect.centery else -1
+            
+            self.hitbox_rect.center += self.direction.normalize() * self.speed * dt if self.direction.x != 0 and self.direction.y != 0 else self.direction * self.speed * dt
+            self.rect.center = self.hitbox_rect.center
+    
+    def animate(self, dt) -> None:
+        self.frame_index += ANIMATION_SPEED * dt
+        self.image = self.frames[self.state][int(self.frame_index % len(self.frames[self.state]))]
+        self.image = pygame.transform.flip(self.image, True, False) if not self.facing_right else self.image
+    
+    def update(self, dt) -> None:
+        self.old_rect = self.hitbox_rect.copy()
+        
+        self.check_player_near()
+        self.get_state()
+        
+        self.move(dt)
+        self.animate(dt)
 
 class Shooter(pygame.sprite.Sprite): pass
 
