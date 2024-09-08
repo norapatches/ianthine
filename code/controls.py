@@ -1,7 +1,7 @@
 from settings import *
 
 class LevelControls:
-    '''Control schemes to choose from'''
+    '''Control schemes for level stages'''
     keyboard = [
         {
             'move_left': pygame.K_LEFT, 'move_right': pygame.K_RIGHT, 'crouch': pygame.K_DOWN, 'interact': pygame.K_UP,
