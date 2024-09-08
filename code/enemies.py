@@ -190,6 +190,9 @@ class Floater(pygame.sprite.Sprite):
         self.player = player
         self.player_near = {'x': False, 'y': False, 'facing_away': False}
     
+    def take_hit(self) -> None:
+        pass
+    
     def check_player_near(self) -> None:
         player_pos, floater_pos = vector(self.player.hitbox_rect.center), vector(self.hitbox_rect.center)
         self.player_near['x'] = floater_pos.distance_to(player_pos) <= 80

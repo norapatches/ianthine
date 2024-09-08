@@ -1,4 +1,5 @@
 from settings import *
+from colours import ColourPalette
 
 class CameraGroup(pygame.sprite.Group):
     def __init__(self, width, height, data) -> None:
@@ -28,16 +29,41 @@ class CameraGroup(pygame.sprite.Group):
         self.offset.x = self.offset.x if self.offset.x < self.borders['left'] else 0
         self.offset.x = self.offset.x if self.offset.x > self.borders['right'] else self.borders['right']
     
+    def target_center_camera(self, target_position) -> None:
+        self.offset.x = -(target_position[0] - SCREEN_WIDTH / 2)
+        self.offset.y = -(target_position[1] - SCREEN_HEIGHT / 2)
+    
     def toggle_minimap(self) -> None:
         '''Show minimap while holding M key'''
         keys = pygame.key.get_pressed()
         if keys[pygame.K_m]:
             self.display.blit(self.minimap.scaled_surface, (10, WINDOW_HEIGHT - self.minimap.scaled_surface.height - 10))
     
+    def change_colours(self, surface, palette, invert= False) -> None:
+        # Convert surface to an array
+        pixel_array = pygame.surfarray.pixels3d(surface)
+
+        # Define black and white as tuples (RGB)
+        black = (0, 0, 0)
+        white = (255, 255, 255)
+
+        # Create masks for black and white pixels
+        black_mask = np.all(pixel_array == black, axis=-1)
+        white_mask = np.all(pixel_array == white, axis=-1)
+
+        if invert:
+            pixel_array[black_mask] = palette['light']
+            pixel_array[white_mask] = palette['dark']
+        else:
+            pixel_array[black_mask] = palette['dark']
+            pixel_array[white_mask] = palette['light']
+
+        # Update the surface
+        del pixel_array  # Unlock the surface from the array
+    
     def draw(self, target_position, dt):
         '''The custom draw method for the CameraGroup that draws in Z layer order'''
-        self.offset.x = -(target_position[0] - SCREEN_WIDTH / 2)
-        self.offset.y = -(target_position[1] - SCREEN_HEIGHT / 2)
+        self.target_center_camera(target_position)
         self.camera_constraint()
         
         self.minimap.update(self.sprites())
@@ -50,6 +76,8 @@ class CameraGroup(pygame.sprite.Group):
         
         #for sprite in self.ui_sprites:
         #    self.screen.blit(sprite.image, sprite.rect)
+        
+        self.change_colours(self.screen, ColourPalette.purple, True)
         
         pygame.transform.scale(self.screen, (WINDOW_WIDTH, WINDOW_HEIGHT), self.display)
         
