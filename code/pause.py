@@ -1,4 +1,5 @@
 from settings import *
+from controls import MenuControls
 from sprites import AnimatedSprite, Sprite
 
 class PauseScreen:
@@ -8,6 +9,8 @@ class PauseScreen:
         self.pause_box = pygame.Surface((200, 150))
         
         self.frames = frames
+        
+        self.controls = MenuControls()
         
         self.sprites = pygame.sprite.Group()
         self.coin = AnimatedSprite(((self.pause_box.get_width() / 3) * 2, self.pause_box.get_height() / 2), self.frames['coin'], self.sprites)
@@ -21,13 +24,13 @@ class PauseScreen:
         '''Check keyboard input'''
         keys = pygame.key.get_just_pressed()
         
-        if keys[pygame.K_LEFT]:
+        if keys[self.controls.left]:
             self.selected -= 1
             if self.selected < 0: self.selected = 0
-        if keys[pygame.K_RIGHT]:
+        if keys[self.controls.right]:
             self.selected += 1
             if self.selected > 1: self.selected = 1
-        if keys[pygame.K_RETURN]:
+        if keys[self.controls.confirm]:
             if self.selected == 1:
                 pygame.quit()
                 sys.exit()
