@@ -45,7 +45,7 @@ class PauseScreen:
                            int(self.coin.rect.y) - 5,
                            text.get_width(), text.get_height())
         coins = self.fonts['bold'].render(f'{self.data.coins}', False, 'white')
-        coin_rect = pygame.Rect(self.coin.rect.x - 2 * coins.get_width(),
+        coin_rect = pygame.Rect(self.coin.rect.x - 1.5 * coins.get_width(),
                                 rect.top,
                                 coins.get_width(), coins.get_height())
         self.pause_box.blit(text, rect)

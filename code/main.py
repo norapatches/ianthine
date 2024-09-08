@@ -26,6 +26,7 @@ class Game:
         self.pause_menu = PauseScreen(self.level_frames['items'], self.fonts, self.data)
         
         self.cheat_list = []
+        self.debugging = False
     
     def import_assets(self) -> None:
         '''Import game assets'''
@@ -58,7 +59,6 @@ class Game:
             'large_regular': pygame.font.Font(join('.', 'assets', 'fonts', '8_regular.ttf'), 32),
             'large_bold': pygame.font.Font(join('.', 'assets', 'fonts', '8_bold.ttf'), 32)
         }
-        self.paused = False
     
     def run(self) -> None:
         '''The game loop, runs current stage'''
@@ -72,12 +72,22 @@ class Game:
             
             # check for pygame events
             for event in pygame.event.get():
+                
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
+
                 if event.type == pygame.KEYDOWN:
+                    '''Pause the game with ESC'''
                     if event.key == pygame.K_ESCAPE:
+                        self.pause_menu.selected = 0
                         self.data.paused = not self.data.paused
+                    
+                    '''Show or hide debug surfaces'''
+                    if event.key == pygame.K_TAB:
+                        self.debugging = not self.debugging
+                    
+                    '''Enter cheat code method'''
                     if self.enter_cheat(event.key) == True:
                         self.current_stage.player.abilities['walljump'] = True
             
@@ -85,16 +95,19 @@ class Game:
                 # run current stage
                 self.current_stage.run(dt)
             else:
+                # show pause screen
                 self.pause_menu.run(dt)
             
             # DEBUG show fps & dt
-            show_fps(self.clock.get_fps())
-            debug_multiple((f'dt: {dt}',))
+            if self.debugging:
+                show_fps(self.clock.get_fps())
+                debug_multiple((f'dt: {dt}',))
             
             # update display
             pygame.display.update()
     
     def enter_cheat(self, key) -> bool:
+        '''Store and check the last 10 keystrokes against a list to enable cheats'''
         if len(self.cheat_list) < 10:
             self.cheat_list.append(key)
         else:
