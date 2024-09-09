@@ -55,7 +55,8 @@ class CameraGroup(pygame.sprite.Group):
         #for sprite in self.ui_sprites:
         #    self.screen.blit(sprite.image, sprite.rect)
         
-        #change_colours(self.screen, ColourPalette.purple)
+        # change colours of every pixel on given surface(s)
+        #change_colours((self.screen, ), ColourPalette.nokia, True)
         
         pygame.transform.scale(self.screen, (WINDOW_WIDTH, WINDOW_HEIGHT), self.display)
         
