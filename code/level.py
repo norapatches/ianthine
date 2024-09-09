@@ -15,7 +15,7 @@ class Level:
         self.level_width = tmx_map.width * TILE_SIZE
         self.level_height = tmx_map.height * TILE_SIZE
         
-        # groups
+        # all sprites
         self.all_sprites = CameraGroup(
             width= tmx_map.width,
             height= tmx_map.height,
