@@ -10,6 +10,7 @@ class CameraGroup(pygame.sprite.Group):
         
         self.display = pygame.display.get_surface()
         self.screen = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
+        self.screen_rect = self.screen.get_frect()
         self.offset = vector()
         self.width, self.height = width * TILE_SIZE, height * TILE_SIZE
         
@@ -23,6 +24,11 @@ class CameraGroup(pygame.sprite.Group):
             'bottom': -self.height + SCREEN_HEIGHT,
             'top': 0
         }
+        
+        # camera box
+        self.camera_bounds = {'left': 64, 'right': 64, 'top': 16, 'bottom': 16}
+        self.camera_box = pygame.FRect((self.screen_rect.left + self.camera_bounds['left'], self.screen_rect.top + self.camera_bounds['top']),
+                                       (self.screen_rect.width - (self.camera_bounds['left'] + self.camera_bounds['right']), self.screen_rect.height - (self.camera_bounds['top'] + self.camera_bounds['bottom'])))
         
         # adjust filters
         self.filters = [
@@ -69,6 +75,19 @@ class CameraGroup(pygame.sprite.Group):
         self.offset.x = -(target.centerx - SCREEN_WIDTH / 2)
         self.offset.y = -(target.centery - SCREEN_HEIGHT / 2)
     
+    def box_target_camera(self, target) -> None:
+        if target.left < self.camera_box.left:
+            self.camera_box.left = target.left
+        if target.right > self.camera_box.right:
+            self.camera_box.right = target.right
+        if target.top < self.camera_box.top:
+            self.camera_box.top = target.top
+        if target.bottom > self.camera_box.bottom:
+            self.camera_box.bottom = target.bottom
+        
+        self.offset.x = -self.camera_box.left + self.camera_bounds['left']
+        self.offset.y = -self.camera_box.top + self.camera_bounds['top']
+    
     def toggle_minimap(self) -> None:
         '''Show minimap while holding M key'''
         keys = pygame.key.get_pressed()
@@ -79,7 +98,8 @@ class CameraGroup(pygame.sprite.Group):
         '''The custom draw method for the CameraGroup that draws in Z layer order'''
         self.cycle_filter()
         
-        self.target_center_camera(target)
+        self.box_target_camera(target)
+        #self.target_center_camera(target)
         self.camera_constraint()
         
         self.minimap.update(self.sprites())
