@@ -17,7 +17,7 @@ class Golem(pygame.sprite.Sprite):
         self.z = Z_LAYERS['main']
         
         self.direction = vector()
-        self.speed = 64
+        self.speed = 80
         self.init_position = position
         
         self.has_fired = False
@@ -68,7 +68,7 @@ class Golem(pygame.sprite.Sprite):
                 
                 if chosen == 'spike':
                     self.hitbox_rect.topleft = self.init_position + vector(10, 20)
-                    self.create_spike(self.rect.bottomright + vector(0, -8), 1)
+                    self.create_spike(self.rect.bottomright + vector(0, -8), 1) if self.facing_right else self.create_spike(self.rect.bottomleft + vector(0, -8), -1)
                     self.state = 'idle'
         
         if self.state == 'idle':
@@ -76,7 +76,7 @@ class Golem(pygame.sprite.Sprite):
             self.direction.x, self.direction.y = 0, 0
     
     def move(self, dt) -> None:
-        self.hitbox_rect.topleft += self.direction * self.speed * dt
+        self.hitbox_rect.topleft += self.direction.normalize() * self.speed * dt if self.direction.x != 0 and self.direction.y != 0 else self.direction * self.speed * dt
         self.rect.topleft = self.hitbox_rect.topleft + vector(-10, -20)
     
     def change_state(self) -> None:
@@ -146,20 +146,24 @@ class Spike(pygame.sprite.Sprite):
         super().__init__(groups)
         
         self.image = surface
-        self.image.fill('white')
         self.rect = self.image.get_frect(topleft= position)
         self.direction = direction
         self.speed = speed
         self.z = Z_LAYERS['main']
         
         self.timers = {
-            'lifetime': Timer(1500)
+            'lifetime': Timer(1500),
+            'rotate': Timer(200, self.rotate, repeat=True)
         }
         self.timers['lifetime'].start()
+    
+    def rotate(self) -> None:
+        self.image = pygame.transform.rotate(self.image, 90)
     
     def update(self, dt) -> None:
         for timer in self.timers.values():
             timer.update()
+        
         self.rect.x += self.direction * self.speed * dt
         
         if not self.timers['lifetime'].active:

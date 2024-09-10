@@ -132,7 +132,7 @@ class Level:
         Boulder(position, self.boss_boulder, (self.all_sprites, self.damage_sprites), direction, 64)
     
     def create_boss_spike(self, position, direction) -> None:
-        Spike(position, pygame.Surface((8, 8)), (self.all_sprites, self.damage_sprites), direction, 64)
+        Spike(position, self.boss_boulder, (self.all_sprites, self.damage_sprites), direction, 64)
     
     def item_collision(self) -> None:
         if self.item_sprites:
