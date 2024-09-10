@@ -20,7 +20,7 @@ class Game:
         self.data = GameData(self.ui)
         
         self.tmx_maps = {
-            0: load_pygame(join('.', 'data', 'levels', 'test.tmx'))
+            0: load_pygame(join('.', 'data', 'levels', 'boss.tmx'))
         }
         self.current_stage = Level(self.tmx_maps[0], self.level_frames, self.data)
         self.pause_menu = PauseScreen(self.level_frames['items'], self.fonts, self.data)
