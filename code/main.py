@@ -43,8 +43,10 @@ class Game:
             'horn': import_sub_folders('.', 'assets', 'graphic', 'enemy', 'horn'),
             'crawler': import_folder('.', 'assets', 'graphic', 'enemy', 'crawler'),
             'ghost': import_sub_folders('.', 'assets', 'graphic', 'enemy', 'ghost'),
+            'golem': import_sub_folders('.', 'assets', 'graphic', 'boss', 'golem'),
             # TRAP
             'spike': import_image('.', 'assets', 'graphic', 'level', 'spike'),
+            'boulder': import_image('.', 'assets', 'graphic', 'level', 'boulder'),
             # MOVING PLATFORM
             'elevator': import_folder('.', 'assets', 'graphic', 'level', 'elevator'),
             # ITEM

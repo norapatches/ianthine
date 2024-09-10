@@ -4,6 +4,7 @@ from sprites import Sprite, MovingSprite, Item, Floor, Platform, VFX
 
 from npc import Creature, Snail
 from enemies import Chaser, Crawler, Floater, Shooter, Skipper, Walker
+from enemy_boss import Golem, Boulder, Spike
 from player import Player, Projectile
 
 class Level:
@@ -34,6 +35,9 @@ class Level:
         
         # frames
         self.vfx_frames = level_frames['vfx']
+        
+        # boss projectiles
+        self.boss_boulder = level_frames['boulder']
     
     def setup(self, tmx_map, level_frames) -> None:
         '''Read tile and object layers from tmx map file'''
@@ -99,6 +103,8 @@ class Level:
                 Chaser((obj.x, obj.y), level_frames[obj.name], (self.all_sprites, self.enemy_sprites), self.collision_sprites, self.player)
             if obj.name == 'ghost':
                 Floater((obj.x, obj.y), level_frames['ghost'], (self.all_sprites, self.enemy_sprites), self.player)
+            if obj.name == 'golem':
+                Golem((obj.x, obj.y), level_frames['golem'], (self.all_sprites, self.enemy_sprites), self.create_boss_boulder, self.create_boss_spike, self.player)
         
         # items
         for obj in tmx_map.get_layer_by_name('items'):
@@ -121,6 +127,12 @@ class Level:
     
     def create_projectile(self, position, direction) -> None:
         Projectile(position, (self.all_sprites, self.projectile_sprites), direction, 128)
+    
+    def create_boss_boulder(self, position, direction) -> None:
+        Boulder(position, self.boss_boulder, (self.all_sprites, self.damage_sprites), direction, 64)
+    
+    def create_boss_spike(self, position, direction) -> None:
+        Spike(position, pygame.Surface((8, 8)), (self.all_sprites, self.damage_sprites), direction, 64)
     
     def item_collision(self) -> None:
         if self.item_sprites:
