@@ -81,8 +81,8 @@ class Golem(pygame.sprite.Sprite):
     
     def change_state(self) -> None:
         if not self.timers['change_state'].active:
-            self.state = choices(('idle', 'left_hammer', 'ground_pound', 'right_punch'), (0, 0, 1, 0))[0]
-            #self.state = choices(('idle', 'left_hammer', 'ground_pound', 'right_punch'), (0.01, 0.33, 0.33, 0.33))[0]
+            #self.state = choices(('idle', 'left_hammer', 'ground_pound', 'right_punch'), (0, 0, 1, 0))[0]
+            self.state = choices(('idle', 'left_hammer', 'ground_pound', 'right_punch'), (0.01, 0.33, 0.33, 0.33))[0]
             self.frame_index = 0
             self.timers['change_state'].start()
     
