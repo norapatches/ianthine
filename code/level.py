@@ -139,4 +139,5 @@ class Level:
         self.ranged_collision()
         self.item_collision()
         
-        self.all_sprites.draw(self.player.hitbox_rect.center, dt)
+        #self.all_sprites.draw(self.player.hitbox_rect.center, dt)
+        self.all_sprites.draw(self.player.hitbox_rect, dt)

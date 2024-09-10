@@ -19,25 +19,28 @@ class ColourPalette:
     sepia =     {'dark' : (111, 77, 61),    'light' : (203, 152, 103)}
     yellow =    {'dark' : (41, 43, 48),     'light' : (207, 171, 74)}
 
-def change_colours(surfaces, palette, invert= False) -> None:   
+def change_colours(surfaces, palette, invert= False) -> None:
     # Convert surface to an array
     for surface in surfaces:
-        pixel_array = pygame.surfarray.pixels3d(surface)
-
-        # Define black and white as tuples (RGB)
-        black = (0, 0, 0)
-        white = (255, 255, 255)
-
-        # Create masks for black and white pixels
-        black_mask = np.all(pixel_array == black, axis=-1)
-        white_mask = np.all(pixel_array == white, axis=-1)
-
-        if invert:
-            pixel_array[black_mask] = palette['light']
-            pixel_array[white_mask] = palette['dark']
+        if palette == None:
+            break
         else:
-            pixel_array[black_mask] = palette['dark']
-            pixel_array[white_mask] = palette['light']
+            pixel_array = pygame.surfarray.pixels3d(surface)
 
-        # Update the surface
-        del pixel_array  # Unlock the surface from the array
+            # Define black and white as tuples (RGB)
+            black = (0, 0, 0)
+            white = (255, 255, 255)
+
+            # Create masks for black and white pixels
+            black_mask = np.all(pixel_array == black, axis=-1)
+            white_mask = np.all(pixel_array == white, axis=-1)
+
+            if invert:
+                pixel_array[black_mask] = palette['light']
+                pixel_array[white_mask] = palette['dark']
+            else:
+                pixel_array[black_mask] = palette['dark']
+                pixel_array[white_mask] = palette['light']
+
+            # Update the surface
+            del pixel_array  # Unlock the surface from the array

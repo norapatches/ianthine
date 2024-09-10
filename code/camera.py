@@ -23,15 +23,51 @@ class CameraGroup(pygame.sprite.Group):
             'bottom': -self.height + SCREEN_HEIGHT,
             'top': 0
         }
+        
+        # adjust filters
+        self.filters = [
+            None,
+            ColourPalette.bubblegum,
+            ColourPalette.dust,
+            ColourPalette.evening,
+            ColourPalette.gato,
+            ColourPalette.green,
+            ColourPalette.evening,
+            ColourPalette.ibm51,
+            ColourPalette.ibm8503,
+            ColourPalette.noire,
+            ColourPalette.nokia,
+            ColourPalette.orange,
+            ColourPalette.port,
+            ColourPalette.popart,
+            ColourPalette.purple,
+            ColourPalette.sand,
+            ColourPalette.sangre,
+            ColourPalette.sepia,
+            ColourPalette.yellow
+        ]
+        self.filter = 0
+        self.invert = 0
+    
+    def cycle_filter(self) -> None:
+        keys = pygame.key.get_just_pressed()
+        
+        if keys[pygame.K_BACKSPACE]:
+            self.filter += 1
+            self.filter = 0 if self.filter > 16 else self.filter
+        
+        if keys[pygame.K_RSHIFT]:
+            self.invert += 1
+            self.invert = 0 if self.invert > 1 else self.invert
     
     def camera_constraint(self) -> None:
         '''Don't allow camera movement when reaching level stage sides'''
         self.offset.x = self.offset.x if self.offset.x < self.borders['left'] else 0
         self.offset.x = self.offset.x if self.offset.x > self.borders['right'] else self.borders['right']
     
-    def target_center_camera(self, target_position) -> None:
-        self.offset.x = -(target_position[0] - SCREEN_WIDTH / 2)
-        self.offset.y = -(target_position[1] - SCREEN_HEIGHT / 2)
+    def target_center_camera(self, target) -> None:
+        self.offset.x = -(target.centerx - SCREEN_WIDTH / 2)
+        self.offset.y = -(target.centery - SCREEN_HEIGHT / 2)
     
     def toggle_minimap(self) -> None:
         '''Show minimap while holding M key'''
@@ -39,9 +75,11 @@ class CameraGroup(pygame.sprite.Group):
         if keys[pygame.K_m]:
             self.display.blit(self.minimap.scaled_surface, (10, WINDOW_HEIGHT - self.minimap.scaled_surface.height - 10))
     
-    def draw(self, target_position, dt):
+    def draw(self, target, dt):
         '''The custom draw method for the CameraGroup that draws in Z layer order'''
-        self.target_center_camera(target_position)
+        self.cycle_filter()
+        
+        self.target_center_camera(target)
         self.camera_constraint()
         
         self.minimap.update(self.sprites())
@@ -56,7 +94,7 @@ class CameraGroup(pygame.sprite.Group):
         #    self.screen.blit(sprite.image, sprite.rect)
         
         # change colours of every pixel on given surface(s)
-        #change_colours((self.screen, ), ColourPalette.nokia, True)
+        change_colours((self.screen, ), self.filters[self.filter], self.invert)
         
         pygame.transform.scale(self.screen, (WINDOW_WIDTH, WINDOW_HEIGHT), self.display)
         
