@@ -100,8 +100,8 @@ class CameraGroup(pygame.sprite.Group):
         '''The custom draw method for the CameraGroup that draws in Z layer order'''
         self.cycle_filter()
         
-        self.box_target_camera(target)
-        #self.target_center_camera(target)
+        #self.box_target_camera(target)
+        self.target_center_camera(target)
         self.camera_constraint()
         
         self.minimap.update(self.sprites())
