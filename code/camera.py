@@ -26,9 +26,11 @@ class CameraGroup(pygame.sprite.Group):
         }
         
         # camera box
-        self.camera_bounds = {'left': 64, 'right': 64, 'top': 16, 'bottom': 16}
-        self.camera_box = pygame.FRect((self.screen_rect.left + self.camera_bounds['left'], self.screen_rect.top + self.camera_bounds['top']),
-                                       (self.screen_rect.width - (self.camera_bounds['left'] + self.camera_bounds['right']), self.screen_rect.height - (self.camera_bounds['top'] + self.camera_bounds['bottom'])))
+        self.camera_bounds = {'left': 64, 'right': 64, 'top': 36, 'bottom': 36}
+        self.camera_box = pygame.FRect((self.screen_rect.left + self.camera_bounds['left'],
+                                        self.screen_rect.top + self.camera_bounds['top']),
+                                       (self.screen_rect.width - (self.camera_bounds['left'] + self.camera_bounds['right']),
+                                        self.screen_rect.height - (self.camera_bounds['top'] + self.camera_bounds['bottom'])))
         
         # adjust filters
         self.filters = [
@@ -107,7 +109,8 @@ class CameraGroup(pygame.sprite.Group):
         self.screen.fill('black')
         
         for sprite in sorted(self, key= lambda sprite: sprite.z):
-            offset_pos = sprite.rect.topleft + self.offset
+            offset_pos = round(sprite.rect.left + self.offset.x), round(sprite.rect.top + self.offset.y)
+            #offset_pos = sprite.rect.topleft + self.offset
             self.screen.blit(sprite.image, offset_pos)
         
         #for sprite in self.ui_sprites:
