@@ -233,7 +233,62 @@ class Floater(pygame.sprite.Sprite):
         self.move(dt)
         self.animate(dt)
 
-class Shooter(pygame.sprite.Sprite): pass
+class Shooter(pygame.sprite.Sprite):
+    def __init__(self, position, frames, groups, player, create_projectile) -> None:
+        self.enemy = True
+        super().__init__(groups)
+        
+        self.frames, self.frame_index = frames, 0
+        self.state, self.facing_right = 'asleep', True
+        self.image = self.frames[self.state][self.frame_index]
+        
+        self.facing_right = True
+        
+        self.rect = self.image.get_frect(topleft= position)
+        self.hitbox_rect = pygame.FRect()
+        self.old_rect = self.rect.copy()
+        self.z = Z_LAYERS['main']
+        
+        self.player = player
+        
+        self.timers = {'shoot': Timer(3000)}
+        self.has_fired = False
+        self.create_projectile = create_projectile
+    
+    def check_player_near(self) -> None:
+        player_pos, shooter_pos = vector(self.player.hitbox_rect.center), vector(self.rect.center)
+        player_near = shooter_pos.distance_to(player_pos) < 64
+        player_level = abs(shooter_pos.y - player_pos.y) < 32
+        
+        if player_near and player_level and not self.timers['shoot'].active:
+            self.state = 'shoot'
+            self.frame_index = 0
+            self.timers['shoot'].start()
+            self.facing_right = False if shooter_pos.x > player_pos.x else True
+    
+    def animate(self, dt) -> None:
+        
+        self.frame_index += (ANIMATION_SPEED + 2) * dt
+        if self.frame_index < len(self.frames[self.state]):
+            self.image = self.frames[self.state][int(self.frame_index)]
+            self.image = pygame.transform.flip(self.image, True, False) if not self.facing_right else self.image
+            # fire
+            if self.state == 'shoot' and int(self.frame_index) == len(self.frames[self.state]) - 1 and not self.has_fired:
+                self.create_projectile(self.rect.topright, 1 if self.facing_right else -1)
+                self.has_fired = True
+        
+        else:
+            self.frame_index = 0
+            if self.state == 'shoot':
+                self.state = 'asleep'
+                self.has_fired = False
+    
+    def update(self, dt) -> None:
+        self.old_rect = self.rect.copy()
+        self.timers['shoot'].update()
+        self.check_player_near()
+        print(self.state)
+        self.animate(dt)
 
 class Skipper(pygame.sprite.Sprite): pass
 
@@ -288,3 +343,43 @@ class Walker(pygame.sprite.Sprite):
         self.check_contact()
         self.move(dt)
         self.animate(dt)      
+
+
+# ENEMY PROJECTILES
+class Thorn(pygame.sprite.Sprite):
+    right = np.array([
+        [255, 0, 255],
+        [255, 255, 255],
+        [0, 255, 0]
+    ], dtype=np.uint8)
+    left = np.array([
+        [0, 255, 0],
+        [255, 255, 255],
+        [255, 0, 255]
+    ], dtype=np.uint8)
+    def __init__(self, position, groups, direction, speed) -> None:
+        self.enemy_projectile = True
+        super().__init__(groups)
+        
+        self.image = pygame.surfarray.make_surface(Thorn.right if direction > 0 else Thorn.left)
+        
+        self.rect = self.image.get_frect(center= position + vector(-4, 4) if direction > 0 else position + vector(-12, 4))
+        self.direction = direction
+        self.speed = speed
+        self.z = Z_LAYERS['main']
+        
+        self.timers = {'lifetime': Timer(5000)}
+        self.timers['lifetime'].start()
+    
+    def update_timers(self) -> None:
+        for timer in self.timers.values():
+            timer.update()
+    
+    def update(self, dt) -> None:
+        self.update_timers()
+        
+        self.rect.x += self.direction * self.speed * dt
+        
+        if not self.timers['lifetime'].active:
+            self.kill()
+        

@@ -3,7 +3,7 @@ from camera import CameraGroup
 from sprites import Sprite, MovingSprite, Item, Floor, Platform, VFX
 
 from npc import Creature, Snail
-from enemies import Chaser, Crawler, Floater, Shooter, Skipper, Walker
+from enemies import Chaser, Crawler, Floater, Shooter, Skipper, Walker, Thorn
 from enemy_boss import Golem, Boulder, Spike
 from player import Player, Projectile
 
@@ -28,7 +28,8 @@ class Level:
         self.damage_sprites = pygame.sprite.Group()             # anything that damages player
         self.snail_collision_sprites = pygame.sprite.Group()    # snails
         self.enemy_sprites = pygame.sprite.Group()              # enemies
-        self.projectile_sprites = pygame.sprite.Group()         # projectiles
+        self.projectile_sprites = pygame.sprite.Group()         # player projectiles
+        self.enemy_projectile_sprites = pygame.sprite.Group()         # enemy projectiles
         self.item_sprites = pygame.sprite.Group()               # items
         
         self.setup(tmx_map, level_frames)
@@ -105,6 +106,8 @@ class Level:
                 Floater((obj.x, obj.y), level_frames['ghost'], (self.all_sprites, self.enemy_sprites), self.player)
             if obj.name == 'golem':
                 Golem((obj.x, obj.y), level_frames['golem'], (self.all_sprites, self.enemy_sprites), self.create_boss_boulder, self.create_boss_spike, self.player)
+            if obj.name == 'plant':
+                Shooter((obj.x, obj.y), level_frames['plant'], (self.all_sprites, self.damage_sprites), self.player, self.create_enemy_projectile)
         
         # items
         for obj in tmx_map.get_layer_by_name('items'):
@@ -127,6 +130,9 @@ class Level:
     
     def create_projectile(self, position, direction) -> None:
         Projectile(position, (self.all_sprites, self.projectile_sprites), direction, 128)
+    
+    def create_enemy_projectile(self, position, direction) -> None:
+        Thorn(position, (self.all_sprites, self.damage_sprites, self.enemy_projectile_sprites), direction, 56)
     
     def create_boss_boulder(self, position, direction) -> None:
         Boulder(position, self.boss_boulder, (self.all_sprites, self.damage_sprites), direction, 64)
