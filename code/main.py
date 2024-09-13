@@ -39,7 +39,7 @@ class Game:
             'vfx': import_sub_folders('.', 'assets', 'graphic', 'vfx'),
             # ENEMY
             'plant': import_sub_folders('.', 'assets', 'graphic', 'enemy', 'plant'),
-            'soldier': import_folder('.', 'assets', 'graphic', 'enemy', 'soldier'),
+            'soldier': import_sub_folders('.', 'assets', 'graphic', 'enemy', 'soldier'),
             'shadowman': import_sub_folders('.', 'assets', 'graphic', 'enemy', 'shadowman'),
             'horn': import_sub_folders('.', 'assets', 'graphic', 'enemy', 'horn'),
             'crawler': import_sub_folders('.', 'assets', 'graphic', 'enemy', 'crawler'),
