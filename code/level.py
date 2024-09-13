@@ -124,7 +124,7 @@ class Level:
         
         groups = self.collision_sprites.sprites() + self.enemy_sprites.sprites()
         for sprite in groups:
-            sprite = pygame.sprite.spritecollide(sprite, self.projectile_sprites, True)
+            sprite = pygame.sprite.spritecollide(sprite, self.projectile_sprites, True, pygame.sprite.collide_mask)
             if sprite:
                 VFX((sprite[0].rect.center), self.vfx_frames['particle'], self.all_sprites)
     
