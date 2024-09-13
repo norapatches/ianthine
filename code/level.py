@@ -29,7 +29,7 @@ class Level:
         self.snail_collision_sprites = pygame.sprite.Group()    # snails
         self.enemy_sprites = pygame.sprite.Group()              # enemies
         self.projectile_sprites = pygame.sprite.Group()         # player projectiles
-        self.enemy_projectile_sprites = pygame.sprite.Group()         # enemy projectiles
+        self.enemy_projectile_sprites = pygame.sprite.Group()   # enemy projectiles
         self.item_sprites = pygame.sprite.Group()               # items
         
         self.setup(tmx_map, level_frames)
@@ -44,7 +44,7 @@ class Level:
         '''Read tile and object layers from tmx map file'''
         
         # tiles
-        for layer in ['bg', 'terrain', 'terrain_hidden', 'platform']:
+        for layer in ['bg', 'terrain', 'terrain_hidden', 'platform', 'spike']:
             for x, y, surface in tmx_map.get_layer_by_name(layer).tiles():
                 if layer == 'terrain':
                     Floor((x * TILE_SIZE, y * TILE_SIZE), surface, (self.all_sprites, self.collision_sprites))
@@ -52,13 +52,11 @@ class Level:
                     Floor((x * TILE_SIZE, y * TILE_SIZE), surface, (self.all_sprites, self.collision_sprites), hidden=True)
                 if layer == 'platform':
                     Platform((x * TILE_SIZE, y * TILE_SIZE), surface, (self.all_sprites, self.semi_collision_sprites))
+                if layer == 'spike':
+                    Sprite((x * TILE_SIZE, y * TILE_SIZE), surface, (self.all_sprites, self.collision_sprites, self.damage_sprites))
                 else:
                     # bg
                     Sprite((x * TILE_SIZE, y * TILE_SIZE), surface, self.all_sprites, Z_LAYERS['bg_tiles'])
-        
-        # spikes
-        for x, y, surface in tmx_map.get_layer_by_name('spike').tiles():
-            Sprite((x * TILE_SIZE, y * TILE_SIZE), surface, (self.all_sprites, self.collision_sprites, self.damage_sprites))
         
         # NPC
         for obj in tmx_map.get_layer_by_name('npc'):
@@ -96,10 +94,10 @@ class Level:
         
         # enemies
         for obj in tmx_map.get_layer_by_name('enemies'):
-            if obj.name == 'soldier':
-                Walker((obj.x, obj.y), level_frames['soldier'], (self.all_sprites, self.enemy_sprites), self.collision_sprites)
+            if obj.name in ['soldier', 'skeleton']:
+                Walker((obj.x, obj.y), level_frames[obj.name], (self.all_sprites, self.enemy_sprites), self.collision_sprites)
             if obj.name == 'crawler':
-                Crawler((obj.x, obj.y), level_frames['crawler'], (self.all_sprites, self.damage_sprites), self.collision_sprites)
+                Crawler((obj.x, obj.y), level_frames['crawler'], (self.all_sprites, self.enemy_sprites), self.collision_sprites)
             if obj.name in ['shadowman', 'horn']:
                 Chaser((obj.x, obj.y), level_frames[obj.name], (self.all_sprites, self.enemy_sprites), self.collision_sprites, self.player)
             if obj.name == 'ghost':
@@ -107,7 +105,7 @@ class Level:
             if obj.name == 'golem':
                 Golem((obj.x, obj.y), level_frames['golem'], (self.all_sprites, self.enemy_sprites), self.create_boss_boulder, self.create_boss_spike, self.player)
             if obj.name == 'plant':
-                Shooter((obj.x, obj.y), level_frames['plant'], (self.all_sprites, self.damage_sprites), self.player, self.create_enemy_projectile)
+                Shooter((obj.x, obj.y), level_frames['plant'], (self.all_sprites, self.enemy_sprites), self.player, self.create_enemy_projectile)
         
         # items
         for obj in tmx_map.get_layer_by_name('items'):
