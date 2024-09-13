@@ -19,6 +19,7 @@ class Player(pygame.sprite.Sprite):
         self.frames, self.frame_index = frames, 0
         self.state, self.facing_right = 'idle', True
         self.image = self.frames[self.state][self.frame_index]
+        self.mask = pygame.mask.from_surface(self.image)
                 
         # minimap
         self.map_image = pygame.Surface((1, 1))
@@ -250,6 +251,7 @@ class Player(pygame.sprite.Sprite):
         
         self.image = self.frames[self.state][int(self.frame_index) % len(self.frames[self.state])]
         self.image = self.image if self.facing_right else pygame.transform.flip(self.image, True, False)
+        self.mask = pygame.mask.from_surface(self.image)
         
         if self.melee_atk and self.frame_index > len(self.frames[self.state]):
             self.melee_atk = False
