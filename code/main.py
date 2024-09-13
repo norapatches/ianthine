@@ -40,6 +40,7 @@ class Game:
             # ENEMY
             'plant': import_sub_folders('.', 'assets', 'graphic', 'enemy', 'plant'),
             'soldier': import_sub_folders('.', 'assets', 'graphic', 'enemy', 'soldier'),
+            'skeleton': import_sub_folders('.', 'assets', 'graphic', 'enemy', 'skeleton'),
             'shadowman': import_sub_folders('.', 'assets', 'graphic', 'enemy', 'shadowman'),
             'horn': import_sub_folders('.', 'assets', 'graphic', 'enemy', 'horn'),
             'crawler': import_sub_folders('.', 'assets', 'graphic', 'enemy', 'crawler'),
