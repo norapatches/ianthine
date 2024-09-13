@@ -6,13 +6,14 @@ from random import choice
     Chaser      img=frames[state][idx]     is idle until player near, moves towards player if on level, turns around on edges & walls
     Crawler     img=frames[idx]            walks on surfaces, changes direction in corners
     Floater     img=frames[state][idx]     moves around on level towards player if near, ignores collision and physics
-    *Shooter    img=frames[state][idx]     stationary, shoots projectiles at player if near
+    Shooter     img=frames[state][idx]     stationary, shoots projectiles at player if near
     *Skipper    img=frames[idx]            jumps around on level endlessly
     *Walker     img=frames[idx]            walks left-right, turns around on edges & walls
 
 Using these enemy archetypes we can use different assets and have more enemies in total.
 '''
 
+# ENEMY TYPES
 class Chaser(pygame.sprite.Sprite):
     '''Stays asleep until player is nearby, goes idle if player is near on x axis, walks if player is near on both x, y axies'''
     def __init__(self, position, frames, groups, collision_sprites, player) -> None:
@@ -382,4 +383,4 @@ class Thorn(pygame.sprite.Sprite):
         
         if not self.timers['lifetime'].active:
             self.kill()
-        
+
