@@ -109,6 +109,7 @@ class Chaser(Enemy):
     def update(self, dt) -> None:
         '''The update method'''
         self.old_rect = self.hitbox_rect.copy()
+        
         self.update_timers()
         
         self.check_player_near()
@@ -156,7 +157,7 @@ class Crawler(Enemy):
             self.rotate['right'] = True
         else:
             self.rotate['left'], self.rotate['right'] = False, False
-
+        
         if self.on_surface['bottom'] and self.on_surface['right']:
             self.direction.y = -1
             self.direction.x = 0
@@ -175,7 +176,7 @@ class Crawler(Enemy):
     
     def animate(self, dt) -> None:
         '''The animation method'''
-        self.frame_index += ANIMATION_SPEED * dt
+        self.frame_index += (ANIMATION_SPEED + 3) * dt
         self.image = self.frames[self.state][int(self.frame_index % len(self.frames[self.state]))]
         
         self.image = pygame.transform.rotate(self.image, 90) if self.rotate['left'] else self.image
@@ -241,6 +242,8 @@ class Floater(Enemy):
         self.frame_index += ANIMATION_SPEED * dt
         self.image = self.frames[self.state][int(self.frame_index % len(self.frames[self.state]))]
         self.image = pygame.transform.flip(self.image, True, False) if not self.facing_right else self.image
+        
+        self.mask = pygame.mask.from_surface(self.image)
     
     def update(self, dt) -> None:
         '''The update method'''
@@ -258,6 +261,9 @@ class Shooter(Enemy):
         super().__init__(position, frames, groups)
         self.state = 'asleep'
         self.facing_right = True
+        
+        self.hitbox_rect = self.rect.inflate(0, 0)
+        self.old_rect = self.hitbox_rect.copy()
         
         self.player = player
         
@@ -283,6 +289,7 @@ class Shooter(Enemy):
         if self.frame_index < len(self.frames[self.state]):
             self.image = self.frames[self.state][int(self.frame_index)]
             self.image = pygame.transform.flip(self.image, True, False) if not self.facing_right else self.image
+            self.mask = pygame.mask.from_surface(self.image)
             # fire
             if self.state == 'shoot' and int(self.frame_index) == len(self.frames[self.state]) - 1 and not self.has_fired:
                 self.create_projectile(self.rect.topright, 1 if self.facing_right else -1)
@@ -296,7 +303,8 @@ class Shooter(Enemy):
     
     def update(self, dt) -> None:
         '''The update method'''
-        self.old_rect = self.rect.copy()
+        self.old_rect = self.hitbox_rect.copy()
+        
         self.timers['shoot'].update()
         
         self.check_player_near()
@@ -310,7 +318,6 @@ class Skipper(Enemy):
     
     def update(self, dt) -> None:
         pass
-
 
 class Walker(Enemy):
     '''Walker enemy walks around left and right and turns around on edges and walls'''
@@ -351,10 +358,14 @@ class Walker(Enemy):
     def animate(self, dt) -> None:
         '''Animate movement'''
         self.frame_index += ANIMATION_SPEED * dt
-        self.image = self.frames[self.state][int(self.frame_index % len(self.frames))]
+        self.image = self.frames[self.state][int(self.frame_index % len(self.frames[self.state]))]
         self.image = pygame.transform.flip(self.image, True, False) if self.direction.x < 0 else self.image
+        
+        self.mask = pygame.mask.from_surface(self.image)
     
     def update(self, dt) -> None:
+        self.old_rect= self.hitbox_rect.copy()
+        
         self.hit_timer.update()
         
         self.check_contact()
