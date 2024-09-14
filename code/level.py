@@ -117,6 +117,7 @@ class Level:
                             self.player.rect.centerx > target.rect.centerx and not self.player.facing_right
             if target.hitbox_rect.colliderect(self.player.rect) and self.player.melee_atk and facing_target:
                 target.take_hit()
+                VFX(target.rect.center, self.vfx_frames['punch'], self.all_sprites)
     
     def ranged_collision(self) -> None:
         
