@@ -326,7 +326,7 @@
 </data>
  </layer>
  <objectgroup id="24" name="objects">
-  <object id="27" name="player" gid="145" x="497.182" y="296.048" width="16" height="16"/>
+  <object id="27" name="player" gid="145" x="331.496" y="364.43" width="16" height="16"/>
   <object id="42" name="door" gid="148" x="54" y="400" width="16" height="16"/>
   <object id="43" name="checkpoint" gid="155" x="756" y="448" width="16" height="16"/>
  </objectgroup>

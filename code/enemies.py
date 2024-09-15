@@ -327,27 +327,27 @@ class Walker(Enemy):
         
         self.hitbox_rect = self.rect.inflate(-6, 0)
         self.old_rect = self.hitbox_rect.copy()
-        self.speed = 24
+        self.speed = 16
         self.direction = vector(choice((-1, 1)), 0)
         self.state = 'walk'
         self.collision_rects = [sprite.rect for sprite in collision_sprites]
         
         self.health = 3
         
+        self.timers = {'hit': Timer(400), 'wait': Timer(1000), 'dir_change': Timer(5000, self.change_direction, True)}
         self.hit_timer = Timer(400)
     
     def take_hit(self) -> None:
         '''Take hit from player attack and die on third hit'''
-        if not self.hit_timer.active:
+        if not self.timers['hit'].active:
             self.health -= 1
             if self.health <= 0:
-                self.frame_index = 0
-                self.state = 'death'
+                self.state, self.frame_index = 'death', 0
                 self.animation_speed = 1.5 * self.animation_speed
                 self.direction.x, self.direction.y = 0, 0
             else:
                 self.direction.x *= -1
-            self.hit_timer.start()
+            self.timers['hit'].start()
     
     def check_contact(self) -> None:
         '''Turn around on edges and walls'''
@@ -360,10 +360,17 @@ class Walker(Enemy):
             wall_rect.collidelist(self.collision_rects) != -1:
             self.direction.x *= -1
     
+    def change_direction(self) -> None:
+        self.state, self.frame_index = 'idle', 0
+        self.timers['wait'].start()
+        self.direction.x = choice((-1, 1))
+    
     def move(self, dt) -> None:
         '''The mobve method'''
-        self.hitbox_rect.x += self.direction.x * self.speed * dt
-        self.rect.center = self.hitbox_rect.center
+        if not self.timers['wait'].active and not self.state == 'death':
+            self.state = 'walk'
+            self.hitbox_rect.x += self.direction.x * self.speed * dt
+            self.rect.center = self.hitbox_rect.center
     
     def animate(self, dt) -> None:
         '''Animate movement'''
@@ -377,10 +384,13 @@ class Walker(Enemy):
         
         self.mask = pygame.mask.from_surface(self.image)
     
+    def update_timers(self) -> None:
+        for timer in self.timers.values():
+            timer.update()
+    
     def update(self, dt) -> None:
         self.old_rect= self.hitbox_rect.copy()
-        
-        self.hit_timer.update()
+        self.update_timers()
         
         self.check_contact()
         self.move(dt)
