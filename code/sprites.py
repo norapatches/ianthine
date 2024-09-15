@@ -101,7 +101,7 @@ class VFX(AnimatedSprite):
         super().__init__(position, frames, groups)
         self.rect.center = position
         self.z = Z_LAYERS['fg']
-        self.animation_speed = 12
+        self.animation_speed = 16
     
     def animate(self, dt) -> None:
         self.frame_index += self.animation_speed * dt

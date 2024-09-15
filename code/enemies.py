@@ -10,7 +10,7 @@ class Enemy(pygame.sprite.Sprite):
         Floater     [asleep, idle, walk, *death]
         Shooter     [asleep, idle, notice, shoot, *death]
         Skipper     [idle, jump, *death]
-        Walker      [idle, walk, *death]
+        Walker      [idle, walk, death]
     '''
     def __init__(self, position, frames, groups) -> None:
         self.enemy = True
@@ -28,6 +28,7 @@ class Enemy(pygame.sprite.Sprite):
         
         self.direction = vector()
         self.speed = 16
+        self.animation_speed = ANIMATION_SPEED
     
     def take_hit(self) -> None:
         pass
@@ -326,17 +327,26 @@ class Walker(Enemy):
         
         self.hitbox_rect = self.rect.inflate(-6, 0)
         self.old_rect = self.hitbox_rect.copy()
-        self.speed = 32
+        self.speed = 24
         self.direction = vector(choice((-1, 1)), 0)
         self.state = 'walk'
         self.collision_rects = [sprite.rect for sprite in collision_sprites]
         
-        self.hit_timer = Timer(250)
+        self.health = 3
+        
+        self.hit_timer = Timer(400)
     
     def take_hit(self) -> None:
-        '''Take hit from player attack'''
+        '''Take hit from player attack and die on third hit'''
         if not self.hit_timer.active:
-            self.direction.x *= -1
+            self.health -= 1
+            if self.health <= 0:
+                self.frame_index = 0
+                self.state = 'death'
+                self.animation_speed = 1.5 * self.animation_speed
+                self.direction.x, self.direction.y = 0, 0
+            else:
+                self.direction.x *= -1
             self.hit_timer.start()
     
     def check_contact(self) -> None:
@@ -357,7 +367,11 @@ class Walker(Enemy):
     
     def animate(self, dt) -> None:
         '''Animate movement'''
-        self.frame_index += ANIMATION_SPEED * dt
+        self.frame_index += self.animation_speed * dt
+        
+        if self.state == 'death' and int(self.frame_index) > len(self.frames[self.state]) - 1:
+            self.kill()
+        
         self.image = self.frames[self.state][int(self.frame_index % len(self.frames[self.state]))]
         self.image = pygame.transform.flip(self.image, True, False) if self.direction.x < 0 else self.image
         

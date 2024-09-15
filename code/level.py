@@ -94,7 +94,7 @@ class Level:
         
         # enemies
         for obj in tmx_map.get_layer_by_name('enemies'):
-            if obj.name in ['soldier', 'skeleton']:
+            if obj.name in ['skeleton', 'zombie']:
                 Walker((obj.x, obj.y), level_frames[obj.name], (self.all_sprites, self.enemy_sprites), self.collision_sprites)
             if obj.name == 'crawler':
                 Crawler((obj.x, obj.y), level_frames['crawler'], (self.all_sprites, self.enemy_sprites), self.collision_sprites)
