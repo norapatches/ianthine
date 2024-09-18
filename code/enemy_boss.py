@@ -31,6 +31,9 @@ class Golem(pygame.sprite.Sprite):
         }
         self.timers['change_state'].start()
     
+    def take_hit(self) -> None:
+        pass
+    
     def change_direction(self) -> None:
         self.facing_right = True if self.hitbox_rect.centerx <= self.player.hitbox_rect.centerx else False
         
@@ -65,7 +68,7 @@ class Golem(pygame.sprite.Sprite):
             if int(self.frame_index) == 5:
                 if chosen == 'boulder':
                     self.hitbox_rect.topleft = self.init_position + vector(10, 20)
-                    self.create_boulder((self.player.rect.centerx, TILE_SIZE), 1)
+                    self.create_boulder((self.player.rect.centerx - 7, TILE_SIZE), 1)
                     self.frame_index = 6
                 
                 if chosen == 'spike':
@@ -125,8 +128,8 @@ class Boulder(pygame.sprite.Sprite):
         self.z = Z_LAYERS['main']
         
         self.timers = {
-            'lifetime': Timer(2500),
-            'rotate': Timer(200, self.rotate, repeat=True)
+            'lifetime': Timer(4000),
+            'rotate': Timer(500, self.rotate, repeat=True)
         }
         self.timers['lifetime'].start()
     
@@ -155,7 +158,7 @@ class Spike(pygame.sprite.Sprite):
         
         self.timers = {
             'lifetime': Timer(2500),
-            'rotate': Timer(200, self.rotate, repeat=True)
+            'rotate': Timer(500, self.rotate, repeat=True)
         }
         self.timers['lifetime'].start()
     

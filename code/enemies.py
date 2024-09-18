@@ -1,6 +1,6 @@
 from settings import *
 from gtimer import Timer
-from random import choice
+from random import choice, randint
 
 # BLUEPRINT CLASS TO INHERIT FROM
 class Enemy(pygame.sprite.Sprite):
@@ -334,12 +334,13 @@ class Walker(Enemy):
         
         self.health = 3
         
-        self.timers = {'hit': Timer(400), 'wait': Timer(1000), 'dir_change': Timer(5000, self.change_direction, True)}
-        self.hit_timer = Timer(400)
+        self.timers = {'hit': Timer(100), 'wait': Timer(500), 'dir_change': Timer(randint(4000, 5000), self.change_direction, True)}
+        self.timers['dir_change'].start()
     
     def take_hit(self) -> None:
-        '''Take hit from player attack and die on third hit'''
+        '''Take hit from player attacks and die on third hit'''
         if not self.timers['hit'].active:
+            self.timers['hit'].start()
             self.health -= 1
             if self.health <= 0:
                 self.state, self.frame_index = 'death', 0
@@ -347,7 +348,6 @@ class Walker(Enemy):
                 self.direction.x, self.direction.y = 0, 0
             else:
                 self.direction.x *= -1
-            self.timers['hit'].start()
     
     def check_contact(self) -> None:
         '''Turn around on edges and walls'''
@@ -362,8 +362,9 @@ class Walker(Enemy):
     
     def change_direction(self) -> None:
         self.state, self.frame_index = 'idle', 0
-        self.timers['wait'].start()
-        self.direction.x = choice((-1, 1))
+        if not self.timers['wait'].active:
+            self.timers['wait'].start()
+            self.direction.x = choice((-1, 1))
     
     def move(self, dt) -> None:
         '''The mobve method'''
@@ -376,9 +377,6 @@ class Walker(Enemy):
         '''Animate movement'''
         self.frame_index += self.animation_speed * dt
         
-        if self.state == 'death' and int(self.frame_index) > len(self.frames[self.state]) - 1:
-            self.kill()
-        
         self.image = self.frames[self.state][int(self.frame_index % len(self.frames[self.state]))]
         self.image = pygame.transform.flip(self.image, True, False) if self.direction.x < 0 else self.image
         
@@ -389,7 +387,10 @@ class Walker(Enemy):
             timer.update()
     
     def update(self, dt) -> None:
-        self.old_rect= self.hitbox_rect.copy()
+        if self.state == 'death' and int(self.frame_index) > len(self.frames[self.state]) - 1:
+            self.kill()
+        
+        self.old_rect = self.hitbox_rect.copy()
         self.update_timers()
         
         self.check_contact()
