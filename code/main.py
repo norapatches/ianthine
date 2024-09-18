@@ -32,6 +32,7 @@ class Game:
         '''Import game assets'''
         self.level_frames = {
             'player': import_sub_folders('.', 'assets', 'graphic', 'player'),
+            'door': import_folder('.', 'assets', 'graphic', 'level', 'door'),
             # NPC
             'snail': import_folder('.', 'assets', 'graphic', 'npc', 'snail'),
             'creature': import_sub_folders('.', 'assets', 'graphic', 'npc', 'creature'),
