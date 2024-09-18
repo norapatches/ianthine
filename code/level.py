@@ -1,6 +1,6 @@
 from settings import *
 from camera import CameraGroup
-from sprites import Sprite, MovingSprite, Item, Floor, Platform, VFX
+from sprites import Sprite, MovingSprite, Door, Item, Floor, Platform, VFX
 
 from npc import Creature, Snail
 from enemies import Chaser, Crawler, Floater, Shooter, Skipper, Walker, Thorn
@@ -76,6 +76,8 @@ class Level:
                     projectile=self.create_projectile,
                     data= self.data
                 )
+            if obj.name == 'door':
+                self.door  = Door((obj.x, obj.y), level_frames['door'], self.all_sprites)
         
         # moving objects
         for obj in tmx_map.get_layer_by_name('moving_objects'):
@@ -120,12 +122,14 @@ class Level:
                 VFX(target.rect.center, self.vfx_frames['punch'], self.all_sprites)
     
     def ranged_collision(self) -> None:
-        
         groups = self.collision_sprites.sprites() + self.enemy_sprites.sprites()
         for sprite in groups:
-            sprite = pygame.sprite.spritecollide(sprite, self.projectile_sprites, True, pygame.sprite.collide_mask)
-            if sprite:
-                VFX((sprite[0].rect.center), self.vfx_frames['particle'], self.all_sprites)
+            collision = pygame.sprite.spritecollideany(sprite, self.projectile_sprites, pygame.sprite.collide_mask)
+            if collision:
+                if hasattr(sprite, 'enemy') and sprite.state != 'death':
+                    sprite.take_hit()
+                VFX((collision.rect.center), self.vfx_frames['particle'], self.all_sprites)
+                collision.kill()
     
     def create_projectile(self, position, direction) -> None:
         Projectile(position, (self.all_sprites, self.projectile_sprites), direction, 128)
@@ -156,5 +160,4 @@ class Level:
         self.ranged_collision()
         self.item_collision()
         
-        #self.all_sprites.draw(self.player.hitbox_rect.center, dt)
         self.all_sprites.draw(self.player.hitbox_rect, dt)
