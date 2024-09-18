@@ -1,0 +1,53 @@
+{
+    "activeFile": "levels/test.tmx",
+    "expandedProjectPaths": [
+        ".",
+        "levels",
+        "tilesets"
+    ],
+    "file.lastUsedOpenFilter": "All Files (*)",
+    "fileStates": {
+        "levels/test.tmx": {
+            "scale": 6.2408,
+            "selectedLayer": 6,
+            "viewCenter": {
+                "x": 122.90091013972567,
+                "y": 332.32918856556853
+            }
+        },
+        "tilesets/enemies.tsx": {
+            "dynamicWrapping": true,
+            "scaleInDock": 4.732,
+            "scaleInEditor": 5.1537
+        },
+        "tilesets/objects.tsx": {
+            "dynamicWrapping": true,
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "tilesets/stone.tsx": {
+            "dynamicWrapping": false,
+            "scaleInDock": 3.0421,
+            "scaleInEditor": 5.1431
+        },
+        "tilesets/terrain.tsx": {
+            "dynamicWrapping": false,
+            "scaleInDock": 2.9031
+        }
+    },
+    "last.imagePath": "/Users/norakovacs/Documents/VSCode/Python/_Projects/stickman/assets/graphic/objects",
+    "openFiles": [
+        "levels/test.tmx",
+        "tilesets/stone.tsx",
+        "tilesets/objects.tsx",
+        "tilesets/enemies.tsx"
+    ],
+    "project": "stickman.tiled-project",
+    "property.type": "int",
+    "recentFiles": [
+        "tilesets/enemies.tsx",
+        "tilesets/objects.tsx",
+        "tilesets/stone.tsx",
+        "levels/test.tmx"
+    ]
+}
