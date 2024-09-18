@@ -137,3 +137,10 @@ class Platform(Floor):
     def __init__(self, position, surface, groups) -> None:
         super().__init__(position, surface, groups)
         self.map_image.fill('gray')
+
+class Door(Sprite):
+    def __init__(self, position, frames, groups) -> None:
+        super().__init__(position, frames[0], groups, Z_LAYERS['bg_tiles'])
+        self.locked = True
+        
+    
