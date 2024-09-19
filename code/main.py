@@ -20,7 +20,7 @@ class Game:
         self.data = GameData(self.ui)
         
         self.tmx_maps = {
-            0: load_pygame(join('.', 'data', 'levels', 'test.tmx'))
+            0: load_pygame(join('.', 'data', 'levels', '0.tmx'))
         }
         self.current_stage = Level(self.tmx_maps[0], self.level_frames, self.data)
         self.pause_menu = PauseScreen(self.level_frames['items'], self.fonts, self.data)
@@ -33,6 +33,8 @@ class Game:
         self.level_frames = {
             'player': import_sub_folders('.', 'assets', 'graphic', 'player'),
             'door': import_folder('.', 'assets', 'graphic', 'level', 'door'),
+            # INTERACTION
+            'interact': import_folder('.', 'assets', 'graphic', 'level', 'interaction'),
             # NPC
             'snail': import_folder('.', 'assets', 'graphic', 'npc', 'snail'),
             'creature': import_sub_folders('.', 'assets', 'graphic', 'npc', 'creature'),

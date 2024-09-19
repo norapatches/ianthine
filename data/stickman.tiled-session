@@ -1,24 +1,75 @@
 {
-    "activeFile": "levels/test.tmx",
+    "activeFile": "/Users/norakovacs/Downloads/Super-Pirate-World-main/data/levels/omni.tmx",
     "expandedProjectPaths": [
-        ".",
         "levels",
+        ".",
         "tilesets"
     ],
     "file.lastUsedOpenFilter": "All Files (*)",
     "fileStates": {
-        "levels/test.tmx": {
-            "scale": 6.2408,
+        "/Users/norakovacs/Downloads/Super-Pirate-World-main/data/levels/omni.tmx": {
+            "scale": 0.42638671875,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": -970.9495671293115,
+                "y": -116.09179606980899
+            }
+        },
+        "/Users/norakovacs/Downloads/Super-Pirate-World-main/data/tilesets/enemies.tsx": {
+            "scaleInDock": 1
+        },
+        "/Users/norakovacs/Downloads/Super-Pirate-World-main/data/tilesets/extra.tsx": {
+            "scaleInDock": 1
+        },
+        "/Users/norakovacs/Downloads/Super-Pirate-World-main/data/tilesets/grass.tsx": {
+            "scaleInDock": 1
+        },
+        "/Users/norakovacs/Downloads/Super-Pirate-World-main/data/tilesets/inside.tsx": {
+            "scaleInDock": 1
+        },
+        "/Users/norakovacs/Downloads/Super-Pirate-World-main/data/tilesets/items.tsx": {
+            "scaleInDock": 1
+        },
+        "/Users/norakovacs/Downloads/Super-Pirate-World-main/data/tilesets/objects.tsx": {
+            "scaleInDock": 1
+        },
+        "/Users/norakovacs/Downloads/Super-Pirate-World-main/data/tilesets/outside.tsx": {
+            "scaleInDock": 1
+        },
+        "/Users/norakovacs/Downloads/Super-Pirate-World-main/data/tilesets/platforms.tsx": {
+            "scaleInDock": 1
+        },
+        "levels/0.tmx": {
+            "expandedObjectLayers": [
+                10,
+                9,
+                26,
+                25,
+                24
+            ],
+            "scale": 11.95,
             "selectedLayer": 6,
             "viewCenter": {
-                "x": 122.90091013972567,
-                "y": 332.32918856556853
+                "x": 320.29288702928875,
+                "y": 196.9874476987448
+            }
+        },
+        "levels/test.tmx": {
+            "expandedObjectLayers": [
+                25,
+                24
+            ],
+            "scale": 0.9431,
+            "selectedLayer": 7,
+            "viewCenter": {
+                "x": 480.3308238786979,
+                "y": 479.80065740642567
             }
         },
         "tilesets/enemies.tsx": {
             "dynamicWrapping": true,
             "scaleInDock": 4.732,
-            "scaleInEditor": 5.1537
+            "scaleInEditor": 1
         },
         "tilesets/objects.tsx": {
             "dynamicWrapping": true,
@@ -28,7 +79,7 @@
         "tilesets/stone.tsx": {
             "dynamicWrapping": false,
             "scaleInDock": 3.0421,
-            "scaleInEditor": 5.1431
+            "scaleInEditor": 1
         },
         "tilesets/terrain.tsx": {
             "dynamicWrapping": false,
@@ -40,14 +91,18 @@
         "levels/test.tmx",
         "tilesets/stone.tsx",
         "tilesets/objects.tsx",
-        "tilesets/enemies.tsx"
+        "tilesets/enemies.tsx",
+        "levels/0.tmx",
+        "/Users/norakovacs/Downloads/Super-Pirate-World-main/data/levels/omni.tmx"
     ],
     "project": "stickman.tiled-project",
     "property.type": "int",
     "recentFiles": [
-        "tilesets/enemies.tsx",
-        "tilesets/objects.tsx",
+        "levels/test.tmx",
         "tilesets/stone.tsx",
-        "levels/test.tmx"
+        "tilesets/objects.tsx",
+        "tilesets/enemies.tsx",
+        "levels/0.tmx",
+        "/Users/norakovacs/Downloads/Super-Pirate-World-main/data/levels/omni.tmx"
     ]
 }

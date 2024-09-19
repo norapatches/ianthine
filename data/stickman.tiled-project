@@ -65,6 +65,43 @@
             ]
         },
         {
+            "color": "#ffff2600",
+            "drawFill": true,
+            "id": 8,
+            "members": [
+                {
+                    "name": "platform",
+                    "type": "bool",
+                    "value": false
+                },
+                {
+                    "name": "speed",
+                    "type": "int",
+                    "value": 48
+                }
+            ],
+            "name": "moving_object",
+            "type": "class",
+            "useAs": [
+                "property",
+                "object",
+                "project"
+            ]
+        },
+        {
+            "color": "#ff942192",
+            "drawFill": true,
+            "id": 2,
+            "members": [
+            ],
+            "name": "shooter",
+            "type": "class",
+            "useAs": [
+                "object",
+                "project"
+            ]
+        },
+        {
             "color": "#ff00f900",
             "drawFill": true,
             "id": 6,
@@ -92,19 +129,6 @@
             "type": "class",
             "useAs": [
                 "property",
-                "object",
-                "project"
-            ]
-        },
-        {
-            "color": "#ff942192",
-            "drawFill": true,
-            "id": 2,
-            "members": [
-            ],
-            "name": "shooter",
-            "type": "class",
-            "useAs": [
                 "object",
                 "project"
             ]

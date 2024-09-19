@@ -142,5 +142,3 @@ class Door(Sprite):
     def __init__(self, position, frames, groups) -> None:
         super().__init__(position, frames[0], groups, Z_LAYERS['bg_tiles'])
         self.locked = True
-        
-    

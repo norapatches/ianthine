@@ -38,12 +38,12 @@ class Player(pygame.sprite.Sprite):
         self.gravity = 960
         self.crouch = False
         self.jump = False
-        self.jump_height = 320 
+        self.jump_height = 320
         self.melee_atk = False
         self.ranged_atk = False
         self.has_fired = False
         self.create_projectile = projectile
-              
+        
         # collision
         self.collision_sprites = collision_sprites
         self.semi_collision_sprites = semi_collision_sprites
@@ -88,9 +88,9 @@ class Player(pygame.sprite.Sprite):
             
             # interaction
             if pressed[self.controls.up]:
-                self.does_interact = True
+                self.interaction['do'] = True
             if released[self.controls.up]:
-                self.does_interact = False
+                self.interaction['do'] = False
             
             # melee
             if jpressed[self.controls.melee]:

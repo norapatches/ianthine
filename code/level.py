@@ -1,6 +1,6 @@
 from settings import *
 from camera import CameraGroup
-from sprites import Sprite, MovingSprite, Door, Item, Floor, Platform, VFX
+from sprites import Sprite, MovingSprite, SpeechBubble, Door, Item, Floor, Platform, VFX
 
 from npc import Creature, Snail
 from enemies import Chaser, Crawler, Floater, Shooter, Skipper, Walker, Thorn
@@ -32,10 +32,13 @@ class Level:
         self.enemy_projectile_sprites = pygame.sprite.Group()   # enemy projectiles
         self.item_sprites = pygame.sprite.Group()               # items
         
+        self.interaction_sprites = pygame.sprite.Group()        # interactibles
+        
         self.setup(tmx_map, level_frames)
         
         # frames
         self.vfx_frames = level_frames['vfx']
+        self.interact_frames = level_frames['interact']
         
         # boss projectiles
         self.boss_boulder = level_frames['boulder']
@@ -77,7 +80,7 @@ class Level:
                     data= self.data
                 )
             if obj.name == 'door':
-                self.door  = Door((obj.x, obj.y), level_frames['door'], self.all_sprites)
+                self.door  = Door((obj.x, obj.y), level_frames['door'], (self.all_sprites, self.interaction_sprites))
         
         # moving objects
         for obj in tmx_map.get_layer_by_name('moving_objects'):
@@ -159,5 +162,5 @@ class Level:
         self.melee_collision()
         self.ranged_collision()
         self.item_collision()
-        
+         
         self.all_sprites.draw(self.player.hitbox_rect, dt)
