@@ -35,7 +35,7 @@ class Player(pygame.sprite.Sprite):
         self.direction = vector()
         
         self.fallspeed_max = 256
-        self.gravity = 960
+        self.gravity = 1024
         self.crouch = False
         self.jump = False
         self.jump_height = 320
@@ -43,6 +43,7 @@ class Player(pygame.sprite.Sprite):
         self.ranged_atk = False
         self.has_fired = False
         self.create_projectile = projectile
+        self.interaction = {'can': False, 'do': False}
         
         # collision
         self.collision_sprites = collision_sprites

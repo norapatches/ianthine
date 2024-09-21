@@ -20,7 +20,7 @@ class Game:
         self.data = GameData(self.ui)
         
         self.tmx_maps = {
-            0: load_pygame(join('.', 'data', 'levels', '0.tmx'))
+            0: load_pygame(join('.', 'data', 'levels', 'test.tmx'))
         }
         self.current_stage = Level(self.tmx_maps[0], self.level_frames, self.data)
         self.pause_menu = PauseScreen(self.level_frames['items'], self.fonts, self.data)
@@ -80,7 +80,7 @@ class Game:
             dt = self.clock.tick() / 1000
             
             # limit delta time
-            max_dt = 0.007
+            max_dt = 0.0075
             dt = min(dt, max_dt)
             
             # check for pygame events

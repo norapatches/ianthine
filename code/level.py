@@ -1,6 +1,6 @@
 from settings import *
 from camera import CameraGroup
-from sprites import Sprite, MovingSprite, SpeechBubble, Door, Item, Floor, Platform, VFX
+from sprites import Sprite, MovingSprite, Door, Item, Floor, Platform, VFX
 
 from npc import Creature, Snail
 from enemies import Chaser, Crawler, Floater, Shooter, Skipper, Walker, Thorn
@@ -127,12 +127,12 @@ class Level:
     def ranged_collision(self) -> None:
         groups = self.collision_sprites.sprites() + self.enemy_sprites.sprites()
         for sprite in groups:
-            collision = pygame.sprite.spritecollideany(sprite, self.projectile_sprites, pygame.sprite.collide_mask)
+            collision = pygame.sprite.spritecollide(sprite, self.projectile_sprites, pygame.sprite.collide_mask)
             if collision:
                 if hasattr(sprite, 'enemy') and sprite.state != 'death':
                     sprite.take_hit()
-                VFX((collision.rect.center), self.vfx_frames['particle'], self.all_sprites)
-                collision.kill()
+                VFX((collision[0].rect.center), self.vfx_frames['particle'], self.all_sprites)
+                collision[0].kill()
     
     def create_projectile(self, position, direction) -> None:
         Projectile(position, (self.all_sprites, self.projectile_sprites), direction, 128)

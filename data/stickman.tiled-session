@@ -1,9 +1,10 @@
 {
-    "activeFile": "/Users/norakovacs/Downloads/Super-Pirate-World-main/data/levels/omni.tmx",
+    "activeFile": "overworld/overworld_test.tmx",
     "expandedProjectPaths": [
-        "levels",
         ".",
-        "tilesets"
+        "tilesets",
+        "levels",
+        "overworld"
     ],
     "file.lastUsedOpenFilter": "All Files (*)",
     "fileStates": {
@@ -11,8 +12,8 @@
             "scale": 0.42638671875,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": -970.9495671293115,
-                "y": -116.09179606980899
+                "x": 458.5039622555082,
+                "y": 614.4656680866657
             }
         },
         "/Users/norakovacs/Downloads/Super-Pirate-World-main/data/tilesets/enemies.tsx": {
@@ -41,16 +42,16 @@
         },
         "levels/0.tmx": {
             "expandedObjectLayers": [
-                10,
-                9,
-                26,
                 25,
-                24
+                10,
+                24,
+                9,
+                26
             ],
             "scale": 11.95,
             "selectedLayer": 6,
             "viewCenter": {
-                "x": 320.29288702928875,
+                "x": 308.4518828451883,
                 "y": 196.9874476987448
             }
         },
@@ -66,6 +67,14 @@
                 "y": 479.80065740642567
             }
         },
+        "overworld/overworld_test.tmx": {
+            "scale": 1.78,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 31.460674157303373,
+                "y": 65.4494382022472
+            }
+        },
         "tilesets/enemies.tsx": {
             "dynamicWrapping": true,
             "scaleInDock": 4.732,
@@ -76,6 +85,11 @@
             "scaleInDock": 1,
             "scaleInEditor": 1
         },
+        "tilesets/overworld.tsx": {
+            "dynamicWrapping": false,
+            "scaleInDock": 2.4672,
+            "scaleInEditor": 3.07
+        },
         "tilesets/stone.tsx": {
             "dynamicWrapping": false,
             "scaleInDock": 3.0421,
@@ -83,26 +97,33 @@
         },
         "tilesets/terrain.tsx": {
             "dynamicWrapping": false,
-            "scaleInDock": 2.9031
+            "scaleInDock": 2.9031,
+            "scaleInEditor": 1
         }
     },
-    "last.imagePath": "/Users/norakovacs/Documents/VSCode/Python/_Projects/stickman/assets/graphic/objects",
+    "last.imagePath": "/Users/norakovacs/Documents/VSCode/Python/_Projects/stickman/assets/graphic/tilesets",
     "openFiles": [
-        "levels/test.tmx",
-        "tilesets/stone.tsx",
-        "tilesets/objects.tsx",
-        "tilesets/enemies.tsx",
-        "levels/0.tmx",
-        "/Users/norakovacs/Downloads/Super-Pirate-World-main/data/levels/omni.tmx"
+        "overworld/overworld_test.tmx",
+        "tilesets/overworld.tsx",
+        "tilesets/terrain.tsx",
+        "tilesets/stone.tsx"
     ],
     "project": "stickman.tiled-project",
     "property.type": "int",
     "recentFiles": [
-        "levels/test.tmx",
         "tilesets/stone.tsx",
-        "tilesets/objects.tsx",
-        "tilesets/enemies.tsx",
+        "tilesets/terrain.tsx",
+        "tilesets/overworld.tsx",
+        "overworld/overworld_test.tmx",
         "levels/0.tmx",
+        "tilesets/enemies.tsx",
+        "tilesets/objects.tsx",
+        "levels/test.tmx",
         "/Users/norakovacs/Downloads/Super-Pirate-World-main/data/levels/omni.tmx"
-    ]
+    ],
+    "tileset.lastUsedFormat": "tsx",
+    "tileset.tileSize": {
+        "height": 16,
+        "width": 16
+    }
 }
