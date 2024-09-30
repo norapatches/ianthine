@@ -434,7 +434,7 @@
  <objectgroup id="28" name="data">
   <object id="39" name="data" x="0" y="0" width="16" height="16">
    <properties>
-    <property name="level_unlock" type="int" value="3"/>
+    <property name="level_unlock" type="int" value="6"/>
    </properties>
   </object>
  </objectgroup>
