@@ -34,7 +34,8 @@ class Overworld:
                 AnimatedSprite((col * TILE_SIZE, row * TILE_SIZE), overworld_frames['water'], self.all_sprites, Z_LAYERS['bg'])
         
         # objects
-        ...
+        for obj in tmx_map.get_layer_by_name('objects'):
+            Sprite((obj.x, obj.y), obj.image, self.all_sprites, Z_LAYERS['bg_details'])
         
         # paths
         self.paths = {}
