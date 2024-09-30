@@ -1,6 +1,5 @@
 from settings import *
 from gtimer import Timer
-from random import choice, randint
 
 # BLUEPRINT CLASS TO INHERIT FROM
 class Enemy(pygame.sprite.Sprite):

@@ -26,7 +26,7 @@ class CameraGroup(pygame.sprite.Group):
         }
         
         # camera box
-        self.camera_bounds = {'left': 64, 'right': 64, 'top': 36, 'bottom': 36}
+        self.camera_bounds = {'left': 80, 'right': 80, 'top': 48, 'bottom': 48}
         self.camera_box = pygame.FRect((self.screen_rect.left + self.camera_bounds['left'],
                                         self.screen_rect.top + self.camera_bounds['top']),
                                        (self.screen_rect.width - (self.camera_bounds['left'] + self.camera_bounds['right']),
@@ -100,8 +100,8 @@ class CameraGroup(pygame.sprite.Group):
         '''The custom draw method for the CameraGroup that draws in Z layer order'''
         self.cycle_filter()
         
-        #self.box_target_camera(target)
-        self.target_center_camera(target)
+        self.box_target_camera(target)
+        #self.target_center_camera(target)
         self.camera_constraint()
         
         self.minimap.update(self.sprites())
@@ -142,3 +142,37 @@ class MiniMap:
         scaled = pygame.transform.scale(self.surface, self.scaled_surface.size)
         self.scaled_surface.blit(scaled, (0, 0))
 
+
+class OverworldCamera(pygame.sprite.Group):
+    def __init__(self, data) -> None:
+        super().__init__()
+        self.display = pygame.display.get_surface()
+        self.screen = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
+        
+        self.data = data
+        self.offset = vector()
+    
+    def draw(self, target) -> None:
+        self.screen.fill('black')
+        
+        self.offset.x = -(target.centerx - SCREEN_WIDTH / 2)
+        self.offset.y = -(target.centery - SCREEN_HEIGHT / 2)
+        
+        # background
+        for sprite in sorted(self, key= lambda sprite: sprite.z):
+            if sprite.z < Z_LAYERS['main']:
+                if sprite.z == Z_LAYERS['path']:
+                    if sprite.level <= self.data.unlocked_level:
+                        self.screen.blit(sprite.image, sprite.rect.topleft + self.offset)
+                else:
+                    self.screen.blit(sprite.image, sprite.rect.topleft + self.offset)
+        
+        # main
+        for sprite in sorted(self, key= lambda sprite: sprite.rect.centery):
+            if sprite.z == Z_LAYERS['main']:
+                if hasattr(sprite, 'icon'):
+                    self.screen.blit(sprite.image, sprite.rect.topleft + self.offset + vector(0, -8))
+                else:
+                    self.screen.blit(sprite.image, sprite.rect.topleft + self.offset)
+        
+        pygame.transform.scale(self.screen, (WINDOW_WIDTH, WINDOW_HEIGHT), self.display)

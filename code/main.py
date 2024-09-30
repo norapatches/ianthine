@@ -2,7 +2,8 @@ from settings import *
 from support import *
 from debug import debug_multiple, show_fps
 from level import Level
-from pause import PauseScreen
+from overworld import Overworld
+
 from gdata import GameData
 from ui import UI
 
@@ -20,13 +21,23 @@ class Game:
         self.data = GameData(self.ui)
         
         self.tmx_maps = {
-            0: load_pygame(join('.', 'data', 'levels', 'test.tmx'))
+            0: load_pygame(join('.', 'data', 'levels', 'test.tmx')),
+            1: load_pygame(join('.', 'data', 'levels', 'boss.tmx'))
         }
-        self.current_stage = Level(self.tmx_maps[0], self.level_frames, self.data)
-        self.pause_menu = PauseScreen(self.level_frames['items'], self.fonts, self.data)
+        self.tmx_overworld = load_pygame(join('.', 'data', 'overworld', 'overworld_test.tmx'))
+        
+        self.current_stage = Level(self.tmx_maps[0], self.level_frames, self.data, self.fonts, self.switch_stage)
         
         self.cheat_list = []
         self.debugging = False
+    
+    def switch_stage(self, target: str, unlock: int= 0) -> None:
+        if target == 'level':
+            self.current_stage = Level(self.tmx_maps[self.data.current_level], self.level_frames, self.data, self.fonts, self.switch_stage)
+        else:
+            if unlock > 0:
+                self.data.unlocked_level = unlock
+            self.current_stage = Overworld(self.tmx_overworld, self.data, self.overworld_frames, self.switch_stage)
     
     def import_assets(self) -> None:
         '''Import game assets'''
@@ -56,7 +67,13 @@ class Game:
             # MOVING PLATFORM
             'elevator': import_folder('.', 'assets', 'graphic', 'level', 'elevator'),
             # ITEM
-            'items': import_sub_folders('.', 'assets', 'graphic', 'items')
+            'items': import_sub_folders('.', 'assets', 'graphic', 'items'),
+            'chest': import_folder('.', 'assets', 'graphic', 'level', 'chest')
+        }
+        self.overworld_frames = {
+            'path': import_folder_dict(join('.', 'assets', 'graphic', 'overworld', 'path')),
+            'icon': import_sub_folders(join('.', 'assets', 'graphic', 'overworld', 'icon')),
+            'water': import_folder(join('.', 'assets', 'graphic', 'overworld', 'water'))
         }
         self.sfx = {
             'jump': pygame.mixer.Sound(join('.', 'assets', 'sound', 'sfx', 'jump.wav')),
@@ -77,7 +94,7 @@ class Game:
         '''The game loop, runs current stage'''
         while True:
             # get delta time
-            dt = self.clock.tick() / 1000
+            dt = self.clock.tick(120) / 1000
             
             # limit delta time
             max_dt = 0.0075
@@ -90,12 +107,7 @@ class Game:
                     pygame.quit()
                     sys.exit()
 
-                if event.type == pygame.KEYDOWN:
-                    '''Pause the game with ESC'''
-                    if event.key == pygame.K_ESCAPE:
-                        self.pause_menu.selected = 0
-                        self.data.paused = not self.data.paused
-                    
+                if event.type == pygame.KEYDOWN:                    
                     '''Show or hide debug surfaces'''
                     if event.key == pygame.K_TAB:
                         self.debugging = not self.debugging
@@ -104,12 +116,7 @@ class Game:
                     if self.enter_cheat(event.key) == True:
                         self.current_stage.player.abilities['walljump'] = True
             
-            if not self.data.paused:
-                # run current stage
-                self.current_stage.run(dt)
-            else:
-                # show pause screen
-                self.pause_menu.run(dt)
+            self.current_stage.run(dt)
             
             # DEBUG show fps & dt
             if self.debugging:
@@ -119,10 +126,11 @@ class Game:
             # update display
             pygame.display.update()
     
-    def enter_cheat(self, key) -> bool:
+    def enter_cheat(self, key: int) -> bool:
         '''Store and check the last 10 keystrokes against a list to enable cheats'''
         if len(self.cheat_list) < 10:
             self.cheat_list.append(key)
+            return False
         else:
             if self.cheat_list == [pygame.K_UP, pygame.K_UP, pygame.K_DOWN, pygame.K_DOWN, pygame.K_LEFT, pygame.K_RIGHT, pygame.K_LEFT, pygame.K_RIGHT, pygame.K_x, pygame.K_c]:
                 return True

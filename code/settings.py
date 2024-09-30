@@ -2,19 +2,24 @@ import numpy as np
 from os.path import join
 import pygame, sys
 from pygame.math import Vector2 as vector
+from pytmx import TiledMap
 from pytmx.util_pygame import load_pygame
+from random import choice, randint
 
 # Game Settings
 WINDOW_WIDTH, WINDOW_HEIGHT = 1280, 960     # the game window
 SCREEN_WIDTH, SCREEN_HEIGHT = 200, 150      # resolution - will be upscaled to window
 PAUSE_WIDTH, PAUSE_HEIGHT = 640, 480        # pause screen dimensions
 TILE_SIZE = 16                              # tile size in tmx_map
-ANIMATION_SPEED = 4
+ANIMATION_SPEED = 5
 
 Z_LAYERS = {
     'bg': 0,
-    'bg_details': 1,
+    'sky': 1,
     'bg_tiles': 2,
-    'main': 3,
-    'fg': 4
+    'path': 3,
+    'bg_details': 4,
+    'main': 5,
+    'water': 6,
+    'fg': 7
 }

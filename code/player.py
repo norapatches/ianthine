@@ -10,7 +10,7 @@ class Player(pygame.sprite.Sprite):
         self.z = Z_LAYERS['main']
                 
         # abilities
-        self.abilities = {'double_jump': False, 'walljump': False}
+        self.abilities = {'input': True, 'double_jump': False, 'walljump': False}
         
         # controls
         self.controls = LevelControls()
@@ -66,56 +66,57 @@ class Player(pygame.sprite.Sprite):
         released = pygame.key.get_just_released()
         input_vector = vector(0, 0)
         
-        # we ignore input for a short time while jumping off the wall
-        if not self.timers['walljump'].active:
-            # movement
-            if pressed[self.controls.right]:
-                input_vector.x += 1
-                self.facing_right = True
+        if self.abilities['input']:
+            # we ignore input for a short time while jumping off the wall
+            if not self.timers['walljump'].active:
+                # movement
+                if pressed[self.controls.right]:
+                    input_vector.x += 1
+                    self.facing_right = True
+                
+                if pressed[self.controls.left]:
+                    input_vector.x -= 1
+                    self.facing_right = False
+                
+                # platform skip / crouch
+                if pressed[self.controls.down]:
+                    if self.on_surface['floor']:
+                        self.timers['platform_skip'].start()
+                    self.crouch = True if self.on_surface['floor'] else False
+                
+                if released[self.controls.down]:
+                    self.crouch = False
+                    self.frame_index = 0
+                
+                # interaction
+                if pressed[self.controls.up]:
+                    self.interaction['do'] = True
+                if released[self.controls.up]:
+                    self.interaction['do'] = False
+                
+                # melee
+                if jpressed[self.controls.melee]:
+                    self.attack('melee')
+                # ranged
+                if jpressed[self.controls.ranged]:
+                    self.attack('ranged')
+                
+                self.direction.x = input_vector.normalize().x if input_vector else input_vector.x
             
-            if pressed[self.controls.left]:
-                input_vector.x -= 1
-                self.facing_right = False
-            
-            # platform skip / crouch
-            if pressed[self.controls.down]:
-                if self.on_surface['floor']:
-                    self.timers['platform_skip'].start()
-                self.crouch = True if self.on_surface['floor'] else False
-            
-            if released[self.controls.down]:
-                self.crouch = False
-                self.frame_index = 0
-            
-            # interaction
-            if pressed[self.controls.up]:
-                self.interaction['do'] = True
-            if released[self.controls.up]:
-                self.interaction['do'] = False
-            
-            # melee
-            if jpressed[self.controls.melee]:
-                self.attack('melee')
-            # ranged
-            if jpressed[self.controls.ranged]:
-                self.attack('ranged')
-            
-            self.direction.x = input_vector.normalize().x if input_vector else input_vector.x
-        
-        # jumping
-        if not self.abilities['walljump']:
-            if jpressed[self.controls.jump]:
-                self.jump = True
-        else:
-            if not any((self.on_surface['left'], self.on_surface['right'])):
+            # jumping
+            if not self.abilities['walljump']:
                 if jpressed[self.controls.jump]:
                     self.jump = True
             else:
-                if pressed[self.controls.jump]:
-                    self.jump = True
-        
-        if released[self.controls.jump] and self.direction.y <= 0:
-            self.direction.y = 1
+                if not any((self.on_surface['left'], self.on_surface['right'])):
+                    if jpressed[self.controls.jump]:
+                        self.jump = True
+                else:
+                    if pressed[self.controls.jump]:
+                        self.jump = True
+            
+            if released[self.controls.jump] and self.direction.y <= 0:
+                self.direction.y = 1
     
     def attack(self, type) -> None:
         if type == 'melee':

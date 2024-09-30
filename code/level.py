@@ -1,5 +1,7 @@
 from settings import *
 from camera import CameraGroup
+from gtimer import Timer
+from pause import PauseScreen
 from sprites import Sprite, MovingSprite, Door, Item, Floor, Platform, VFX
 
 from npc import Creature, Snail
@@ -8,13 +10,19 @@ from enemy_boss import Golem, Boulder, Spike
 from player import Player, Projectile
 
 class Level:
-    def __init__(self, tmx_map, level_frames, data) -> None:
+    def __init__(self, tmx_map: TiledMap, level_frames: dict, data, fonts: dict, switch_stage: callable) -> None:
         self.display = pygame.display.get_surface()
         self.data = data
+        self.switch_stage = switch_stage
         
         # level data
         self.level_width = tmx_map.width * TILE_SIZE
         self.level_height = tmx_map.height * TILE_SIZE
+        tmx_level_properties = tmx_map.get_layer_by_name('data')[0].properties
+        self.level_unlock = tmx_level_properties['level_unlock']
+        
+        # pause screen
+        self.pause_menu = PauseScreen(level_frames['items'], fonts, self.data)
         
         # all sprites
         self.all_sprites = CameraGroup(
@@ -42,8 +50,13 @@ class Level:
         
         # boss projectiles
         self.boss_boulder = level_frames['boulder']
+        
+        # timers
+        self.timers = {
+            'interaction_wait': Timer(1000)
+        }
     
-    def setup(self, tmx_map, level_frames) -> None:
+    def setup(self, tmx_map: TiledMap, level_frames: dict) -> None:
         '''Read tile and object layers from tmx map file'''
         
         # tiles
@@ -81,6 +94,8 @@ class Level:
                 )
             if obj.name == 'door':
                 self.door  = Door((obj.x, obj.y), level_frames['door'], (self.all_sprites, self.interaction_sprites))
+            if obj.name == 'chest':
+                self.chest = Sprite((obj.x, obj.y), level_frames['chest'][0], self.all_sprites, Z_LAYERS['bg_tiles'])
         
         # moving objects
         for obj in tmx_map.get_layer_by_name('moving_objects'):
@@ -115,6 +130,15 @@ class Level:
         # items
         for obj in tmx_map.get_layer_by_name('items'):
             Item(obj.name, (obj.x + TILE_SIZE / 2, obj.y + TILE_SIZE / 2), level_frames['items'][obj.name], (self.all_sprites, self.item_sprites), self.data)
+    
+    def check_exit(self) -> None:
+        # door
+        if self.player.hitbox_rect.colliderect(self.door.rect) and self.player.interaction['do']:
+            if self.data.key:
+                self.data.key = False
+                self.switch_stage('overworld', self.level_unlock)
+            else:
+                pass
     
     def melee_collision(self) -> None:
         for target in self.enemy_sprites:
@@ -153,14 +177,32 @@ class Level:
                     sprite.activate()
                     VFX((sprite.rect.center), self.vfx_frames['sparkle'] if sprite.item_type == 'key' else self.vfx_frames['particle'], self.all_sprites)
     
+    def pause_game(self) -> None:
+        keys = pygame.key.get_just_pressed()
+        '''Pause the game with ESC'''
+        if keys[pygame.K_ESCAPE]:
+            self.pause_menu.selected = 0
+            self.data.paused = not self.data.paused
+    
+    def update_timers(self) -> None:
+        for timer in self.timers.values():
+            timer.update()
+    
     def run(self, dt):
         '''Run the given level, update all sprites, center camera around player'''
         
-        self.all_sprites.update(dt)
-        #self.data.ui.sprites.update(dt)
-        
-        self.melee_collision()
-        self.ranged_collision()
-        self.item_collision()
-         
-        self.all_sprites.draw(self.player.hitbox_rect, dt)
+        self.pause_game()
+        if not self.data.paused:
+            self.update_timers()
+            self.all_sprites.update(dt)
+            #self.data.ui.sprites.update(dt)
+            
+            self.melee_collision()
+            self.ranged_collision()
+            self.item_collision()
+            
+            self.check_exit()
+            
+            self.all_sprites.draw(self.player.hitbox_rect, dt)
+        else:
+            self.pause_menu.run(dt)

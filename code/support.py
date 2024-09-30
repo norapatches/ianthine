@@ -21,20 +21,13 @@ def import_folder(*path) -> list:
                 continue
     return frames
 
-def import_folder_dict(*path) -> dict:
-    '''Imports all images from a specified folder and returns them as a dictionary.
-    The keys are integers derived from the image filenames, and the values are Pygame Surface objects.'''
+def import_folder_dict(*path):
     frame_dict = {}
     for folder_path, _, image_names in walk(join(*path)):
         for image_name in image_names:
-            try:
-                key = int(image_name.split('.')[0])
-                full_path = join(folder_path, image_name)
-                surface = pygame.image.load(full_path).convert_alpha()
-                frame_dict[key] = surface
-            except ValueError:
-                # Skip files that cannot be converted to an integer
-                continue
+            full_path = join(folder_path, image_name)
+            surface = pygame.image.load(full_path).convert_alpha()
+            frame_dict[image_name.split('.')[0]] = surface
     return frame_dict
 
 def import_sub_folders(*path) -> dict:

@@ -138,7 +138,94 @@ class Platform(Floor):
         super().__init__(position, surface, groups)
         self.map_image.fill('gray')
 
+# STAGE EXIT
 class Door(Sprite):
     def __init__(self, position, frames, groups) -> None:
         super().__init__(position, frames[0], groups, Z_LAYERS['bg_tiles'])
-        self.locked = True
+
+# OVERWORLD
+class Node(pygame.sprite.Sprite):
+    def __init__(self, position, surface, groups, level, data, paths) -> None:
+        super().__init__(groups)
+        self.image = surface
+        self.rect = self.image.get_frect(center= (position[0] + TILE_SIZE / 2, position[1] + TILE_SIZE / 2))
+        self.z = Z_LAYERS['path']
+        self.level = level
+        self.data = data
+        self.paths = paths
+        self.grid_position = (int(position[0] / TILE_SIZE), int(position[1] / TILE_SIZE))
+    
+    def can_move(self, direction) -> bool:
+        if direction in list(self.paths.keys()) and int(self.paths[direction][0][0]) <= self.data.unlocked_level:
+            return True
+
+class Icon(pygame.sprite.Sprite):
+    def __init__(self, position, groups, frames) -> None:
+        super().__init__(groups)
+        self.icon = True
+        self.path = None
+        self.direction = vector()
+        self.speed = 32
+        
+        # image
+        self.frames, self.frame_index = frames, 0
+        self.state = 'idle'
+        self.image = self.frames[self.state][self.frame_index]
+        self.z = Z_LAYERS['main']
+        self.rect = self.image.get_frect(center = position)
+    
+    def start_move(self, path) -> None:
+        self.rect.center = path[0]
+        self.path = path[1:]
+        self.find_path()
+    
+    def find_path(self) -> None:
+        if self.path:
+            # VERTICAL
+            if self.rect.centerx == self.path[0][0]:
+                self.direction = vector(0, 1 if self.path[0][1] > self.rect.centery else -1)
+            # HORIZONTAL
+            else:
+                self.direction = vector(1 if self.path[0][0] > self.rect.centerx else -1, 0)
+        else:
+            self.direction = vector(0, 0)
+    
+    def point_collision(self) -> None:
+        if self.direction.y == 1 and self.rect.centery >= self.path[0][1] or \
+            self.direction.y == -1 and self.rect.centery <= self.path[0][1]:
+            self.rect.centery = self.path[0][1]
+            del self.path[0]
+            self.find_path()
+        
+        if self.direction.x == 1 and self.rect.centerx >= self.path[0][0] or \
+            self.direction.x == -1 and self.rect.centerx <= self.path[0][0]:
+            self.rect.centerx = self.path[0][0]
+            del self.path[0]
+            self.find_path()
+    
+    def get_state(self) -> None:
+        self.state = 'idle'
+        if self.direction == vector(1, 0):
+            self.state = 'right'
+        if self.direction == vector(-1, 0):
+            self.state = 'left'
+        if self.direction == vector(0, 1):
+            self.state = 'down'
+        if self.direction == vector(0, -1):
+            self.state = 'up'
+    
+    def animate(self, dt) -> None:
+        self.frame_index += ANIMATION_SPEED * dt
+        self.image = self.frames[self.state][int(self.frame_index % len(self.frames[self.state]))]
+    
+    def update(self, dt) -> None:
+        if self.path:
+            self.point_collision()
+            self.rect.center += self.direction * self.speed * dt
+        self.get_state()
+        self.animate(dt)
+
+class PathSprite(Sprite):
+    def __init__(self, position, surface, groups, level):
+        super().__init__(position, surface, groups, Z_LAYERS['path'])
+        self.level = level
