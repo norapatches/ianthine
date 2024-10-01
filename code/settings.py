@@ -2,7 +2,6 @@ import numpy as np
 from os.path import join
 import pygame, sys
 from pygame.math import Vector2 as vector
-from pytmx import TiledMap
 from pytmx.util_pygame import load_pygame
 from random import choice, randint
 
