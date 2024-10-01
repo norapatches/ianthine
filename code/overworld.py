@@ -4,7 +4,7 @@ from controls import MenuControls
 from sprites import AnimatedSprite, Sprite, Icon, Node, PathSprite
 
 class Overworld:
-    def __init__(self, tmx_map: TiledMap, data, overworld_frames: dict, switch_stage: callable) -> None:
+    def __init__(self, tmx_map, data, overworld_frames, switch_stage) -> None:
         self.display = pygame.display.get_surface()
         self.data = data
         self.switch_stage = switch_stage
@@ -22,7 +22,7 @@ class Overworld:
         self.path_frames = overworld_frames['path']
         self.create_path_sprites()
     
-    def setup(self, tmx_map: TiledMap, overworld_frames: dict) -> None:
+    def setup(self, tmx_map, overworld_frames) -> None:
         # tiles
         for layer in ['main', 'top']:
             for x, y, surface in tmx_map.get_layer_by_name(layer).tiles():
