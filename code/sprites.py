@@ -142,6 +142,16 @@ class Platform(Floor):
 class Door(Sprite):
     def __init__(self, position, frames, groups) -> None:
         super().__init__(position, frames[0], groups, Z_LAYERS['bg_tiles'])
+        self.frames, self.frame_index = frames, 0
+        self.unlocked = False
+    
+    def animate(self, dt) -> None:
+        self.frame_index += ANIMATION_SPEED * dt
+        self.image = self.frames[int(self.frame_index % len(self.frames))]
+    
+    def update(self, dt) -> None:
+        if self.unlocked:
+            self.animate(dt)
 
 # OVERWORLD
 class Node(pygame.sprite.Sprite):
@@ -226,6 +236,6 @@ class Icon(pygame.sprite.Sprite):
         self.animate(dt)
 
 class PathSprite(Sprite):
-    def __init__(self, position, surface, groups, level):
+    def __init__(self, position, surface, groups, level) -> None:
         super().__init__(position, surface, groups, Z_LAYERS['path'])
         self.level = level
