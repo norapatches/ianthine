@@ -31,7 +31,7 @@ class Game:
         self.cheat_list = []
         self.debugging = False
     
-    def switch_stage(self, target: str, unlock: int= 0) -> None:
+    def switch_stage(self, target, unlock= 0) -> None:
         if target == 'level':
             self.current_stage = Level(self.tmx_maps[self.data.current_level], self.level_frames, self.data, self.fonts, self.switch_stage)
         else:
@@ -43,6 +43,7 @@ class Game:
         '''Import game assets'''
         self.level_frames = {
             'player': import_sub_folders('.', 'assets', 'graphic', 'player'),
+            'arrow': import_folder(join('.', 'assets', 'graphic', 'projectiles', 'arrow')),
             'door': import_folder('.', 'assets', 'graphic', 'level', 'door'),
             # INTERACTION
             'interact': import_folder('.', 'assets', 'graphic', 'level', 'interaction'),
@@ -55,8 +56,8 @@ class Game:
             'plant': import_sub_folders('.', 'assets', 'graphic', 'enemy', 'plant'),
             'skeleton': import_sub_folders('.', 'assets', 'graphic', 'enemy', 'walker', 'skeleton'),
             'zombie': import_sub_folders('.', 'assets', 'graphic', 'enemy', 'walker', 'zombie'),
-            'shadowman': import_sub_folders('.', 'assets', 'graphic', 'enemy', 'shadowman'),
-            'horn': import_sub_folders('.', 'assets', 'graphic', 'enemy', 'horn'),
+            'shadowman': import_sub_folders('.', 'assets', 'graphic', 'enemy', 'chaser', 'shadowman'),
+            'horn': import_sub_folders('.', 'assets', 'graphic', 'enemy', 'chaser', 'horn'),
             'crawler': import_sub_folders('.', 'assets', 'graphic', 'enemy', 'crawler'),
             'ghost': import_sub_folders('.', 'assets', 'graphic', 'enemy', 'ghost'),
             # BOSS

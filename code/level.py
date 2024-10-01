@@ -7,10 +7,10 @@ from sprites import Sprite, MovingSprite, Door, Item, Floor, Platform, VFX
 from npc import Creature, Snail
 from enemies import Chaser, Crawler, Floater, Shooter, Skipper, Walker, Thorn
 from enemy_boss import Golem, Boulder, Spike
-from player import Player, Projectile
+from player import Player, Arrow
 
 class Level:
-    def __init__(self, tmx_map: TiledMap, level_frames: dict, data, fonts: dict, switch_stage: callable) -> None:
+    def __init__(self, tmx_map, level_frames: dict, data, fonts: dict, switch_stage: callable) -> None:
         self.display = pygame.display.get_surface()
         self.data = data
         self.switch_stage = switch_stage
@@ -47,6 +47,7 @@ class Level:
         # frames
         self.vfx_frames = level_frames['vfx']
         self.interact_frames = level_frames['interact']
+        self.arrow_frames = level_frames['arrow']
         
         # boss projectiles
         self.boss_boulder = level_frames['boulder']
@@ -56,7 +57,7 @@ class Level:
             'interaction_wait': Timer(1000)
         }
     
-    def setup(self, tmx_map: TiledMap, level_frames: dict) -> None:
+    def setup(self, tmx_map, level_frames: dict) -> None:
         '''Read tile and object layers from tmx map file'''
         
         # tiles
@@ -159,7 +160,7 @@ class Level:
                 collision[0].kill()
     
     def create_projectile(self, position, direction) -> None:
-        Projectile(position, (self.all_sprites, self.projectile_sprites), direction, 128)
+        Arrow(position, self.arrow_frames, (self.all_sprites, self.projectile_sprites), direction, 128)
     
     def create_enemy_projectile(self, position, direction) -> None:
         Thorn(position, (self.all_sprites, self.damage_sprites, self.enemy_projectile_sprites), direction, 56)
