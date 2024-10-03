@@ -1,10 +1,10 @@
 {
-    "activeFile": "overworld/overworld_test.tmx",
+    "activeFile": "levels/test.tmx",
     "expandedProjectPaths": [
-        ".",
-        "tilesets",
         "overworld",
-        "levels"
+        "tilesets",
+        "levels",
+        "."
     ],
     "file.lastUsedOpenFilter": "All Files (*)",
     "fileStates": {
@@ -96,25 +96,26 @@
                 28
             ],
             "scale": 4.1232,
-            "selectedLayer": 11,
+            "selectedLayer": 7,
             "viewCenter": {
-                "x": 193.17520372526195,
-                "y": 128.0558789289872
+                "x": 194.26658905704306,
+                "y": 596.2601862630967
             }
         },
         "overworld/overworld_test.tmx": {
             "expandedObjectLayers": [
-                4,
-                3
+                3,
+                4
             ],
             "scale": 1.2774,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": -176.13903240958194,
-                "y": 27.007984969469234
+                "x": 288.0851730076718,
+                "y": 287.69375293565054
             }
         },
         "tilesets/dark_light.tsx": {
+            "dynamicWrapping": false,
             "scaleInDock": 2.5873,
             "scaleInEditor": 1.4971
         },
@@ -154,7 +155,7 @@
             "scaleInEditor": 1
         }
     },
-    "last.imagePath": "/Users/norakovacs/Documents/VSCode/Python/_Projects/stickman/assets/graphic/overworld/objects",
+    "last.imagePath": "/Users/norakovacs/Documents/VSCode/Python/_Projects/stickman/assets/graphic/level",
     "openFiles": [
         "overworld/overworld_test.tmx",
         "levels/test.tmx"
@@ -162,8 +163,8 @@
     "project": "stickman.tiled-project",
     "property.type": "string",
     "recentFiles": [
-        "levels/test.tmx",
         "overworld/overworld_test.tmx",
+        "levels/test.tmx",
         "tilesets/overworld_objects.tsx",
         "/Users/norakovacs/Downloads/Super-Pirate-World-main/data/overworld/overworld.tmx",
         "tilesets/dark_light.tsx",

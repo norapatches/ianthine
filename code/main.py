@@ -95,7 +95,7 @@ class Game:
         '''The game loop, runs current stage'''
         while True:
             # get delta time
-            dt = self.clock.tick(120) / 1000
+            dt = self.clock.tick() / 1000
             
             # limit delta time
             max_dt = 0.0075
@@ -112,10 +112,6 @@ class Game:
                     '''Show or hide debug surfaces'''
                     if event.key == pygame.K_TAB:
                         self.debugging = not self.debugging
-                    
-                    '''Enter cheat code method'''
-                    if self.enter_cheat(event.key) == True:
-                        self.current_stage.player.abilities['walljump'] = True
             
             self.current_stage.run(dt)
             
@@ -126,19 +122,6 @@ class Game:
             
             # update display
             pygame.display.update()
-    
-    def enter_cheat(self, key: int) -> bool:
-        '''Store and check the last 10 keystrokes against a list to enable cheats'''
-        if len(self.cheat_list) < 10:
-            self.cheat_list.append(key)
-            return False
-        else:
-            if self.cheat_list == [pygame.K_UP, pygame.K_UP, pygame.K_DOWN, pygame.K_DOWN, pygame.K_LEFT, pygame.K_RIGHT, pygame.K_LEFT, pygame.K_RIGHT, pygame.K_x, pygame.K_c]:
-                return True
-            else:
-                self.cheat_list.pop(0)
-                self.cheat_list.append(key)
-                return False
 
 
 if __name__ == "__main__":

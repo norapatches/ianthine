@@ -96,7 +96,7 @@ class Player(pygame.sprite.Sprite):
                     self.interaction['do'] = False
                 
                 # melee
-                if jpressed[self.controls.melee] and not self.state in ('melee', 'air_melee'):
+                if jpressed[self.controls.melee] and not self.state == 'melee':
                     self.attack('melee')
                     self.frame_index = 0
                 # ranged
@@ -124,12 +124,12 @@ class Player(pygame.sprite.Sprite):
     def attack(self, type) -> None:
         if type == 'melee':
             if not self.timers['attack_lock'].active:
-                self.melee_atk = True
+                self.melee_atk, self.ranged_atk = True, False
                 self.frame_index = 0
                 self.timers['attack_lock'].start()
         if type == 'ranged':
             if not self.timers['attack_lock'].active:
-                self.ranged_atk = True
+                self.ranged_atk, self.melee_atk = True, False
                 self.frame_index = 0
                 self.timers['attack_lock'].start()
     
@@ -240,7 +240,7 @@ class Player(pygame.sprite.Sprite):
     
     def animate(self, dt) -> None:
         if self.state in ['melee', 'ranged']:
-            self.frame_index += (ANIMATION_SPEED * 2) * dt
+            self.frame_index += (ANIMATION_SPEED * 2.5) * dt
         elif self.state == 'idle':
             self.frame_index += (ANIMATION_SPEED * 0.75) * dt
         else:

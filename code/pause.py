@@ -1,4 +1,5 @@
 from settings import *
+from colours import ColourPalette, change_colours
 from controls import MenuControls
 from sprites import AnimatedSprite, Sprite
 
@@ -19,6 +20,31 @@ class PauseScreen:
         self.data = data
         
         self.selected = 0
+        
+        # adjust filters
+        self.filters = [
+            None,
+            ColourPalette.bubblegum,
+            ColourPalette.dust,
+            ColourPalette.evening,
+            ColourPalette.gato,
+            ColourPalette.green,
+            ColourPalette.evening,
+            ColourPalette.ibm51,
+            ColourPalette.ibm8503,
+            ColourPalette.noire,
+            ColourPalette.nokia,
+            ColourPalette.orange,
+            ColourPalette.port,
+            ColourPalette.popart,
+            ColourPalette.purple,
+            ColourPalette.sand,
+            ColourPalette.sangre,
+            ColourPalette.sepia,
+            ColourPalette.yellow
+        ]
+        self.filter = 0
+        self.invert = 0
     
     def input(self) -> None:
         '''Check keyboard input'''
@@ -36,6 +62,14 @@ class PauseScreen:
                 sys.exit()
             else:
                 self.data.paused = False
+        
+        if keys[pygame.K_BACKSPACE]:
+            self.filter += 1
+            self.filter = 0 if self.filter > 16 else self.filter
+        
+        if keys[pygame.K_RSHIFT]:
+            self.invert += 1
+            self.invert = 0 if self.invert > 1 else self.invert
     
     def show_pause_text(self) -> None:
         '''Display paused label'''
@@ -95,5 +129,6 @@ class PauseScreen:
         self.sprites.update(dt)
         self.sprites.draw(self.pause_box)
         
+        change_colours((self.pause_box, ), self.filters[self.filter], self.invert)
         scaled = pygame.transform.scale(self.pause_box, (PAUSE_WIDTH, PAUSE_HEIGHT))
         self.display.blit(scaled, (320, 240))

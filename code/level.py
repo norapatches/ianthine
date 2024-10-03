@@ -2,7 +2,7 @@ from settings import *
 from camera import CameraGroup
 from gtimer import Timer
 from pause import PauseScreen
-from sprites import Sprite, MovingSprite, Door, Item, Floor, Platform, VFX
+from sprites import Sprite, MovingSprite, Door, Item, Floor, Platform, VFX, Lever, ExprBubble
 
 from npc import Creature, Snail
 from enemies import Chaser, Crawler, Floater, Shooter, Skipper, Walker, Thorn
@@ -95,6 +95,10 @@ class Level:
                 )
             if obj.name == 'door':
                 self.door  = Door((obj.x, obj.y), level_frames['door'], (self.all_sprites, self.interaction_sprites))
+            if obj.name == 'gate':
+                self.gate = Sprite((obj.x, obj.y), obj.image, (self.all_sprites, self.collision_sprites))
+            if obj.name == 'lever':
+                self.lever = Lever((obj.x, obj.y), obj.image, (self.all_sprites, self.interaction_sprites))
             if obj.name == 'chest':
                 self.chest = Sprite((obj.x, obj.y), level_frames['chest'][0], self.all_sprites, Z_LAYERS['bg_tiles'])
         
@@ -132,31 +136,43 @@ class Level:
         for obj in tmx_map.get_layer_by_name('items'):
             Item(obj.name, (obj.x + TILE_SIZE / 2, obj.y + TILE_SIZE / 2), level_frames['items'][obj.name], (self.all_sprites, self.item_sprites), self.data)
     
-    def check_exit(self) -> None:
+    def check_interactions(self) -> None:
         # door
-        if self.player.hitbox_rect.colliderect(self.door.rect) and self.player.interaction['do']:
-            if self.data.key:
+        if self.player.hitbox_rect.colliderect(self.door.rect):
+            # TODO display exclamation mark above player for 1 second
+            
+            # if player interacts and has the key, exit level
+            if self.data.key and self.player.interaction['do']:
                 self.data.key = False
                 self.switch_stage('overworld', self.level_unlock)
+            # display question mark above player for 1 second
             else:
                 pass
+        
+        # lever
+        if self.player.hitbox_rect.colliderect(self.lever.rect) and not self.lever.activated:
+            ExprBubble(self.player.hitbox_rect.midtop + vector(-8, -16), self.interact_frames, self.all_sprites, '!')
+            if self.player.interaction['do'] and not self.lever.activated:
+                self.lever.activated = True
+                self.gate.kill()
+            
     
     def melee_collision(self) -> None:
         for target in self.enemy_sprites:
             facing_target = self.player.rect.centerx < target.rect.centerx and self.player.facing_right or\
                             self.player.rect.centerx > target.rect.centerx and not self.player.facing_right
-            if target.hitbox_rect.colliderect(self.player.rect) and self.player.melee_atk and facing_target:
+            if target.hitbox_rect.colliderect(self.player.rect) and self.player.melee_atk and facing_target and int(self.player.frame_index) in (3, 4):
                 target.take_hit()
                 VFX(target.rect.center, self.vfx_frames['punch'], self.all_sprites)
     
     def ranged_collision(self) -> None:
         groups = self.collision_sprites.sprites() + self.enemy_sprites.sprites()
         for sprite in groups:
-            collision = pygame.sprite.spritecollide(sprite, self.projectile_sprites, pygame.sprite.collide_mask)
+            collision = pygame.sprite.spritecollide(sprite, self.projectile_sprites, False, pygame.sprite.collide_mask)
             if collision:
                 if hasattr(sprite, 'enemy') and sprite.state != 'death':
                     sprite.take_hit()
-                VFX((collision[0].rect.center), self.vfx_frames['particle'], self.all_sprites)
+                VFX((collision[0].rect.midleft if collision[0].direction < 0 else collision[0].rect.midright), self.vfx_frames['particle'], self.all_sprites)
                 collision[0].kill()
     
     def create_projectile(self, position, direction) -> None:
@@ -202,7 +218,7 @@ class Level:
             self.ranged_collision()
             self.item_collision()
             
-            self.check_exit()
+            self.check_interactions()
             
             self.all_sprites.draw(self.player.hitbox_rect, dt)
         else:

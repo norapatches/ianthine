@@ -110,6 +110,24 @@ class VFX(AnimatedSprite):
         else:
             self.kill()
 
+class ExprBubble(Sprite):
+    def __init__(self, position, frames, groups, mark) -> None:
+        self.ques_mark = frames[0]
+        self.excl_mark = frames[1]
+        if mark == '?':
+            self.image = self.ques_mark
+        if mark == '!':
+            self.image = self.excl_mark
+        super().__init__(position, self.image, groups)
+        
+        self.timer = Timer(1)
+        self.timer.start()
+    
+    def update(self, dt) -> None:
+        self.timer.update()
+        if not self.timer.active:
+            self.kill()
+
 # UI
 class Heart(AnimatedSprite):
     '''A heart for the ui'''
@@ -138,7 +156,7 @@ class Platform(Floor):
         super().__init__(position, surface, groups)
         self.map_image.fill('gray')
 
-# STAGE EXIT
+# INTERACTIBLES
 class Door(Sprite):
     def __init__(self, position, frames, groups) -> None:
         super().__init__(position, frames[0], groups, Z_LAYERS['bg_tiles'])
@@ -152,6 +170,15 @@ class Door(Sprite):
     def update(self, dt) -> None:
         if self.unlocked:
             self.animate(dt)
+
+class Lever(Sprite):
+    def __init__(self, position, surface, groups) -> None:
+        super().__init__(position, surface, groups, Z_LAYERS['bg_tiles'])
+        self.activated_surface = pygame.transform.flip(self.image, True, False)
+        self.activated = False
+    
+    def update(self, dt) -> None:
+        self.image = self.activated_surface if self.activated else self.image
 
 # OVERWORLD
 class Node(pygame.sprite.Sprite):
