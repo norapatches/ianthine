@@ -39,6 +39,7 @@ class Player(pygame.sprite.Sprite):
         self.gravity = 1024
         self.crouch = False
         self.jump = False
+        self.jump_two = False
         self.jump_height = 320
         self.melee_atk = False
         self.ranged_atk = False
@@ -55,11 +56,13 @@ class Player(pygame.sprite.Sprite):
         
         # timers
         self.timers = {
+            'spawn': Timer(200),
             'platform_skip': Timer(100),
             'walljump': Timer(150),
             'wallslide_block': Timer(400),
             'attack_lock': Timer(450)
         }
+        self.timers['spawn'].start()
     
     def input(self) -> None:
         pressed = pygame.key.get_pressed()
@@ -134,42 +137,50 @@ class Player(pygame.sprite.Sprite):
                 self.timers['attack_lock'].start()
     
     def move(self, dt) -> None:
-        
-        # horizontal movement
-        self.hitbox_rect.x += self.direction.x * self.speed * dt
-        
-        self.collision('horizontal')
-        
-        # vertical movement
-        if not self.on_surface['floor'] and any((self.on_surface['left'], self.on_surface['right'])) and not self.timers['wallslide_block'].active and self.abilities['walljump']:
-            self.direction.y = 0
-            self.hitbox_rect.y += self.gravity / 14 * dt
-        else:
-            self.direction.y += self.gravity / 2 * dt
-            self.hitbox_rect.y += self.direction.y * dt
-            self.direction.y += self.gravity / 2 * dt
-        # cap max velocity
-        self.direction.y = self.direction.y if self.direction.y < self.fallspeed_max else self.fallspeed_max
-        
-        if self.jump:
-            # jump
-            if not self.timers['platform_skip'].active:
-                if self.on_surface['floor']:
-                    self.direction.y = -self.jump_height
-                    self.timers['wallslide_block'].start()
-                    self.hitbox_rect.bottom -= 1
-                # walljump
-                elif any((self.on_surface['left'], self.on_surface['right'])) and not self.timers['wallslide_block'].active and self.abilities['walljump']:
-                    self.timers['walljump'].start()
-                    self.direction.y = -self.jump_height
-                    self.direction.x = 1 if self.on_surface['left'] else -1
-            self.jump = False
-        
-        self.collision('vertical')
-        self.semi_collision()
-        
-        self.rect.topleft = self.hitbox_rect.topleft + vector(-13, -16)
-        self.map_rect.x, self.map_rect.y = self.hitbox_rect.x / TILE_SIZE, self.hitbox_rect.y / TILE_SIZE
+        if not self.timers['spawn'].active:
+            # horizontal movement
+            self.hitbox_rect.x += self.direction.x * self.speed * dt
+            
+            self.collision('horizontal')
+            
+            # vertical movement
+            if not self.on_surface['floor'] and any((self.on_surface['left'], self.on_surface['right'])) and not self.timers['wallslide_block'].active and self.abilities['walljump']:
+                self.direction.y = 0
+                self.hitbox_rect.y += self.gravity / 14 * dt
+            else:
+                self.direction.y += self.gravity / 2 * dt
+                self.hitbox_rect.y += self.direction.y * dt
+                self.direction.y += self.gravity / 2 * dt
+            # cap max velocity
+            self.direction.y = self.direction.y if self.direction.y < self.fallspeed_max else self.fallspeed_max
+            
+            if self.jump:
+                if not self.timers['platform_skip'].active:
+                    # jump
+                    if self.on_surface['floor']:
+                        self.jump_two = False
+                        self.direction.y = -self.jump_height
+                        self.timers['wallslide_block'].start()
+                        self.hitbox_rect.bottom -= 1
+                    # double jump
+                    elif self.abilities['double_jump'] and not self.jump_two:
+                        self.jump_two = True
+                        self.direction.y = -self.jump_height
+                        self.timers['wallslide_block'].start()
+                        self.hitbox_rect.bottom -= 1
+                    # walljump
+                    elif any((self.on_surface['left'], self.on_surface['right'])) and not self.timers['wallslide_block'].active and self.abilities['walljump']:
+                        self.timers['walljump'].start()
+                        self.direction.y = -self.jump_height
+                        self.direction.x = 1 if self.on_surface['left'] else -1
+                self.jump = False
+                
+            
+            self.collision('vertical')
+            self.semi_collision()
+            
+            self.rect.topleft = self.hitbox_rect.topleft + vector(-13, -16)
+            self.map_rect.x, self.map_rect.y = self.hitbox_rect.x / TILE_SIZE, self.hitbox_rect.y / TILE_SIZE
     
     def platform_move(self, dt) -> None:
         if self.platform:
@@ -329,8 +340,10 @@ class Arrow(pygame.sprite.Sprite):
         self.frames, self.frame_index = frames, 0
         self.image = self.frames[self.frame_index]
         self.mask = pygame.mask.from_surface(self.image)
+        
         self.rect = self.image.get_frect(center= position + vector(6 * direction, 0))
         self.hitbox_rect = self.rect.inflate(0, 10)
+        
         self.direction = direction
         self.speed = speed
         self.z = Z_LAYERS['main']

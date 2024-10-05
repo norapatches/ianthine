@@ -25,8 +25,10 @@ class Game:
             1: load_pygame(join('.', 'data', 'levels', 'boss.tmx'))
         }
         self.tmx_overworld = load_pygame(join('.', 'data', 'overworld', 'overworld_test.tmx'))
+        self.main_menu = load_pygame(join('.', 'data', 'overworld', 'main_menu.tmx'))
         
         self.current_stage = Level(self.tmx_maps[0], self.level_frames, self.data, self.fonts, self.switch_stage)
+        #self.current_stage = Overworld(self.main_menu, self.data, self.overworld_frames, self.switch_stage)
         
         self.cheat_list = []
         self.debugging = False
@@ -96,11 +98,7 @@ class Game:
         while True:
             # get delta time
             dt = self.clock.tick() / 1000
-            
-            # limit delta time
-            max_dt = 0.0075
-            dt = min(dt, max_dt)
-            
+                        
             # check for pygame events
             for event in pygame.event.get():
                 

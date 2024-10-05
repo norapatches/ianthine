@@ -1,10 +1,10 @@
 {
-    "activeFile": "levels/test.tmx",
+    "activeFile": "",
     "expandedProjectPaths": [
         "overworld",
+        ".",
         "tilesets",
-        "levels",
-        "."
+        "levels"
     ],
     "file.lastUsedOpenFilter": "All Files (*)",
     "fileStates": {
@@ -95,28 +95,41 @@
                 24,
                 28
             ],
-            "scale": 4.1232,
-            "selectedLayer": 7,
+            "scale": 5.5266,
+            "selectedLayer": 6,
             "viewCenter": {
-                "x": 194.26658905704306,
-                "y": 596.2601862630967
+                "x": 407.9361632830312,
+                "y": 56.001881807983196
+            }
+        },
+        "overworld/main_menu.tmx": {
+            "expandedObjectLayers": [
+                4,
+                3,
+                5
+            ],
+            "scale": 3.3185,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 241.52478529456081,
+                "y": 150.51981316860028
             }
         },
         "overworld/overworld_test.tmx": {
             "expandedObjectLayers": [
-                3,
-                4
+                4,
+                3
             ],
-            "scale": 1.2774,
-            "selectedLayer": 1,
+            "scale": 1.76,
+            "selectedLayer": 4,
             "viewCenter": {
-                "x": 288.0851730076718,
-                "y": 287.69375293565054
+                "x": 495.7386363636364,
+                "y": 298.5795454545455
             }
         },
         "tilesets/dark_light.tsx": {
             "dynamicWrapping": false,
-            "scaleInDock": 2.5873,
+            "scaleInDock": 1.4245,
             "scaleInEditor": 1.4971
         },
         "tilesets/enemies.tsx": {
@@ -157,24 +170,22 @@
     },
     "last.imagePath": "/Users/norakovacs/Documents/VSCode/Python/_Projects/stickman/assets/graphic/level",
     "openFiles": [
-        "overworld/overworld_test.tmx",
-        "levels/test.tmx"
     ],
     "project": "stickman.tiled-project",
     "property.type": "string",
     "recentFiles": [
         "overworld/overworld_test.tmx",
+        "overworld/main_menu.tmx",
         "levels/test.tmx",
+        "tilesets/objects.tsx",
         "tilesets/overworld_objects.tsx",
         "/Users/norakovacs/Downloads/Super-Pirate-World-main/data/overworld/overworld.tmx",
         "tilesets/dark_light.tsx",
         "levels/boss.tmx",
-        "tilesets/objects.tsx",
         "tilesets/foliage.tsx",
         "tilesets/overworld.tsx",
         "tilesets/stone.tsx",
-        "tilesets/terrain.tsx",
-        "levels/0.tmx"
+        "tilesets/terrain.tsx"
     ],
     "tileset.lastUsedFormat": "tsx",
     "tileset.tileSize": {
