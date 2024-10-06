@@ -1,16 +1,15 @@
 from settings import *
 
-'''TODO: Rewrite the class to represent player and enemies with different health'''
-
 class GameData:
-    def __init__(self, ui) -> None:
-        self.ui = ui
+    def __init__(self) -> None:
         
         # PLAYER
         self._health: int = 5
         self._coins: int = 0
         self._gems: int = 0
         self.key: bool = False
+        self.can_double_jump: bool = False
+        self.can_walljump: bool = False
         
         # GAME PROGRESS
         self.unlocked_level: int = 0
@@ -30,6 +29,7 @@ class GameData:
         # PAUSE/RESUME
         self.paused: bool = False
     
+    # player health
     @property
     def health(self) -> int:
         return self._health
@@ -38,6 +38,7 @@ class GameData:
     def health(self, value: int) -> None:
         self._health = value
 
+    # player coins
     @property
     def coins(self):
         return self._coins
@@ -46,6 +47,7 @@ class GameData:
     def coins(self, value: int):
         self._coins = value
     
+    # player gems
     @property
     def gems(self) -> int:
         return self._gems

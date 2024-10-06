@@ -150,11 +150,12 @@ class Level:
                 pass
         
         # lever
-        if self.player.hitbox_rect.colliderect(self.lever.rect) and not self.lever.activated:
-            ExprBubble(self.player.hitbox_rect.midtop + vector(-8, -16), self.interact_frames, self.all_sprites, '!')
-            if self.player.interaction['do'] and not self.lever.activated:
-                self.lever.activated = True
-                self.gate.kill()
+        if hasattr(self, 'lever'):
+            if self.player.hitbox_rect.colliderect(self.lever.rect) and not self.lever.activated:
+                ExprBubble(self.player.hitbox_rect.midtop + vector(-8, -16), self.interact_frames, self.all_sprites, '!')
+                if self.player.interaction['do'] and not self.lever.activated:
+                    self.lever.activated = True
+                    self.gate.kill()
             
     
     def melee_collision(self) -> None:

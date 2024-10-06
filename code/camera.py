@@ -6,7 +6,7 @@ class CameraGroup(pygame.sprite.Group):
         '''The CameraGroup serves as a moving zoomed-in display surface that displays all sprites on level stages'''
         super().__init__()
         
-        self.ui_sprites = [sprite for sprite in data.ui.sprites]
+        #self.ui_sprites = [sprite for sprite in data.ui.sprites]
         
         self.display = pygame.display.get_surface()
         self.screen = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
@@ -144,19 +144,39 @@ class MiniMap:
 
 
 class OverworldCamera(pygame.sprite.Group):
-    def __init__(self, data) -> None:
+    def __init__(self, width, height, data) -> None:
         super().__init__()
         self.display = pygame.display.get_surface()
         self.screen = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
         
         self.data = data
         self.offset = vector()
+        
+        self.width, self.height = width * TILE_SIZE, height * TILE_SIZE
+        
+        # camera boundaries
+        self.borders = {
+            'left': 0,
+            'right': -self.width + SCREEN_WIDTH,
+            'bottom': -self.height + SCREEN_HEIGHT,
+            'top': 0
+        }
+    
+    def camera_constraint(self) -> None:
+        '''Don't allow camera movement when reaching level stage sides'''
+        self.offset.x = self.offset.x if self.offset.x < self.borders['left'] else 0
+        self.offset.x = self.offset.x if self.offset.x > self.borders['right'] else self.borders['right']
+        
+        self.offset.y = self.offset.y if self.offset.y < self.borders['top'] else 0
+        self.offset.y = self.offset.y if self.offset.y > self.borders['bottom'] else self.borders['bottom']
     
     def draw(self, target) -> None:
         self.screen.fill('black')
         
         self.offset.x = -(target.centerx - SCREEN_WIDTH / 2)
         self.offset.y = -(target.centery - SCREEN_HEIGHT / 2)
+        
+        self.camera_constraint()
         
         # background
         for sprite in sorted(self, key= lambda sprite: sprite.z):

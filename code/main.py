@@ -3,7 +3,6 @@ from support import *
 from debug import debug_multiple, show_fps
 from level import Level
 from overworld import Overworld
-
 from gdata import GameData
 from ui import UI
 
@@ -18,19 +17,27 @@ class Game:
         self.import_assets()
         
         self.ui = UI(pygame.font.Font(None, 16), self.ui_frames)
-        self.data = GameData(self.ui)
+        self.data = GameData()
         
+        # load save file if any
+        self.load_game()
+        
+        # level stages
         self.tmx_maps = {
             0: load_pygame(join('.', 'data', 'levels', 'test.tmx')),
             1: load_pygame(join('.', 'data', 'levels', 'boss.tmx'))
         }
+        # game overworld
         self.tmx_overworld = load_pygame(join('.', 'data', 'overworld', 'overworld_test.tmx'))
+        # main menu
         self.main_menu = load_pygame(join('.', 'data', 'overworld', 'main_menu.tmx'))
+        # settings level stage
+        ...
         
-        self.current_stage = Level(self.tmx_maps[0], self.level_frames, self.data, self.fonts, self.switch_stage)
-        #self.current_stage = Overworld(self.main_menu, self.data, self.overworld_frames, self.switch_stage)
+        # load stage
+        #self.current_stage = Level(self.tmx_maps[0], self.level_frames, self.data, self.fonts, self.switch_stage)
+        self.current_stage = Overworld(self.tmx_overworld, self.data, self.overworld_frames, self.switch_stage)
         
-        self.cheat_list = []
         self.debugging = False
     
     def switch_stage(self, target, unlock= 0) -> None:
@@ -40,6 +47,23 @@ class Game:
             if unlock > 0:
                 self.data.unlocked_level = unlock
             self.current_stage = Overworld(self.tmx_overworld, self.data, self.overworld_frames, self.switch_stage)
+    
+    def save_game(self) -> None:
+        '''Save self.data as a serialised object'''
+        with open(join('.', 'save', 'default.sav'), 'wb') as file:
+            pickle.dump(self.data, file)
+    
+    def load_game(self) -> None:
+        '''Load self.data from a serialised object'''
+        try:
+            # if the save file exists, load it
+            with open(join('.', 'save', 'default.sav'), 'rb') as file:
+                self.data = pickle.load(file)
+                print(self.data.unlocked_level)
+        except FileNotFoundError:
+            # if file doesn't exist, carry on
+            print('no save data found')
+            pass
     
     def import_assets(self) -> None:
         '''Import game assets'''
@@ -78,6 +102,9 @@ class Game:
             'icon': import_sub_folders(join('.', 'assets', 'graphic', 'overworld', 'icon')),
             'water': import_folder(join('.', 'assets', 'graphic', 'overworld', 'water'))
         }
+        self.bgm = {
+            'overworld': pygame.mixer.Sound(join('.', 'assets', 'sound', 'bgm', 'overworld.wav'))
+        }
         self.sfx = {
             'jump': pygame.mixer.Sound(join('.', 'assets', 'sound', 'sfx', 'jump.wav')),
             'land': pygame.mixer.Sound(join('.', 'assets', 'sound', 'sfx', 'jump_land.wav')),
@@ -103,6 +130,7 @@ class Game:
             for event in pygame.event.get():
                 
                 if event.type == pygame.QUIT:
+                    #self.save_game()
                     pygame.quit()
                     sys.exit()
 

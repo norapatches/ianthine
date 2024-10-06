@@ -6,8 +6,10 @@ class Player(pygame.sprite.Sprite):
     def __init__(self, position, groups, collision_sprites, semi_collision_sprites, snail_sprites, frames, data, projectile):
         # general setup
         super().__init__(groups)
-        self.data = data
         self.z = Z_LAYERS['main']
+        
+        # game data
+        self.data = data
                 
         # abilities
         self.abilities = {'input': True, 'double_jump': False, 'walljump': False}
@@ -28,12 +30,12 @@ class Player(pygame.sprite.Sprite):
         
         # rects
         self.rect = self.image.get_frect(topleft = position)
-        self.hitbox_rect = pygame.FRect((self.rect.topleft + vector(13, 16)), (11, 16))
+        self.hitbox_rect = pygame.FRect((self.rect.topleft + vector(13, 16)), (10, 16))
         self.old_rect = self.hitbox_rect.copy()
                
         # movement
         self.direction = vector()
-        self.speed = 64
+        self.speed = 56
         
         self.fallspeed_max = 256
         self.gravity = 1024
@@ -151,9 +153,10 @@ class Player(pygame.sprite.Sprite):
                 self.direction.y += self.gravity / 2 * dt
                 self.hitbox_rect.y += self.direction.y * dt
                 self.direction.y += self.gravity / 2 * dt
-            # cap max velocity
+            # cap max falling velocity
             self.direction.y = self.direction.y if self.direction.y < self.fallspeed_max else self.fallspeed_max
             
+            # jump, double jump, walljump
             if self.jump:
                 if not self.timers['platform_skip'].active:
                     # jump

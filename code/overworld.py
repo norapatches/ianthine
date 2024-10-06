@@ -12,7 +12,11 @@ class Overworld:
         self.controls = MenuControls()
         
         # groups
-        self.all_sprites = OverworldCamera(data)
+        self.all_sprites = OverworldCamera(
+            width= tmx_map.width,
+            height= tmx_map.height,
+            data= data
+        )
         self.node_sprites = pygame.sprite.Group()
         
         self.setup(tmx_map, overworld_frames)

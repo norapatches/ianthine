@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="30" height="15" tilewidth="16" tileheight="16" infinite="0" nextlayerid="30" nextobjectid="110">
+<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="30" height="15" tilewidth="16" tileheight="16" infinite="0" nextlayerid="30" nextobjectid="113">
  <tileset firstgid="1" source="../tilesets/terrain.tsx"/>
  <tileset firstgid="145" source="../tilesets/objects.tsx"/>
- <tileset firstgid="161" source="../tilesets/enemies.tsx"/>
- <tileset firstgid="168" source="../tilesets/stone.tsx"/>
+ <tileset firstgid="164" source="../tilesets/enemies.tsx"/>
+ <tileset firstgid="171" source="../tilesets/stone.tsx"/>
  <layer id="19" name="bg" width="30" height="15">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -101,8 +101,8 @@
 </data>
  </layer>
  <objectgroup id="24" name="objects">
-  <object id="27" name="player" gid="145" x="44.1787" y="39.7486" width="16" height="16"/>
   <object id="109" name="door" gid="160" x="288" y="224" width="16" height="16"/>
+  <object id="112" name="player" gid="145" x="42" y="48" width="36" height="32"/>
  </objectgroup>
  <objectgroup id="25" name="moving_objects">
   <object id="108" name="elevator" type="moving_object" x="112" y="48" width="16" height="168.004">
