@@ -1,5 +1,7 @@
 from __future__ import annotations
 from typing import TYPE_CHECKING
+
+import pygame.gfxdraw
 if TYPE_CHECKING:
     from gdata import GameData
     from pytmx import TiledMap
@@ -96,7 +98,7 @@ class Level:
                     semi_collision_sprites= self.semi_collision_sprites,
                     snail_sprites= self.snail_collision_sprites,
                     frames= level_frames['player'],
-                    projectile=self.create_projectile,
+                    shoot_arrow= self.shoot_arrow,
                     data= self.data
                 )
             elif obj.name == 'door':
@@ -163,7 +165,6 @@ class Level:
                     self.lever.activated = True
                     linked_obj = getattr(self, self.lever.linked_object)
                     linked_obj.kill()
-            
     
     def melee_collision(self) -> None:
         for target in self.enemy_sprites:
@@ -183,7 +184,17 @@ class Level:
                 VFX((collision[0].rect.midleft if collision[0].direction < 0 else collision[0].rect.midright), self.vfx_frames['particle'], self.all_sprites)
                 collision[0].kill()
     
-    def create_projectile(self, position, direction) -> None:
+    def player_hit_collision(self) -> None:
+        groups = self.damage_sprites.sprites() + self.enemy_sprites.sprites()
+        for sprite in groups:
+            if hasattr(sprite, 'hitbox_rect'):
+                if sprite.hitbox_rect.colliderect(self.player.hitbox_rect):
+                    self.player.take_damage()
+            else:
+                if sprite.rect.colliderect(self.player.hitbox_rect):
+                    self.player.take_damage()
+    
+    def shoot_arrow(self, position, direction) -> None:
         Arrow(position, self.arrow_frames, (self.all_sprites, self.projectile_sprites), direction, 128)
     
     def create_enemy_projectile(self, position, direction) -> None:
@@ -220,11 +231,11 @@ class Level:
         if not self.data.paused:
             self.update_timers()
             self.all_sprites.update(dt)
-            #self.data.ui.sprites.update(dt)
             
             self.melee_collision()
             self.ranged_collision()
             self.item_collision()
+            self.player_hit_collision()
             
             self.check_interactions()
             

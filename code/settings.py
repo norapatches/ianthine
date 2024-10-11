@@ -1,3 +1,4 @@
+from math import sin
 import numpy as np
 from os.path import join
 import pickle

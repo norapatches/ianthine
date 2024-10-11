@@ -1,7 +1,8 @@
 from settings import *
 
 class GameData:
-    def __init__(self, screen: pygame.Surface) -> None:
+    def __init__(self, ui, screen: pygame.Surface) -> None:
+        self.ui = ui
         self.screen = screen
         
         # PLAYER
@@ -11,6 +12,8 @@ class GameData:
         self.key: bool = False
         self.can_double_jump: bool = False
         self.can_walljump: bool = False
+        
+        self.ui.create_hearts(self.health)
         
         # GAME PROGRESS
         self.unlocked_level: int = 0
@@ -42,6 +45,7 @@ class GameData:
     @health.setter
     def health(self, value: int) -> None:
         self._health = value
+        self.ui.create_hearts(value)
 
     # player coins
     @property

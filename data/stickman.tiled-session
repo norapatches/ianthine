@@ -1,8 +1,8 @@
 {
-    "activeFile": "levels/settings.tmx",
+    "activeFile": "levels/test.tmx",
     "expandedProjectPaths": [
-        ".",
         "overworld",
+        ".",
         "tilesets",
         "levels"
     ],
@@ -93,39 +93,39 @@
         "levels/settings.tmx": {
             "expandedObjectLayers": [
                 24,
-                25,
-                9
+                9,
+                25
             ],
             "scale": 2.2879,
             "selectedLayer": 11,
             "viewCenter": {
                 "x": -8.5230997858298,
-                "y": 94.40972070457624
+                "y": 94.19117968442676
             }
         },
         "levels/test.tmx": {
             "expandedObjectLayers": [
-                28,
-                25
+                25,
+                28
             ],
             "scale": 1.126,
-            "selectedLayer": 7,
+            "selectedLayer": 6,
             "viewCenter": {
-                "x": 480.0177619893429,
-                "y": 479.57371225577276
+                "x": -35.079928952042636,
+                "y": 135.87921847246895
             }
         },
         "overworld/main_menu.tmx": {
             "expandedObjectLayers": [
                 5,
-                4,
-                3
+                3,
+                4
             ],
             "scale": 3.3208,
             "selectedLayer": 1,
             "viewCenter": {
                 "x": 135.96121416526137,
-                "y": 94.2543965309564
+                "y": 94.1038304023127
             }
         },
         "overworld/overworld_test.tmx": {
@@ -191,8 +191,8 @@
     "property.type": "string",
     "recentFiles": [
         "overworld/main_menu.tmx",
-        "levels/test.tmx",
         "levels/settings.tmx",
+        "levels/test.tmx",
         "levels/boss.tmx",
         "levels/0.tmx",
         "tilesets/objects.tsx",

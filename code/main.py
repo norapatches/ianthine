@@ -1,8 +1,3 @@
-from __future__ import annotations
-from typing import TYPE_CHECKING
-if TYPE_CHECKING:
-    from pytmx import TiledMap
-
 from settings import *
 from support import *
 from debug import debug_multiple, show_fps
@@ -23,8 +18,8 @@ class Game:
         
         self.import_assets()
         
-        self.ui = UI(pygame.font.Font(None, 16), self.ui_frames)
-        self.data = GameData(self.game_screen)
+        self.ui = UI(self.game_screen, pygame.font.Font(None, 16), self.ui_frames)
+        self.data = GameData(self.ui, self.game_screen)
         
         # load save file if any
         self.load_game()
@@ -50,6 +45,7 @@ class Game:
         # adjust filters
         self.filters = [
             None,
+            ColourPalette.test,
             ColourPalette.bubblegum,
             ColourPalette.dust,
             ColourPalette.evening,
@@ -70,7 +66,7 @@ class Game:
             ColourPalette.yellow
         ]
         self.filter = 0
-        self.invert = 0
+        self.invert = False
     
     def switch_stage(self, target: str, unlock: int= 0) -> None:
         if target == 'level':
@@ -93,7 +89,6 @@ class Game:
             # if the save file exists, load it
             with open(join('.', 'save', 'default.sav'), 'rb') as file:
                 self.data = pickle.load(file)
-                print(self.data.unlocked_level)
         except FileNotFoundError:
             # if file doesn't exist, carry on
             print('no save data found')
@@ -176,18 +171,19 @@ class Game:
                     if event.key == pygame.K_TAB:
                         self.debugging = not self.debugging
                     
-                    if event.key == pygame.K_BACKSPACE:
+                    if event.key == pygame.K_PAGEUP:
                         self.filter += 1
                         self.filter = 0 if self.filter > 16 else self.filter
+                    if event.key == pygame.K_PAGEDOWN:
+                        self.filter -= 1
+                        self.filter = 16 if self.filter < 0 else self.filter
                     if event.key == pygame.K_RSHIFT:
-                        self.invert += 1
-                        self.invert = 0 if self.invert > 1 else self.invert
+                        self.invert = not self.invert
             
-            self.display.fill('gray')
             self.current_stage.run(dt)
+            self.ui.update(dt)
             
-            # change colours of every pixel on given surface(s)
-            change_colours((self.game_screen, ), self.filters[self.filter], self.invert)
+            change_colours(self.game_screen, self.filters[self.filter], self.invert)
             self.display.blit(pygame.transform.scale(self.data.screen, (WINDOW_WIDTH, WINDOW_HEIGHT)))
             
             # DEBUG show fps & dt

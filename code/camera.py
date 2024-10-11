@@ -79,14 +79,7 @@ class CameraGroup(pygame.sprite.Group):
         
         for sprite in sorted(self, key= lambda sprite: sprite.z):
             offset_pos = round(sprite.rect.left + self.offset.x), round(sprite.rect.top + self.offset.y)
-            #offset_pos = sprite.rect.topleft + self.offset
             self.screen.blit(sprite.image, offset_pos)
-        
-        #for sprite in self.ui_sprites:
-        #    self.screen.blit(sprite.image, sprite.rect)
-        
-        #pygame.transform.scale(self.screen, (WINDOW_WIDTH, WINDOW_HEIGHT), self.display)
-        #self.display.blit(pygame.transform.scale(self.screen, (1280, 720)), (43, 24))
         
         self.toggle_minimap()
 

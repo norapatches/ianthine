@@ -1,5 +1,5 @@
-- **Project Title** 'Stickman'
-- **Project Version** *N/A*
+- **Project Title** 'IANTHINE'
+- **Project Version** v.Alpha
 - **Project Genre** platformer
 - **Language** Python 3.12.2
 - **Library** [pygame-ce](https://pyga.me) *2.5.1 (SDL 2.30.6)*
@@ -8,7 +8,7 @@
 - [ClickUp](https://app.clickup.com/9012231275/home)
 
 ## Project Description
-**'Stickman'** is a simple 2D *platformer* video game, where the player controls a stick figure. The game has an **overworld stage** and several individual **level stage**s. The player unlocks access to new levels on the overworld as progressing with finishing prior ones. The level stages have **checkpoints** where the player can respawn. The game has a **pause screen** both on the overworld and the level stages where the player can exit the game or resume gameplay.
+**Ianthine** is a simple 2D *platformer* video game, where the player controls a stick figure. The game has an **overworld stage** and several individual **level stage**s. The player unlocks access to new levels on the overworld as progressing with finishing prior ones. The level stages have **checkpoints** where the player can respawn. The game has a **pause screen** both on the overworld and the level stages where the player can exit the game or resume gameplay.
 
 ### Overworld
 There are **nodes** and **paths** on the overworld that represent **level stage**s and the progression between them. A new path only becomes available to traverse if a previous level stage has been finished.

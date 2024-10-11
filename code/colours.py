@@ -1,6 +1,7 @@
 from settings import *
 
 class ColourPalette:
+    test =      {'dark' : (10, 0, 20),      'light' : (235, 225, 225)}
     bubblegum = {'dark' : (41, 22, 29),     'light' : (250, 148, 149)}
     dust =      {'dark' : (37, 41, 50),     'light' : (203, 158, 106)}
     evening =   {'dark' : (29, 15, 68),     'light' : (244, 78, 56)}
@@ -19,12 +20,11 @@ class ColourPalette:
     sepia =     {'dark' : (111, 77, 61),    'light' : (203, 152, 103)}
     yellow =    {'dark' : (41, 43, 48),     'light' : (207, 171, 74)}
 
-def change_colours(surfaces, palette, invert= False) -> None:
+def change_colours(surface, palette, invert= False) -> None:
+    
     # Convert surface to an array
-    for surface in surfaces:
-        if palette == None:
-            break
-        else:
+    if palette == None:
+        if invert:
             pixel_array = pygame.surfarray.pixels3d(surface)
 
             # Define black and white as tuples (RGB)
@@ -34,13 +34,30 @@ def change_colours(surfaces, palette, invert= False) -> None:
             # Create masks for black and white pixels
             black_mask = np.all(pixel_array == black, axis=-1)
             white_mask = np.all(pixel_array == white, axis=-1)
+            
+            pixel_array[black_mask] = white
+            pixel_array[white_mask] = black
+            
+            del pixel_array
+        else:
+            pass
+    else:
+        pixel_array = pygame.surfarray.pixels3d(surface)
 
-            if invert:
-                pixel_array[black_mask] = palette['light']
-                pixel_array[white_mask] = palette['dark']
-            else:
-                pixel_array[black_mask] = palette['dark']
-                pixel_array[white_mask] = palette['light']
+        # Define black and white as tuples (RGB)
+        black = (0, 0, 0)
+        white = (255, 255, 255)
 
-            # Update the surface
-            del pixel_array  # Unlock the surface from the array
+        # Create masks for black and white pixels
+        black_mask = np.all(pixel_array == black, axis=-1)
+        white_mask = np.all(pixel_array == white, axis=-1)
+
+        if invert:
+            pixel_array[black_mask] = palette['light']
+            pixel_array[white_mask] = palette['dark']
+        else:
+            pixel_array[black_mask] = palette['dark']
+            pixel_array[white_mask] = palette['light']
+
+        # Update the surface
+        del pixel_array  # Unlock the surface from the array
