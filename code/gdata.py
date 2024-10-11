@@ -1,7 +1,8 @@
 from settings import *
 
 class GameData:
-    def __init__(self) -> None:
+    def __init__(self, screen: pygame.Surface) -> None:
+        self.screen = screen
         
         # PLAYER
         self._health: int = 5
@@ -16,8 +17,12 @@ class GameData:
         self.current_level: int = 0
         
         # GRAPHIC SETTINGS
+        self.window_ratio: str = '16:9'
         self.graphic_filter = None
         self.filter_invert: bool = False
+        
+        # CAMERA SETTINGS
+        self.camera_type: str = 'box'
         
         # AUDIO SETTINGS
         self.bgm_volume: float = 1.0

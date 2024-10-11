@@ -1,6 +1,12 @@
+from __future__ import annotations
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from pytmx import TiledMap
+
 from settings import *
 from support import *
 from debug import debug_multiple, show_fps
+from colours import ColourPalette, change_colours
 from level import Level
 from overworld import Overworld
 from gdata import GameData
@@ -13,11 +19,12 @@ class Game:
         pygame.display.set_caption('stickman')
         self.clock = pygame.time.Clock()
         self.display = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
+        self.game_screen = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
         
         self.import_assets()
         
         self.ui = UI(pygame.font.Font(None, 16), self.ui_frames)
-        self.data = GameData()
+        self.data = GameData(self.game_screen)
         
         # load save file if any
         self.load_game()
@@ -35,14 +42,41 @@ class Game:
         ...
         
         # load stage
-        #self.current_stage = Level(self.tmx_maps[0], self.level_frames, self.data, self.fonts, self.switch_stage)
-        self.current_stage = Overworld(self.tmx_overworld, self.data, self.overworld_frames, self.switch_stage)
+        self.current_stage = Level(self.tmx_maps[0], self.level_frames, self.data, self.fonts, self.switch_stage)
+        #self.current_stage = Overworld(self.tmx_overworld, self.data, self.overworld_frames, self.switch_stage)
         
         self.debugging = False
+        
+        # adjust filters
+        self.filters = [
+            None,
+            ColourPalette.bubblegum,
+            ColourPalette.dust,
+            ColourPalette.evening,
+            ColourPalette.gato,
+            ColourPalette.green,
+            ColourPalette.evening,
+            ColourPalette.ibm51,
+            ColourPalette.ibm8503,
+            ColourPalette.noire,
+            ColourPalette.nokia,
+            ColourPalette.orange,
+            ColourPalette.port,
+            ColourPalette.popart,
+            ColourPalette.purple,
+            ColourPalette.sand,
+            ColourPalette.sangre,
+            ColourPalette.sepia,
+            ColourPalette.yellow
+        ]
+        self.filter = 0
+        self.invert = 0
     
-    def switch_stage(self, target, unlock= 0) -> None:
+    def switch_stage(self, target: str, unlock: int= 0) -> None:
         if target == 'level':
             self.current_stage = Level(self.tmx_maps[self.data.current_level], self.level_frames, self.data, self.fonts, self.switch_stage)
+        elif target == 'settings':
+            pass
         else:
             if unlock > 0:
                 self.data.unlocked_level = unlock
@@ -129,17 +163,32 @@ class Game:
             # check for pygame events
             for event in pygame.event.get():
                 
+                #if event.type == pygame.WINDOWFOCUSLOST:
+                #    self.data.paused = True
+                
                 if event.type == pygame.QUIT:
                     #self.save_game()
                     pygame.quit()
                     sys.exit()
-
+                
                 if event.type == pygame.KEYDOWN:                    
                     '''Show or hide debug surfaces'''
                     if event.key == pygame.K_TAB:
                         self.debugging = not self.debugging
+                    
+                    if event.key == pygame.K_BACKSPACE:
+                        self.filter += 1
+                        self.filter = 0 if self.filter > 16 else self.filter
+                    if event.key == pygame.K_RSHIFT:
+                        self.invert += 1
+                        self.invert = 0 if self.invert > 1 else self.invert
             
+            self.display.fill('gray')
             self.current_stage.run(dt)
+            
+            # change colours of every pixel on given surface(s)
+            change_colours((self.game_screen, ), self.filters[self.filter], self.invert)
+            self.display.blit(pygame.transform.scale(self.data.screen, (WINDOW_WIDTH, WINDOW_HEIGHT)))
             
             # DEBUG show fps & dt
             if self.debugging:

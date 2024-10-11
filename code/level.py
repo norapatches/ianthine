@@ -1,3 +1,9 @@
+from __future__ import annotations
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from gdata import GameData
+    from pytmx import TiledMap
+
 from settings import *
 from camera import CameraGroup
 from gtimer import Timer
@@ -10,7 +16,7 @@ from enemy_boss import Golem, Boulder, Spike
 from player import Player, Arrow
 
 class Level:
-    def __init__(self, tmx_map, level_frames: dict, data, fonts: dict, switch_stage: callable) -> None:
+    def __init__(self, tmx_map: TiledMap, level_frames: dict, data: GameData, fonts: dict, switch_stage: callable) -> None:
         self.display = pygame.display.get_surface()
         self.data = data
         self.switch_stage = switch_stage
@@ -57,7 +63,7 @@ class Level:
             'interaction_wait': Timer(1000)
         }
     
-    def setup(self, tmx_map, level_frames: dict) -> None:
+    def setup(self, tmx_map: TiledMap, level_frames: dict) -> None:
         '''Read tile and object layers from tmx map file'''
         
         # tiles
@@ -93,13 +99,13 @@ class Level:
                     projectile=self.create_projectile,
                     data= self.data
                 )
-            if obj.name == 'door':
+            elif obj.name == 'door':
                 self.door  = Door((obj.x, obj.y), level_frames['door'], (self.all_sprites, self.interaction_sprites))
-            if obj.name == 'gate':
+            elif obj.name == 'gate':
                 self.gate = Sprite((obj.x, obj.y), obj.image, (self.all_sprites, self.collision_sprites))
-            if obj.name == 'lever':
-                self.lever = Lever((obj.x, obj.y), obj.image, (self.all_sprites, self.interaction_sprites))
-            if obj.name == 'chest':
+            elif obj.name == 'lever':
+                self.lever = Lever((obj.x, obj.y), obj.image, (self.all_sprites, self.interaction_sprites), obj.properties['linked_object'])
+            elif obj.name == 'chest':
                 self.chest = Sprite((obj.x, obj.y), level_frames['chest'][0], self.all_sprites, Z_LAYERS['bg_tiles'])
         
         # moving objects
@@ -139,15 +145,15 @@ class Level:
     def check_interactions(self) -> None:
         # door
         if self.player.hitbox_rect.colliderect(self.door.rect):
-            # TODO display exclamation mark above player for 1 second
-            
-            # if player interacts and has the key, exit level
-            if self.data.key and self.player.interaction['do']:
-                self.data.key = False
-                self.switch_stage('overworld', self.level_unlock)
-            # display question mark above player for 1 second
-            else:
-                pass
+            if not self.data.key:
+                ExprBubble(self.player.hitbox_rect.midtop + vector(-8, -16), self.interact_frames, self.all_sprites, '?')
+                if self.player.interaction['do']:
+                    ExprBubble(self.player.hitbox_rect.midtop + vector(-8, -16), self.interact_frames, self.all_sprites, 'key')
+            elif self.data.key:
+                ExprBubble(self.player.hitbox_rect.midtop + vector(-8, -16), self.interact_frames, self.all_sprites, '!')
+                if self.player.interaction['do']:
+                    self.data.key = False
+                    self.switch_stage('overworld', self.level_unlock)
         
         # lever
         if hasattr(self, 'lever'):
@@ -155,7 +161,8 @@ class Level:
                 ExprBubble(self.player.hitbox_rect.midtop + vector(-8, -16), self.interact_frames, self.all_sprites, '!')
                 if self.player.interaction['do'] and not self.lever.activated:
                     self.lever.activated = True
-                    self.gate.kill()
+                    linked_obj = getattr(self, self.lever.linked_object)
+                    linked_obj.kill()
             
     
     def melee_collision(self) -> None:

@@ -1,24 +1,30 @@
+from __future__ import annotations
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from gdata import GameData
+
 from settings import *
-from colours import ColourPalette, change_colours
+
 
 class CameraGroup(pygame.sprite.Group):
-    def __init__(self, width, height, data) -> None:
+    def __init__(self, width: int, height: int, data: GameData) -> None:
         '''The CameraGroup serves as a moving zoomed-in display surface that displays all sprites on level stages'''
         super().__init__()
-        
+        self.data: GameData = data
         #self.ui_sprites = [sprite for sprite in data.ui.sprites]
         
-        self.display = pygame.display.get_surface()
-        self.screen = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
-        self.screen_rect = self.screen.get_frect()
-        self.offset = vector()
-        self.width, self.height = width * TILE_SIZE, height * TILE_SIZE
+        self.display: pygame.Surface = pygame.display.get_surface()
+        self.screen: pygame.Surface = data.screen
+        self.screen_rect: pygame.FRect = self.screen.get_frect()
+        self.offset: vector = vector()
+        self.width: int = width * TILE_SIZE
+        self.height: int = height * TILE_SIZE
         
         # minimap
         self.minimap = MiniMap(width, height)
         
         # camera boundaries
-        self.borders = {
+        self.borders: dict[str, int] = {
             'left': 0,
             'right': -self.width + SCREEN_WIDTH,
             'bottom': -self.height + SCREEN_HEIGHT,
@@ -26,58 +32,22 @@ class CameraGroup(pygame.sprite.Group):
         }
         
         # camera box
-        self.camera_bounds = {'left': 80, 'right': 80, 'top': 48, 'bottom': 48}
+        self.camera_bounds: dict[str, int] = {'left': 80, 'right': 80, 'top': 48, 'bottom': 48}
         self.camera_box = pygame.FRect((self.screen_rect.left + self.camera_bounds['left'],
                                         self.screen_rect.top + self.camera_bounds['top']),
                                        (self.screen_rect.width - (self.camera_bounds['left'] + self.camera_bounds['right']),
                                         self.screen_rect.height - (self.camera_bounds['top'] + self.camera_bounds['bottom'])))
-        
-        # adjust filters
-        self.filters = [
-            None,
-            ColourPalette.bubblegum,
-            ColourPalette.dust,
-            ColourPalette.evening,
-            ColourPalette.gato,
-            ColourPalette.green,
-            ColourPalette.evening,
-            ColourPalette.ibm51,
-            ColourPalette.ibm8503,
-            ColourPalette.noire,
-            ColourPalette.nokia,
-            ColourPalette.orange,
-            ColourPalette.port,
-            ColourPalette.popart,
-            ColourPalette.purple,
-            ColourPalette.sand,
-            ColourPalette.sangre,
-            ColourPalette.sepia,
-            ColourPalette.yellow
-        ]
-        self.filter = 0
-        self.invert = 0
-    
-    def cycle_filter(self) -> None:
-        keys = pygame.key.get_just_pressed()
-        
-        if keys[pygame.K_BACKSPACE]:
-            self.filter += 1
-            self.filter = 0 if self.filter > 16 else self.filter
-        
-        if keys[pygame.K_RSHIFT]:
-            self.invert += 1
-            self.invert = 0 if self.invert > 1 else self.invert
     
     def camera_constraint(self) -> None:
         '''Don't allow camera movement when reaching level stage sides'''
         self.offset.x = self.offset.x if self.offset.x < self.borders['left'] else 0
         self.offset.x = self.offset.x if self.offset.x > self.borders['right'] else self.borders['right']
     
-    def target_center_camera(self, target) -> None:
+    def target_center_camera(self, target: pygame.FRect) -> None:
         self.offset.x = -(target.centerx - SCREEN_WIDTH / 2)
         self.offset.y = -(target.centery - SCREEN_HEIGHT / 2)
     
-    def box_target_camera(self, target) -> None:
+    def box_target_camera(self, target: pygame.FRect) -> None:
         if target.left < self.camera_box.left:
             self.camera_box.left = target.left
         if target.right > self.camera_box.right:
@@ -96,9 +66,8 @@ class CameraGroup(pygame.sprite.Group):
         if keys[pygame.K_m]:
             self.display.blit(self.minimap.scaled_surface, (10, WINDOW_HEIGHT - self.minimap.scaled_surface.height - 10))
     
-    def draw(self, target, dt):
+    def draw(self, target: pygame.FRect, dt: float):
         '''The custom draw method for the CameraGroup that draws in Z layer order'''
-        self.cycle_filter()
         
         self.box_target_camera(target)
         #self.target_center_camera(target)
@@ -116,10 +85,8 @@ class CameraGroup(pygame.sprite.Group):
         #for sprite in self.ui_sprites:
         #    self.screen.blit(sprite.image, sprite.rect)
         
-        # change colours of every pixel on given surface(s)
-        change_colours((self.screen, ), self.filters[self.filter], self.invert)
-        
-        pygame.transform.scale(self.screen, (WINDOW_WIDTH, WINDOW_HEIGHT), self.display)
+        #pygame.transform.scale(self.screen, (WINDOW_WIDTH, WINDOW_HEIGHT), self.display)
+        #self.display.blit(pygame.transform.scale(self.screen, (1280, 720)), (43, 24))
         
         self.toggle_minimap()
 
@@ -130,7 +97,7 @@ class MiniMap:
         self.surface = pygame.Surface((width, height))
         self.scaled_surface = pygame.Surface((320, 240))
     
-    def update(self, sprites) -> None:
+    def update(self, sprites: list) -> None:
         '''Update sprite positions'''
         self.scaled_surface.fill('black')
         self.surface.fill('black')
@@ -144,11 +111,11 @@ class MiniMap:
 
 
 class OverworldCamera(pygame.sprite.Group):
-    def __init__(self, width, height, data) -> None:
+    def __init__(self, width: int, height: int, data: GameData) -> None:
         super().__init__()
         self.display = pygame.display.get_surface()
-        self.screen = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
-        
+        #self.screen = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
+        self.screen = data.screen
         self.data = data
         self.offset = vector()
         
@@ -170,7 +137,7 @@ class OverworldCamera(pygame.sprite.Group):
         self.offset.y = self.offset.y if self.offset.y < self.borders['top'] else 0
         self.offset.y = self.offset.y if self.offset.y > self.borders['bottom'] else self.borders['bottom']
     
-    def draw(self, target) -> None:
+    def draw(self, target: pygame.FRect) -> None:
         self.screen.fill('black')
         
         self.offset.x = -(target.centerx - SCREEN_WIDTH / 2)
@@ -196,3 +163,4 @@ class OverworldCamera(pygame.sprite.Group):
                     self.screen.blit(sprite.image, sprite.rect.topleft + self.offset)
         
         pygame.transform.scale(self.screen, (WINDOW_WIDTH, WINDOW_HEIGHT), self.display)
+        

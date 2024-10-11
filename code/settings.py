@@ -7,11 +7,10 @@ from pytmx.util_pygame import load_pygame
 from random import choice, randint
 
 # Game Settings
-WINDOW_WIDTH, WINDOW_HEIGHT = 1280, 960     # the game window
-SCREEN_WIDTH, SCREEN_HEIGHT = 200, 150      # resolution - will be upscaled to window
-PAUSE_WIDTH, PAUSE_HEIGHT = 640, 480        # pause screen dimensions
+WINDOW_WIDTH, WINDOW_HEIGHT = 1366, 768     # the game window
+SCREEN_WIDTH, SCREEN_HEIGHT = 256, 144      # resolution
 TILE_SIZE = 16                              # tile size in tmx_map
-ANIMATION_SPEED = 5
+ANIMATION_SPEED = 5                         # global animation speed
 
 Z_LAYERS = {
     'bg': 0,

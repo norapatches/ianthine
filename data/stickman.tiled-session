@@ -1,10 +1,10 @@
 {
-    "activeFile": "levels/test.tmx",
+    "activeFile": "levels/settings.tmx",
     "expandedProjectPaths": [
-        "tilesets",
         ".",
-        "levels",
-        "overworld"
+        "overworld",
+        "tilesets",
+        "levels"
     ],
     "file.lastUsedOpenFilter": "All Files (*)",
     "fileStates": {
@@ -80,39 +80,52 @@
         },
         "levels/boss.tmx": {
             "expandedObjectLayers": [
-                28,
-                30
+                30,
+                28
             ],
-            "scale": 15.2638,
+            "scale": 2.6106,
+            "selectedLayer": 7,
+            "viewCenter": {
+                "x": 167.96904926070636,
+                "y": 95.95495288439437
+            }
+        },
+        "levels/settings.tmx": {
+            "expandedObjectLayers": [
+                24,
+                25,
+                9
+            ],
+            "scale": 2.2879,
             "selectedLayer": 11,
             "viewCenter": {
-                "x": 167.97914018789555,
-                "y": 95.97872089518992
+                "x": -8.5230997858298,
+                "y": 94.40972070457624
             }
         },
         "levels/test.tmx": {
             "expandedObjectLayers": [
                 28,
-                24
+                25
             ],
-            "scale": 2.0375,
-            "selectedLayer": 11,
+            "scale": 1.126,
+            "selectedLayer": 7,
             "viewCenter": {
-                "x": -168.5889570552147,
-                "y": -85.15337423312883
+                "x": 480.0177619893429,
+                "y": 479.57371225577276
             }
         },
         "overworld/main_menu.tmx": {
             "expandedObjectLayers": [
                 5,
-                3,
-                4
+                4,
+                3
             ],
             "scale": 3.3208,
             "selectedLayer": 1,
             "viewCenter": {
                 "x": 135.96121416526137,
-                "y": 94.10383040231271
+                "y": 94.2543965309564
             }
         },
         "overworld/overworld_test.tmx": {
@@ -171,6 +184,7 @@
     "last.imagePath": "/Users/norakovacs/Documents/VSCode/Python/_Projects/stickman/assets/graphic/level",
     "openFiles": [
         "overworld/main_menu.tmx",
+        "levels/settings.tmx",
         "levels/test.tmx"
     ],
     "project": "stickman.tiled-project",
@@ -178,16 +192,16 @@
     "recentFiles": [
         "overworld/main_menu.tmx",
         "levels/test.tmx",
+        "levels/settings.tmx",
+        "levels/boss.tmx",
         "levels/0.tmx",
         "tilesets/objects.tsx",
         "overworld/overworld_test.tmx",
         "tilesets/overworld_objects.tsx",
         "/Users/norakovacs/Downloads/Super-Pirate-World-main/data/overworld/overworld.tmx",
         "tilesets/dark_light.tsx",
-        "levels/boss.tmx",
         "tilesets/foliage.tsx",
-        "tilesets/overworld.tsx",
-        "tilesets/stone.tsx"
+        "tilesets/overworld.tsx"
     ],
     "tileset.lastUsedFormat": "tsx",
     "tileset.tileSize": {

@@ -329,7 +329,11 @@
   <object id="43" name="checkpoint" gid="155" x="756" y="448" width="16" height="16"/>
   <object id="107" name="door" gid="160" x="352" y="160" width="16" height="16"/>
   <object id="108" name="chest" gid="161" x="80" y="848" width="16" height="16"/>
-  <object id="109" name="lever" gid="162" x="460" y="784" width="16" height="16"/>
+  <object id="109" name="lever" gid="162" x="460" y="784" width="16" height="16">
+   <properties>
+    <property name="linked_object" value="gate"/>
+   </properties>
+  </object>
   <object id="110" name="gate" gid="163" x="512" y="784" width="16" height="32"/>
   <object id="111" name="player" gid="145" x="384" y="48" width="36" height="32"/>
  </objectgroup>

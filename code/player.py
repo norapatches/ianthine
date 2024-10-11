@@ -80,8 +80,14 @@ class Player(pygame.sprite.Sprite):
                     input_vector.x += 1
                     self.facing_right = True
                 
+                if jpressed[self.controls.right]:
+                    self.facing_right = True
+                
                 if pressed[self.controls.left] and not self.state in ('melee', 'ranged'):
                     input_vector.x -= 1
+                    self.facing_right = False
+                
+                if jpressed[self.controls.left]:
                     self.facing_right = False
                 
                 # platform skip / crouch

@@ -111,16 +111,16 @@ class VFX(AnimatedSprite):
             self.kill()
 
 class ExprBubble(Sprite):
+    marks = {
+        '?': 0,
+        '!': 1,
+        'key': 2
+    }
     def __init__(self, position, frames, groups, mark) -> None:
-        self.ques_mark = frames[0]
-        self.excl_mark = frames[1]
-        if mark == '?':
-            self.image = self.ques_mark
-        if mark == '!':
-            self.image = self.excl_mark
+        self.image = frames[ExprBubble.marks[mark]]
         super().__init__(position, self.image, groups)
         
-        self.timer = Timer(1)
+        self.timer = Timer(10)
         self.timer.start()
     
     def update(self, dt) -> None:
@@ -172,10 +172,11 @@ class Door(Sprite):
             self.animate(dt)
 
 class Lever(Sprite):
-    def __init__(self, position, surface, groups) -> None:
+    def __init__(self, position, surface, groups, linked_object) -> None:
         super().__init__(position, surface, groups, Z_LAYERS['bg_tiles'])
         self.activated_surface = pygame.transform.flip(self.image, True, False)
         self.activated = False
+        self.linked_object = linked_object
     
     def update(self, dt) -> None:
         self.image = self.activated_surface if self.activated else self.image
